@@ -71,7 +71,7 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("up"):
 		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
-		
+
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var input_direction = Input.get_vector("left", "right", "up", "down")
 	linear_velocity.x = input_direction.x * MOVEMENT_SPEED
@@ -88,4 +88,3 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 			floor = state.get_contact_collider_object(i)
 			on_floor = true
 		i += 1
-

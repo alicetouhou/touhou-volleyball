@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cb70ljle7mf4h" path="res://volleyball.png" id="2_1awvx"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1awvx"]
+friction = 0.2
 bounce = 0.99
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1awvx"]

@@ -1,7 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://ceiqdu57f4f65"]
 
 [ext_resource type="Texture2D" uid="uid://bjlbb12vi8g7q" path="res://resources/effects/flak-burst.png" id="1_sheet"]
 
+[sub_resource type="CanvasItemMaterial" id="mat"]
+blend_mode = 1
 
 [sub_resource type="AtlasTexture" id="f0"]
 atlas = ExtResource("1_sheet")
@@ -101,19 +103,89 @@ region = Rect2(1792, 512, 256, 256)
 
 [sub_resource type="SpriteFrames" id="frames"]
 animations = [{
-"frames": [{"duration": 1.0,"texture": SubResource("f0")}, {"duration": 1.0,"texture": SubResource("f1")}, {"duration": 1.0,"texture": SubResource("f2")}, {"duration": 1.0,"texture": SubResource("f3")}, {"duration": 1.0,"texture": SubResource("f4")}, {"duration": 1.0,"texture": SubResource("f5")}, {"duration": 1.0,"texture": SubResource("f6")}, {"duration": 1.0,"texture": SubResource("f7")}, {"duration": 1.0,"texture": SubResource("f8")}, {"duration": 1.0,"texture": SubResource("f9")}, {"duration": 1.0,"texture": SubResource("f10")}, {"duration": 1.0,"texture": SubResource("f11")}, {"duration": 1.0,"texture": SubResource("f12")}, {"duration": 1.0,"texture": SubResource("f13")}, {"duration": 1.0,"texture": SubResource("f14")}, {"duration": 1.0,"texture": SubResource("f15")}, {"duration": 1.0,"texture": SubResource("f16")}, {"duration": 1.0,"texture": SubResource("f17")}, {"duration": 1.0,"texture": SubResource("f18")}, {"duration": 1.0,"texture": SubResource("f19")}, {"duration": 1.0,"texture": SubResource("f20")}, {"duration": 1.0,"texture": SubResource("f21")}, {"duration": 1.0,"texture": SubResource("f22")}, {"duration": 1.0,"texture": SubResource("f23")}],
-"loop": false,
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("f0")
+}, {
+"duration": 1.0,
+"texture": SubResource("f1")
+}, {
+"duration": 1.0,
+"texture": SubResource("f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("f3")
+}, {
+"duration": 1.0,
+"texture": SubResource("f4")
+}, {
+"duration": 1.0,
+"texture": SubResource("f5")
+}, {
+"duration": 1.0,
+"texture": SubResource("f6")
+}, {
+"duration": 1.0,
+"texture": SubResource("f7")
+}, {
+"duration": 1.0,
+"texture": SubResource("f8")
+}, {
+"duration": 1.0,
+"texture": SubResource("f9")
+}, {
+"duration": 1.0,
+"texture": SubResource("f10")
+}, {
+"duration": 1.0,
+"texture": SubResource("f11")
+}, {
+"duration": 1.0,
+"texture": SubResource("f12")
+}, {
+"duration": 1.0,
+"texture": SubResource("f13")
+}, {
+"duration": 1.0,
+"texture": SubResource("f14")
+}, {
+"duration": 1.0,
+"texture": SubResource("f15")
+}, {
+"duration": 1.0,
+"texture": SubResource("f16")
+}, {
+"duration": 1.0,
+"texture": SubResource("f17")
+}, {
+"duration": 1.0,
+"texture": SubResource("f18")
+}, {
+"duration": 1.0,
+"texture": SubResource("f19")
+}, {
+"duration": 1.0,
+"texture": SubResource("f20")
+}, {
+"duration": 1.0,
+"texture": SubResource("f21")
+}, {
+"duration": 1.0,
+"texture": SubResource("f22")
+}, {
+"duration": 1.0,
+"texture": SubResource("f23")
+}],
+"loop": 0,
 "name": &"default",
 "speed": 24.0
 }]
 
-[sub_resource type="CanvasItemMaterial" id="mat"]
-blend_mode = 1
-
-[node name="flak-burst" type="AnimatedSprite2D"]
+[node name="flak-burst" type="AnimatedSprite2D" unique_id=473611550]
 texture_filter = 2
 material = SubResource("mat")
 sprite_frames = SubResource("frames")
-animation = &"default"
 autoplay = "default"
-offset = Vector2(0.0, 10.239999999999995)
+frame = 23
+frame_progress = 1.0
+offset = Vector2(0, 10.24)

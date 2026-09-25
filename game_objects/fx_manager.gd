@@ -7,6 +7,8 @@ var update_positions = []
 const dust_settle = preload("res://resources/effects/dust-settle.tscn")
 const hit_sparks = preload("res://resources/effects/hit-sparks.tscn")
 const pressure_ring = preload("res://resources/effects/pressure-ring.tscn")
+const pummel_pop = preload("res://resources/effects/pommel-pop.tscn")
+const spark_spit = preload("res://resources/effects/spark-spit.tscn")
 
 func _process(delta: float) -> void:
 	for u in update_positions:

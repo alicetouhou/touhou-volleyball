@@ -31,6 +31,8 @@ func kick():
 	
 	var ball: RigidBody3D = bodies[ball_index]
 	on_hit_ball.emit()
+	create_fx.emit(FXManager.pummel_pop, (ball.global_position + global_position) / 2)
+	create_fx.emit(FXManager.spark_spit, (ball.global_position + global_position) / 2)
 	
 	var global_position_2D = Vector2(global_position.x, global_position.y)
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
@@ -41,13 +43,16 @@ func kick():
 		ball_angle += PI
 	while ball_angle > PI:
 		ball_angle -= PI
+	
+	# Always hit the ball torward the center of the court
+	var hit_ball_in_direction = sign(position.x) * -1
 
 	if ball_angle <= PI / 4:
-		ball.apply_impulse(Vector3(5 * direction, 10, 0))
+		ball.apply_impulse(Vector3(5 * hit_ball_in_direction, 10, 0))
 	elif ball_angle <= PI / 4 * 3:
-		ball.apply_impulse(Vector3(12 * direction, -2, 0))
+		ball.apply_impulse(Vector3(18 * hit_ball_in_direction, 0, 0))
 	elif ball_angle <= PI:
-		ball.apply_impulse(Vector3(5 * direction, -10, 0))
+		ball.apply_impulse(Vector3(10 * hit_ball_in_direction, -10, 0))
 
 func _physics_process(delta: float) -> void:
 	var x = int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left"))

@@ -19,26 +19,6 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
 
-[sub_resource type="Animation" id="Animation_aug3q"]
-resource_name = "face_left"
-tracks/0/type = "rotation_3d"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ScaleAndDirection/Sprite3D")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 0, 1, 0, 0)
-
-[sub_resource type="Animation" id="Animation_v1alf"]
-resource_name = "face_right"
-tracks/0/type = "rotation_3d"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ScaleAndDirection/Sprite3D")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array()
-
 [sub_resource type="Animation" id="Animation_olk2d"]
 resource_name = "idle"
 length = 0.4
@@ -83,76 +63,10 @@ tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.083333336, 1, 0, 0.3, 0, 0.2
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_kxtgu"]
 _data = {
 &"RESET": SubResource("Animation_kxtgu"),
-&"face_left": SubResource("Animation_aug3q"),
-&"face_right": SubResource("Animation_v1alf"),
 &"idle": SubResource("Animation_olk2d"),
 &"kick": SubResource("Animation_wa84s"),
 &"turn": SubResource("Animation_rpeqp")
 }
-
-[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_wa84s"]
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wa84s"]
-animation = &"face_right"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kxtgu"]
-animation = &"face_left"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rpeqp"]
-animation = &"idle"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_olk2d"]
-animation = &"kick"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_v1alf"]
-animation = &"turn"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_aug3q"]
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nc42t"]
-advance_mode = 0
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xqd5o"]
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0urx3"]
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fbf3r"]
-switch_mode = 2
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lf7pk"]
-advance_mode = 0
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_v1alf"]
-states/Start/position = Vector2(217, 118)
-states/idle/node = SubResource("AnimationNodeAnimation_rpeqp")
-states/idle/position = Vector2(421, 174)
-states/kick/node = SubResource("AnimationNodeAnimation_olk2d")
-states/kick/position = Vector2(610, 100)
-states/turn/node = SubResource("AnimationNodeAnimation_v1alf")
-states/turn/position = Vector2(486, 57)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_aug3q"), "idle", "turn", SubResource("AnimationNodeStateMachineTransition_nc42t"), "turn", "idle", SubResource("AnimationNodeStateMachineTransition_xqd5o"), "turn", "kick", SubResource("AnimationNodeStateMachineTransition_0urx3"), "kick", "idle", SubResource("AnimationNodeStateMachineTransition_fbf3r"), "idle", "kick", SubResource("AnimationNodeStateMachineTransition_lf7pk")]
-
-[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_olk2d"]
-
-[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_62d2p"]
-graph_offset = Vector2(4.1170654, -7.0385284)
-nodes/output/position = Vector2(1340, 240)
-nodes/Animation/node = SubResource("AnimationNodeAnimation_kxtgu")
-nodes/Animation/position = Vector2(200, 120)
-"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_wa84s")
-"nodes/Animation 2/position" = Vector2(140, 300)
-nodes/Turning/node = SubResource("AnimationNodeBlend2_olk2d")
-nodes/Turning/position = Vector2(420, 200)
-nodes/StateMachine/node = SubResource("AnimationNodeStateMachine_v1alf")
-nodes/StateMachine/position = Vector2(740, 80)
-nodes/Add2/node = SubResource("AnimationNodeAdd2_wa84s")
-nodes/Add2/position = Vector2(1011.7518, 189.51257)
-node_connections = [&"output", 0, &"Add2", &"Turning", 0, &"Animation", &"Turning", 1, &"Animation 2", &"Add2", 0, &"StateMachine", &"Add2", 1, &"Turning"]
 
 [node name="Player3d" type="RigidBody3D" unique_id=733247983]
 axis_lock_linear_z = true
@@ -174,7 +88,6 @@ transform = Transform3D(0.302, 0, 0, 0, 0.302, 0, 0, 0, 0.302, 0, 0, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="ScaleAndDirection" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.048383, 0, 0, 0, 1, 0, 0.14514919, 0)
 flip_h = true
 texture = ExtResource("2_wa84s")
 
@@ -187,11 +100,3 @@ shape = SubResource("BoxShape3D_kxtgu")
 
 [node name="PlayerAnimations" type="AnimationPlayer" parent="." unique_id=1453755451]
 libraries/ = SubResource("AnimationLibrary_kxtgu")
-
-[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1147054397]
-unique_name_in_owner = true
-root_node = NodePath("%AnimationTree/..")
-tree_root = SubResource("AnimationNodeBlendTree_62d2p")
-anim_player = NodePath("../PlayerAnimations")
-parameters/Turning/blend_amount = 1.0
-parameters/Add2/add_amount = 1.0

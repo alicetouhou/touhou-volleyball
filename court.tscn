@@ -9,12 +9,15 @@
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_hb3xx"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_0xfd7"]
+size = Vector3(29.37555, 1, 3)
+
 [node name="TouhouVolleyball" type="Node3D" unique_id=1885262703]
 script = ExtResource("1_8eugd")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=586917617]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5549393, 4.511648)
+transform = Transform3D(1, 0, 0, 0, 0.9976108, 0.06908454, 0, -0.06908454, 0.9976108, 0, 3.6643643, 4.511648)
 projection = 1
 current = true
 size = 10.0
@@ -34,6 +37,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.845355, 5.8920703, 0)
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=763583146]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=2013359004]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.046759725, 0)
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=1985249417]
@@ -51,6 +55,16 @@ shape = SubResource("WorldBoundaryShape3D_hb3xx")
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1647853670]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 5.8632264, 0)
 texture = ExtResource("6_utqu1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1354710620]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.43214703, -0.5331788, 0.3654909)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_0xfd7")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1551213810]
+transform = Transform3D(0.6777291, 0.31832865, 0.6628349, -0.7353116, 0.29340023, 0.61092806, 0, -0.90143394, 0.43291664, 17, 7, 4)
+shadow_enabled = true
+directional_shadow_mode = 0
 
 [connection signal="create_fx" from="Player3d" to="." method="_on_player_3d_create_fx"]
 [connection signal="on_hit_ball" from="Player3d" to="." method="_on_player_3d_on_hit_ball"]

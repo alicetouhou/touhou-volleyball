@@ -228,6 +228,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("f31")
+}, {
+"duration": 1.0,
+"texture": null
 }],
 "loop": 0,
 "name": &"default",

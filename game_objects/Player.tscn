@@ -13,6 +13,7 @@ size = Vector2(122, 137)
 
 [node name="Player" type="RigidBody2D" unique_id=1372600083]
 physics_material_override = SubResource("PhysicsMaterial_exy86")
+lock_rotation = true
 script = ExtResource("1_h31r8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1780334865]

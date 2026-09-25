@@ -2,6 +2,7 @@ extends RigidBody2D
 
 const MOVEMENT_SPEED = 2000
 const JUMP_POWER = 1000
+const KICK_POWER = 2000
 
 func kick():
 	var ball = %Kick.get_overlapping_bodies().filter(func(x): return x.is_in_group("ball"))

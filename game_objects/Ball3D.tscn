@@ -10,6 +10,8 @@ bounce = 0.99
 [sub_resource type="SphereShape3D" id="SphereShape3D_1awvx"]
 radius = 0.46174127
 
+[sub_resource type="SphereMesh" id="SphereMesh_km8ha"]
+
 [node name="Ball3d" type="RigidBody3D" unique_id=1208449855 groups=["ball"]]
 collision_layer = 4
 axis_lock_linear_z = true
@@ -17,11 +19,20 @@ axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
 physics_material_override = SubResource("PhysicsMaterial_1awvx")
+contact_monitor = true
+max_contacts_reported = 4
 script = ExtResource("1_1awvx")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1464322554]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+alpha_antialiasing_mode = 1
+alpha_antialiasing_edge = 0.75
 texture = ExtResource("2_1awvx")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2050033133]
 shape = SubResource("SphereShape3D_1awvx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=127288944]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.047618628)
+cast_shadow = 3
+mesh = SubResource("SphereMesh_km8ha")

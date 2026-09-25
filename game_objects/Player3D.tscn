@@ -138,6 +138,10 @@ _data = {
 &"turn_right": SubResource("Animation_nc42t")
 }
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_km8ha"]
+radius = 0.25
+height = 0.9
+
 [node name="Player3d" type="RigidBody3D" unique_id=733247983]
 collision_layer = 2
 axis_lock_linear_z = true
@@ -161,7 +165,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="ScaleAndDirection" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0493397, 0, 0, 0, 1, 0, 0.14801927, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0383492, 0, 0, 0, 1, 0, 0.11504732, 0)
 flip_h = true
 texture = ExtResource("2_wa84s")
 
@@ -187,3 +191,8 @@ tree_root = ExtResource("3_kxtgu")
 anim_player = NodePath("../PlayerAnimations")
 parameters/turn/TimeScale/scale = 1.0
 parameters/turn/Direction/blend_amount = 0.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=324289998]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.051332235)
+cast_shadow = 3
+mesh = SubResource("CapsuleMesh_km8ha")

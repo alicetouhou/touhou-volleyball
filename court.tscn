@@ -5,20 +5,88 @@
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="2_0uhp5"]
 [ext_resource type="PackedScene" uid="uid://reki74cx25co" path="res://game_objects/Ball3D.tscn" id="2_ih5bv"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/FXManager.tscn" id="3_acrlw"]
-[ext_resource type="Texture2D" uid="uid://vsimlmjv380n" path="res://icon.svg" id="6_utqu1"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_hb3xx"]
 
+[sub_resource type="Shader" id="Shader_3ygy1"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.7.1.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
+
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color, filter_linear_mipmap, repeat_enable;
+uniform ivec2 albedo_texture_size;
+uniform float point_size : hint_range(0.1, 128.0, 0.1);
+
+uniform float roughness : hint_range(0.0, 1.0);
+uniform sampler2D texture_metallic : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r, filter_linear_mipmap, repeat_enable;
+
+uniform float specular : hint_range(0.0, 1.0, 0.01);
+uniform float metallic : hint_range(0.0, 1.0, 0.01);
+
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+void vertex() {
+	UV = UV * uv1_scale.xy + uv1_offset.xy;
+}
+
+void fragment() {
+	vec2 base_uv = UV;
+
+	vec4 albedo_tex = texture(texture_albedo, base_uv * 100.);
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+
+	float metallic_tex = dot(texture(texture_metallic, base_uv), metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	SPECULAR = specular;
+
+	vec4 roughness_texture_channel = vec4(1.0, 0.0, 0.0, 0.0);
+	float roughness_tex = dot(texture(texture_roughness, base_uv), roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pujm6"]
+render_priority = 0
+shader = SubResource("Shader_3ygy1")
+shader_parameter/albedo = Color(0.43728, 0.72, 0.2736, 1)
+shader_parameter/albedo_texture_size = Vector2i(300, 300)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = Vector4(1, 0, 0, 0)
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+
 [sub_resource type="BoxMesh" id="BoxMesh_0xfd7"]
-size = Vector3(29.37555, 1, 3)
+material = SubResource("ShaderMaterial_pujm6")
+size = Vector3(54, 1, 54)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pujm6"]
+
+[sub_resource type="Sky" id="Sky_utqu1"]
+sky_material = SubResource("ProceduralSkyMaterial_pujm6")
+
+[sub_resource type="Environment" id="Environment_utqu1"]
+background_mode = 2
+background_color = Color(0.46610004, 0.78460175, 0.79, 1)
+sky = SubResource("Sky_utqu1")
 
 [node name="TouhouVolleyball" type="Node3D" unique_id=1885262703]
 script = ExtResource("1_8eugd")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=586917617]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.9976108, 0.06908454, 0, -0.06908454, 0.9976108, 0, 3.6643643, 4.511648)
-projection = 1
+transform = Transform3D(1, 0, 0, 0, 0.9976108, 0.06908454, 0, -0.06908454, 0.9976108, 0, 4.368427, 8.134905)
 current = true
 size = 10.0
 script = ExtResource("2_0uhp5")
@@ -30,8 +98,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.511648)
 [node name="Player1" parent="." unique_id=733247983 instance=ExtResource("1_klx28")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.147914, 1.102423, 0)
 
-[node name="Player2" parent="." unique_id=1557334906 instance=ExtResource("1_klx28")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.852086, 1.102423, 0)
+[node name="Player2" parent="." unique_id=1827797252 instance=ExtResource("1_klx28")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4307375, 1.102423, 0)
 player_device = 0
 
 [node name="Ball3d" parent="." unique_id=1208449855 instance=ExtResource("2_ih5bv")]
@@ -41,27 +109,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.845355, 5.8920703, 0)
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=763583146]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=2013359004]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.046759725, 0)
+transform = Transform3D(2.7227015, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.046759725, 0)
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=1985249417]
-transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, -8, 0, 0)
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, -11.5, 0, 0)
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D" unique_id=1339365208]
-transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, 0, 9, 0)
+transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, 0, 10.33122, 0)
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
 [node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D" unique_id=1000831129]
-transform = Transform3D(1.3113416e-07, -1, 0, 1, 1.3113416e-07, 0, 0, 0, 1, 9, 6, 0)
+transform = Transform3D(1.3113416e-07, -1, 0, 1, 1.3113416e-07, 0, 0, 0, 1, 11.5, 6, 0)
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1647853670]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 5.8632264, 0)
-texture = ExtResource("6_utqu1")
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1354710620]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.43214703, -0.5331788, 0.3654909)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.43214703, -0.5331788, -11.634509)
 cast_shadow = 0
 mesh = SubResource("BoxMesh_0xfd7")
 
@@ -70,7 +134,14 @@ transform = Transform3D(0.6777291, 0.31832865, 0.6628349, -0.7353116, 0.29340023
 shadow_enabled = true
 directional_shadow_mode = 0
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1612071918]
+environment = SubResource("Environment_utqu1")
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=345739650]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.106257, 2.9032006, 6.9366546)
+
 [connection signal="create_fx" from="Player1" to="." method="_on_player_3d_create_fx"]
 [connection signal="on_hit_ball" from="Player1" to="." method="_on_player_3d_on_hit_ball"]
 [connection signal="create_fx" from="Player2" to="." method="_on_player_3d_create_fx"]
 [connection signal="on_hit_ball" from="Player2" to="." method="_on_player_3d_on_hit_ball"]
+[connection signal="create_fx" from="Ball3d" to="." method="_on_ball_3d_create_fx"]

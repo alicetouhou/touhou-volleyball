@@ -49,9 +49,6 @@ func kick():
 	elif ball_angle <= PI:
 		ball.apply_impulse(Vector3(5 * direction, -10, 0))
 
-func _ready() -> void:
-	pass
-
 func _physics_process(delta: float) -> void:
 	var x = int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left"))
 

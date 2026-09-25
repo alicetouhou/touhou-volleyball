@@ -139,6 +139,7 @@ _data = {
 }
 
 [node name="Player3d" type="RigidBody3D" unique_id=733247983]
+collision_layer = 2
 axis_lock_linear_z = true
 axis_lock_angular_x = true
 axis_lock_angular_y = true
@@ -160,14 +161,15 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="ScaleAndDirection" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0158277, 0, 0, 0, 1, 0, 0.047482982, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0469518, 0, 0, 0, 1, 0, 0.14085534, 0)
 flip_h = true
 texture = ExtResource("2_wa84s")
 
 [node name="KickHitbox" type="Area3D" parent="." unique_id=1627492970]
 unique_name_in_owner = true
+collision_mask = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="KickHitbox" unique_id=996229372]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="KickHitbox" unique_id=996229372 groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103637695, -0.10105133, 0)
 shape = SubResource("BoxShape3D_kxtgu")
 

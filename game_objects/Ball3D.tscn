@@ -10,6 +10,7 @@ bounce = 0.99
 radius = 0.46174127
 
 [node name="Ball3d" type="RigidBody3D" unique_id=1208449855 groups=["ball"]]
+collision_layer = 4
 axis_lock_linear_z = true
 axis_lock_angular_x = true
 axis_lock_angular_y = true

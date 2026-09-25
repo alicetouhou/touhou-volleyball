@@ -238,6 +238,7 @@ animations = [{
 }]
 
 [node name="dust-settle" type="AnimatedSprite3D" unique_id=522321049]
+transform = Transform3D(0.5588193, 0, 0, 0, 0.5588193, 0, 0, 0, 1, 0, 0, 0)
 texture_filter = 2
 sprite_frames = SubResource("frames")
 autoplay = "default"

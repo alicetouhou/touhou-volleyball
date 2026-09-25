@@ -1,0 +1,24 @@
+[gd_resource type="AnimationNodeBlendTree" format=3 uid="uid://buip0li4navk2"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wa84s"]
+animation = &"turn"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_wa84s"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_wa84s"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kxtgu"]
+animation = &"turn"
+
+[resource]
+graph_offset = Vector2(-234.96652, 27.023224)
+nodes/output/position = Vector2(560, 160)
+nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_wa84s")
+nodes/TimeScale/position = Vector2(80, 260)
+nodes/Direction/node = SubResource("AnimationNodeBlend2_wa84s")
+nodes/Direction/position = Vector2(320, 100)
+"nodes/Turn 2/node" = SubResource("AnimationNodeAnimation_kxtgu")
+"nodes/Turn 2/position" = Vector2(-100, 100)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_wa84s")
+"nodes/Animation 2/position" = Vector2(-140, 360)
+node_connections = [&"output", 0, &"Direction", &"TimeScale", 0, &"Animation 2", &"Direction", 0, &"Turn 2", &"Direction", 1, &"TimeScale"]

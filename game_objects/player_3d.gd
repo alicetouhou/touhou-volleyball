@@ -8,9 +8,12 @@ const UP_KICK_POWER = Vector2()
 const FORWARD_KICK_POWER = Vector2()
 const DOWN_KICK_POWER = Vector2()
 
+@onready var Animations = %AnimationTree.get("parameters/playback/StateMachine")
+
 func kick():
-	var bodies = %Kick.get_overlapping_bodies()
+	var bodies = %KickHitbox.get_overlapping_bodies()
 	var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
+	Animations.travel("kick")
 
 	if ball_index < 0:
 		return
@@ -34,16 +37,20 @@ func kick():
 	elif ball_angle <= PI:
 		print("up")
 
-
-
+func _ready() -> void:
+	Animations.travel("idle")
 
 func _physics_process(delta: float) -> void:
 	var x = int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left"))
 	
 	apply_central_force(Vector3(x, 0, 0)  * MOVEMENT_SPEED)
+	
+	if sign(x) != direction and x != 0:
+		direction = sign(x)
+		Animations.travel("turn")
 
 	if Input.is_action_just_pressed("up"):
-		apply_central_impulse(Vector3(0, -JUMP_POWER, 0))
+		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
 
 
 func _input(event: InputEvent) -> void:

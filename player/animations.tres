@@ -1,0 +1,39 @@
+[gd_resource type="AnimationNodeStateMachine" format=3 uid="uid://c14uejte347bk"]
+
+[ext_resource type="AnimationNodeBlendTree" uid="uid://buip0li4navk2" path="res://player/turn_blend_tree.tres" id="1_pceem"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kxtgu"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rpeqp"]
+animation = &"kick"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rpeqp"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_olk2d"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_v1alf"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_aug3q"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nc42t"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xqd5o"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0urx3"]
+
+[resource]
+states/End/position = Vector2(1013, 128)
+states/Start/position = Vector2(131, 120)
+states/idle/node = SubResource("AnimationNodeAnimation_kxtgu")
+states/idle/position = Vector2(450, 208)
+states/kick/node = SubResource("AnimationNodeAnimation_rpeqp")
+states/kick/position = Vector2(684, 139)
+states/turn/node = ExtResource("1_pceem")
+states/turn/position = Vector2(450, 37)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_rpeqp"), "idle", "turn", SubResource("AnimationNodeStateMachineTransition_olk2d"), "turn", "idle", SubResource("AnimationNodeStateMachineTransition_v1alf"), "kick", "turn", SubResource("AnimationNodeStateMachineTransition_aug3q"), "kick", "idle", SubResource("AnimationNodeStateMachineTransition_nc42t"), "idle", "kick", SubResource("AnimationNodeStateMachineTransition_xqd5o"), "turn", "kick", SubResource("AnimationNodeStateMachineTransition_0urx3")]

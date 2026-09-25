@@ -7,9 +7,9 @@
 bounce = 0.99
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1awvx"]
-radius = 1.8386139
+radius = 0.912952
 
-[node name="Ball3d" type="RigidBody3D" unique_id=1208449855]
+[node name="Ball3d" type="RigidBody3D" unique_id=1208449855 groups=["ball"]]
 axis_lock_linear_z = true
 axis_lock_angular_x = true
 axis_lock_angular_y = true
@@ -18,6 +18,7 @@ physics_material_override = SubResource("PhysicsMaterial_1awvx")
 script = ExtResource("1_1awvx")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1464322554]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 texture = ExtResource("2_1awvx")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2050033133]

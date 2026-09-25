@@ -1,7 +1,7 @@
 extends RigidBody3D
 
 var direction = 1
-const MOVEMENT_SPEED = 10
+const MOVEMENT_SPEED = 7
 const JUMP_POWER = 7
 
 const UP_KICK_POWER = Vector2()
@@ -74,7 +74,7 @@ func _physics_process(delta: float) -> void:
 	if time_since_kick_pressed < KICK_TIME_ALLOW:
 		kick()
 
-	if Input.is_action_just_pressed("up"):
+	if Input.is_action_just_pressed("up") and on_floor:
 		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:

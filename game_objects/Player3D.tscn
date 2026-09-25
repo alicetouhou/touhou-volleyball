@@ -156,11 +156,11 @@ transparent_bg = true
 
 [node name="ScaleAndDirection" type="Node3D" parent="." unique_id=1883257529]
 unique_name_in_owner = true
-transform = Transform3D(0.302, 0, 0, 0, 0.302, 0, 0, 0, 0.302, 0, 0, 0)
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="ScaleAndDirection" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0499271, 0, 0, 0, 1, 0, 0.14978139, 0)
+transform = Transform3D(1, 0, 0, 0, 1.000859, 0, 0, 0, 1, 0, 0.0025772732, 0)
 flip_h = true
 texture = ExtResource("2_wa84s")
 

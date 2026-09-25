@@ -9,11 +9,15 @@ const JUMP_POWER = 7
 const UP_KICK_POWER = Vector2()
 const FORWARD_KICK_POWER = Vector2()
 const DOWN_KICK_POWER = Vector2()
+
 var on_floor: bool = false
 var floor: Object
 
 const KICK_TIME_ALLOW = .15
-var time_since_kick_pressed = 1000
+var KICK_COOLDOWN = .1
+var time_since_kick_pressed = 100
+var time_since_kick = 100
+var can_jump = true
 
 signal create_fx(fx: PackedScene, pos: Vector3)
 signal on_hit_ball
@@ -30,6 +34,7 @@ func kick():
 
 	Animations.travel("kick_hit")
 	time_since_kick_pressed = 10000
+	time_since_kick = 0
 	
 	var ball: RigidBody3D = bodies[ball_index]
 	on_hit_ball.emit()
@@ -49,9 +54,9 @@ func kick():
 	# Always hit the ball torward the center of the court
 	var hit_ball_in_direction = direction
 
-	if Input.is_action_pressed("up"):
+	if is_up_pressed():
 		ball.apply_impulse(Vector3(5 * hit_ball_in_direction, 10, 0))
-	elif Input.is_action_pressed("down"):
+	elif is_down_pressed():
 		ball.apply_impulse(Vector3(10 * hit_ball_in_direction, -10, 0))
 	else:
 		ball.apply_impulse(Vector3(18 * hit_ball_in_direction, 0, 0))
@@ -62,10 +67,14 @@ func get_left_right():
 	return Input.get_joy_axis(player_device, JOY_AXIS_LEFT_X)
 
 func is_up_pressed():
-	print(Input.get_joy_axis(player_device, JOY_AXIS_LEFT_Y))
 	if player_device == 16:
 		return Input.is_action_pressed("up")
 	return Input.get_joy_axis(player_device, JOY_AXIS_LEFT_Y) < -.5
+
+func is_down_pressed():
+	if player_device == 16:
+		return Input.is_action_pressed("down")
+	return Input.get_joy_axis(player_device, JOY_AXIS_LEFT_Y) > .5
 
 func is_kick_pressed():
 	if player_device == 16:
@@ -74,16 +83,15 @@ func is_kick_pressed():
 
 func _physics_process(delta: float) -> void:
 	var x = get_left_right()
-	print(x)
 
 	apply_central_force(Vector3(x, 0, 0) * MOVEMENT_SPEED)
 	
 	if sign(x) != direction and x != 0:
 		direction = sign(x)
-		
+
 		if on_floor:
 			create_fx.emit(FXManager.dust_settle, global_position + Vector3(0, -.6, 0))
-		
+
 		if direction < 0:
 			Animations.travel("turn")
 			%Turning.play("turn_left")
@@ -94,11 +102,15 @@ func _physics_process(delta: float) -> void:
 	if is_kick_pressed():
 		time_since_kick_pressed = 0
 	time_since_kick_pressed += delta
-	if time_since_kick_pressed < KICK_TIME_ALLOW:
+	time_since_kick += delta
+	if time_since_kick_pressed < KICK_TIME_ALLOW and time_since_kick > KICK_COOLDOWN:
 		kick()
 
-	if is_up_pressed() and on_floor:
+	if not on_floor:
+		can_jump = true
+	if is_up_pressed() and on_floor and can_jump:
 		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
+		can_jump = false
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var input_direction = get_left_right()

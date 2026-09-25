@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://c2mmut6diltxb"]
+
+[ext_resource type="Script" uid="uid://bsdulcdlihkag" path="res://menu.gd" id="1_lti8b"]
+
+[node name="Menu" type="Control" unique_id=1410295219]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_lti8b")
+
+[node name="P1Device" type="Label" parent="." unique_id=1368469215]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 50.0
+offset_top = 42.0
+offset_right = 342.0
+offset_bottom = 98.0
+
+[node name="P2Device" type="Label" parent="." unique_id=349188997]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1566.0
+offset_top = 41.0
+offset_right = 1813.0
+offset_bottom = 92.0

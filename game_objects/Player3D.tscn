@@ -8,7 +8,7 @@
 size = Vector3(0.6385498, 1.2646484, 0.2998047)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kxtgu"]
-size = Vector3(2.946045, 3.2489624, 1)
+size = Vector3(1.9367676, 1.9572601, 1)
 
 [sub_resource type="Animation" id="Animation_kxtgu"]
 length = 0.001
@@ -160,7 +160,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="ScaleAndDirection" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0231007, 0, 0, 0, 1, 0, 0.06930226, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0158277, 0, 0, 0, 1, 0, 0.047482982, 0)
 flip_h = true
 texture = ExtResource("2_wa84s")
 
@@ -168,7 +168,7 @@ texture = ExtResource("2_wa84s")
 unique_name_in_owner = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="KickHitbox" unique_id=996229372]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14758301, -0.059173584, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103637695, -0.10105133, 0)
 shape = SubResource("BoxShape3D_kxtgu")
 
 [node name="PlayerAnimations" type="AnimationPlayer" parent="." unique_id=1453755451]

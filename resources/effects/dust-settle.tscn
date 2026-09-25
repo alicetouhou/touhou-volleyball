@@ -241,5 +241,5 @@ animations = [{
 texture_filter = 2
 sprite_frames = SubResource("frames")
 autoplay = "default"
-frame = 31
+frame = 32
 frame_progress = 1.0

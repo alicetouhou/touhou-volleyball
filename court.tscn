@@ -32,5 +32,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.845355, 5.8920703, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=2013359004]
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=1985249417]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, -8, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_hb3xx")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D" unique_id=1339365208]
+transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, 0, 9, 0)
+shape = SubResource("WorldBoundaryShape3D_hb3xx")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D" unique_id=1000831129]
+transform = Transform3D(1.3113416e-07, -1, 0, 1, 1.3113416e-07, 0, 0, 0, 1, 9, 6, 0)
+shape = SubResource("WorldBoundaryShape3D_hb3xx")
+
 [connection signal="create_fx" from="Player3d" to="." method="_on_player_3d_create_fx"]
 [connection signal="on_hit_ball" from="Player3d" to="." method="_on_player_3d_on_hit_ball"]

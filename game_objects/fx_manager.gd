@@ -18,9 +18,9 @@ func project_pos_to_viewport(c: Vector3):
 
 func create_at_pos(fx: PackedScene, pos: Vector3):
 	var f: AnimatedSprite2D = fx.instantiate()
-	f.position = project_pos_to_viewport(pos)
 	%Viewport.add_child(f)
-	
+	f.position = project_pos_to_viewport(pos)
+	f.play()
 	f.animation_finished.connect(func():
 		f.queue_free()
 	)
@@ -29,6 +29,7 @@ func create_with_parent_3D(fx: PackedScene, parent: Node3D):
 	var f: AnimatedSprite2D = fx.instantiate()
 	f.position = project_pos_to_viewport(parent.position)
 	%Viewport.add_child(f)
+	f.play()
 	
 	var a = [f, parent]
 	update_positions.push_back(a)

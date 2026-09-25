@@ -43,11 +43,11 @@ func kick():
 		ball_angle -= PI
 
 	if ball_angle <= PI / 4:
-		ball.apply_impulse(Vector3(5 * direction, -5, 0))
+		ball.apply_impulse(Vector3(5 * direction, 10, 0))
 	elif ball_angle <= PI / 4 * 3:
-		ball.apply_impulse(Vector3(10 * direction, 1, 0))
+		ball.apply_impulse(Vector3(12 * direction, -2, 0))
 	elif ball_angle <= PI:
-		ball.apply_impulse(Vector3(5 * direction, 5, 0))
+		ball.apply_impulse(Vector3(5 * direction, -10, 0))
 
 func _ready() -> void:
 	pass

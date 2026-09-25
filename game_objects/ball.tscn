@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bydhp0vxwyihj"]
+
+[ext_resource type="Script" uid="uid://0ururxwtcgpa" path="res://game_objects/ball.gd" id="1_33iqp"]
+[ext_resource type="Texture2D" uid="uid://cb70ljle7mf4h" path="res://volleyball.png" id="1_a6gkv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0xfd7"]
+radius = 50.01
+
+[node name="Ball" type="RigidBody2D" unique_id=293387036 groups=["ball"]]
+script = ExtResource("1_33iqp")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1860351015]
+scale = Vector2(0.2675, 0.2675)
+texture = ExtResource("1_a6gkv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=168902661]
+shape = SubResource("CircleShape2D_0xfd7")

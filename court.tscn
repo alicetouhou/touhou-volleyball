@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://iy2hssrv4u5f"]
+
+[ext_resource type="PackedScene" uid="uid://dq67hchpmq6bi" path="res://game_objects/Player.tscn" id="1_ih5bv"]
+[ext_resource type="PackedScene" uid="uid://bydhp0vxwyihj" path="res://game_objects/ball.tscn" id="2_acrlw"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_0xfd7"]
+distance = -622.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ih5bv"]
+normal = Vector2(0, 1)
+distance = -622.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_acrlw"]
+normal = Vector2(-1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_8eugd"]
+normal = Vector2(1, 0)
+
+[node name="TouhouVolleyball" type="Node2D" unique_id=610754997]
+
+[node name="Player" parent="." unique_id=1372600083 instance=ExtResource("1_ih5bv")]
+position = Vector2(283, 250)
+
+[node name="Ball" parent="." unique_id=293387036 instance=ExtResource("2_acrlw")]
+position = Vector2(320, 273)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=271878921]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1987629900]
+shape = SubResource("WorldBoundaryShape2D_0xfd7")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=2142468029]
+position = Vector2(4, 622)
+shape = SubResource("WorldBoundaryShape2D_ih5bv")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D" unique_id=866254905]
+position = Vector2(1152, 25)
+shape = SubResource("WorldBoundaryShape2D_acrlw")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="StaticBody2D" unique_id=874723846]
+shape = SubResource("WorldBoundaryShape2D_8eugd")

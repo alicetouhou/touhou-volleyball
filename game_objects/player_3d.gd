@@ -45,7 +45,7 @@ func kick():
 		ball_angle -= PI
 	
 	# Always hit the ball torward the center of the court
-	var hit_ball_in_direction = sign(position.x) * -1
+	var hit_ball_in_direction = direction
 
 	if Input.is_action_pressed("up"):
 		ball.apply_impulse(Vector3(5 * hit_ball_in_direction, 10, 0))

@@ -1,12 +1,14 @@
 extends RigidBody3D
 
 var direction = 1
-const MOVEMENT_SPEED = 20
+const MOVEMENT_SPEED = 10
 const JUMP_POWER = 7
 
 const UP_KICK_POWER = Vector2()
 const FORWARD_KICK_POWER = Vector2()
 const DOWN_KICK_POWER = Vector2()
+var on_floor: bool = false
+var floor: Object
 
 func kick():
 	var bodies = %KickHitbox.get_overlapping_bodies()
@@ -36,17 +38,26 @@ func kick():
 
 func _ready() -> void:
 	pass
-
-func _physics_process(delta: float) -> void:
-	var x = int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left"))
+		
+func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
+	var input_direction = Input.get_vector("left", "right", "up", "down")
+	linear_velocity.x = input_direction.x * MOVEMENT_SPEED
 	
-	apply_central_force(Vector3(x, 0, 0)  * MOVEMENT_SPEED)
-	
-	if sign(x) != direction and x != 0:
-		direction = sign(x)
-
-	if Input.is_action_just_pressed("up"):
-		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
+	if Input.is_action_just_pressed("up") and on_floor:
+		apply_impulse(Vector3(0, JUMP_POWER, 0))
+	# https://forum.godotengine.org/t/how-to-check-if-rigid-body-is-on-floor/65679/3
+	var i := 0
+	on_floor = false
+	floor = null
+	while i < state.get_contact_count():
+		var normal := state.get_contact_local_normal(i)
+		#  1.0 would be perfectly straight up
+		#  0.0 is a wall
+		# -1.0 is a ceiling
+		if normal.dot(Vector3.UP) > 0.3: # this can be dialed in
+			floor = state.get_contact_collider_object(i)
+			on_floor = true
+		i += 1
 
 
 func _input(event: InputEvent) -> void:

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ca4cs8h4j08ay"]
+
+[ext_resource type="Script" uid="uid://bd50et6aw3p6l" path="res://game_objects/fx_manager.gd" id="1_plexv"]
+
+[node name="FxManager" type="Node3D" unique_id=1008124586]
+script = ExtResource("1_plexv")

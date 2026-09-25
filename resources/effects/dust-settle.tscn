@@ -2,9 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://chdc5dpqyd1ou" path="res://resources/effects/dust-settle.png" id="1_sheet"]
 
-[sub_resource type="CanvasItemMaterial" id="mat"]
-blend_mode = 1
-
 [sub_resource type="AtlasTexture" id="f0"]
 atlas = ExtResource("1_sheet")
 region = Rect2(0, 0, 256, 256)
@@ -237,8 +234,9 @@ animations = [{
 "speed": 24.0
 }]
 
-[node name="dust-settle" type="AnimatedSprite2D" unique_id=1281652929]
+[node name="dust-settle" type="AnimatedSprite3D" unique_id=522321049]
 texture_filter = 2
-material = SubResource("mat")
 sprite_frames = SubResource("frames")
 autoplay = "default"
+frame = 31
+frame_progress = 1.0

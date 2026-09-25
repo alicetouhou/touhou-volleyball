@@ -13,6 +13,8 @@ var floor: Object
 const KICK_TIME_ALLOW = .15
 var time_since_kick_pressed = 1000
 
+signal create_fx(fx: PackedScene, pos: Vector3)
+
 @onready var Animations = %AnimationTree.get("parameters/playback")
 
 func kick():
@@ -55,6 +57,9 @@ func _physics_process(delta: float) -> void:
 	
 	if sign(x) != direction and x != 0:
 		direction = sign(x)
+		
+		if on_floor:
+			create_fx.emit(FXManager.dust_settle, global_position + Vector3(0, -.6, 0))
 		
 		if direction < 0:
 			Animations.travel("turn")

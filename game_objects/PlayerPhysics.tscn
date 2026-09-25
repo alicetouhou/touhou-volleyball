@@ -1,32 +1,31 @@
 [gd_scene format=3 uid="uid://dq67hchpmq6bi"]
 
-[ext_resource type="Script" uid="uid://bomdskl87q6gq" path="res://game_objects/player.gd" id="1_h31r8"]
 [ext_resource type="Texture2D" uid="uid://vsimlmjv380n" path="res://icon.svg" id="2_exy86"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_exy86"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h31r8"]
-size = Vector2(18, 20)
+size = Vector2(58, 114.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0xfd7"]
-size = Vector2(122, 137)
+size = Vector2(139, 220)
 
 [node name="Player" type="RigidBody2D" unique_id=1372600083]
 physics_material_override = SubResource("PhysicsMaterial_exy86")
 lock_rotation = true
-script = ExtResource("1_h31r8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1780334865]
+position = Vector2(0, 1.75)
 shape = SubResource("RectangleShape2D_h31r8")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1776837063]
-position = Vector2(0, -7)
-scale = Vector2(0.14062497, 0.265625)
+position = Vector2(5.9604645e-08, 9.094947e-13)
+scale = Vector2(0.5, 0.943)
 texture = ExtResource("2_exy86")
 
 [node name="Kick" type="Area2D" parent="." unique_id=1104528495]
 unique_name_in_owner = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Kick" unique_id=980200296]
-position = Vector2(-2, 1)
+position = Vector2(1.5, -11)
 shape = SubResource("RectangleShape2D_0xfd7")

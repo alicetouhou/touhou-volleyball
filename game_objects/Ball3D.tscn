@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://reki74cx25co"]
+
+[ext_resource type="Script" uid="uid://dndlisrcw5um6" path="res://game_objects/ball_3d.gd" id="1_1awvx"]
+[ext_resource type="Texture2D" uid="uid://cb70ljle7mf4h" path="res://volleyball.png" id="2_1awvx"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1awvx"]
+bounce = 0.99
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1awvx"]
+radius = 1.8386139
+
+[node name="Ball3d" type="RigidBody3D" unique_id=1208449855]
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+physics_material_override = SubResource("PhysicsMaterial_1awvx")
+script = ExtResource("1_1awvx")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1464322554]
+texture = ExtResource("2_1awvx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2050033133]
+shape = SubResource("SphereShape3D_1awvx")

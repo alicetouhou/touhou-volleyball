@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://cbyawmu8vbekl"]
+
+[ext_resource type="Script" uid="uid://blxb51ypbdrqg" path="res://game_objects/player_3d.gd" id="1_wa84s"]
+[ext_resource type="Texture2D" uid="uid://vsimlmjv380n" path="res://icon.svg" id="2_wa84s"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wa84s"]
+
+[sub_resource type="Animation" id="Animation_kxtgu"]
+length = 0.001
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_wa84s"]
+resource_name = "kick"
+length = 0.25
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.13333334, 1, 0, 1, 0, 0, 0.25, 1, 0, 0, 0, 1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kxtgu"]
+_data = {
+&"RESET": SubResource("Animation_kxtgu"),
+&"kick": SubResource("Animation_wa84s")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kxtgu"]
+size = Vector3(2.946045, 3.2489624, 1)
+
+[node name="Player3d" type="RigidBody3D" unique_id=733247983]
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+script = ExtResource("1_wa84s")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1588437195]
+shape = SubResource("BoxShape3D_wa84s")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=530659774]
+transparent_bg = true
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=705725850]
+texture = ExtResource("2_wa84s")
+
+[node name="Kick" type="AnimationPlayer" parent="." unique_id=1453755451]
+unique_name_in_owner = true
+libraries/ = SubResource("AnimationLibrary_kxtgu")
+
+[node name="KickHitbox" type="Area3D" parent="." unique_id=1627492970]
+unique_name_in_owner = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="KickHitbox" unique_id=996229372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14758301, -0.059173584, 0)
+shape = SubResource("BoxShape3D_kxtgu")

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://pyyksc64hxxu"
-path="res://.godot/imported/hit-sparks.png-2c1b0df32c5faa9679fda71f9ceab564.ctex"
+path="res://.godot/imported/hit-sparks.png-2c009a23e8c3925620f726544245ac7a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sheets/CLEAVE/hit-sparks.png"
-dest_files=["res://.godot/imported/hit-sparks.png-2c1b0df32c5faa9679fda71f9ceab564.ctex"]
+source_file="res://resources/effects/hit-sparks.png"
+dest_files=["res://.godot/imported/hit-sparks.png-2c009a23e8c3925620f726544245ac7a.ctex"]
 
 [params]
 

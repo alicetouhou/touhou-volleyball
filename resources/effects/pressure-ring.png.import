@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ctacmsg2ioliu"
-path="res://.godot/imported/pressure-ring.png-025772869ab2fae4f3105193b4cfeecb.ctex"
+path="res://.godot/imported/pressure-ring.png-93797425b07e0f4c520aeba1b9a365cf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sheets/CLEAVE/pressure-ring.png"
-dest_files=["res://.godot/imported/pressure-ring.png-025772869ab2fae4f3105193b4cfeecb.ctex"]
+source_file="res://resources/effects/pressure-ring.png"
+dest_files=["res://.godot/imported/pressure-ring.png-93797425b07e0f4c520aeba1b9a365cf.ctex"]
 
 [params]
 

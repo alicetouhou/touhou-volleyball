@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://djehrkaapuj08"
-path="res://.godot/imported/pommel-pop.png-fb36d45f3d69ed3e05ea29d0290328e8.ctex"
+path="res://.godot/imported/pommel-pop.png-25e739afbbc5892a2dc8b6d9fd75c57b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sheets/CLEAVE/pommel-pop.png"
-dest_files=["res://.godot/imported/pommel-pop.png-fb36d45f3d69ed3e05ea29d0290328e8.ctex"]
+source_file="res://resources/effects/pommel-pop.png"
+dest_files=["res://.godot/imported/pommel-pop.png-25e739afbbc5892a2dc8b6d9fd75c57b.ctex"]
 
 [params]
 

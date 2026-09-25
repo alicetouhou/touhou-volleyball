@@ -1,7 +1,7 @@
 extends RigidBody3D
 
 var direction = 1
-const MOVEMENT_SPEED = 10
+const MOVEMENT_SPEED = 7
 const JUMP_POWER = 7
 
 const UP_KICK_POWER = Vector2()

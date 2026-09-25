@@ -47,12 +47,12 @@ func kick():
 	# Always hit the ball torward the center of the court
 	var hit_ball_in_direction = sign(position.x) * -1
 
-	if ball_angle <= PI / 4:
+	if Input.is_action_pressed("up"):
 		ball.apply_impulse(Vector3(5 * hit_ball_in_direction, 10, 0))
-	elif ball_angle <= PI / 4 * 3:
-		ball.apply_impulse(Vector3(18 * hit_ball_in_direction, 0, 0))
-	elif ball_angle <= PI:
+	elif Input.is_action_pressed("down"):
 		ball.apply_impulse(Vector3(10 * hit_ball_in_direction, -10, 0))
+	else:
+		ball.apply_impulse(Vector3(18 * hit_ball_in_direction, 0, 0))
 
 func _physics_process(delta: float) -> void:
 	var x = int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left"))

@@ -11,7 +11,7 @@ animation = &"turn"
 animation = &"turn"
 
 [resource]
-graph_offset = Vector2(-234.96652, 27.023224)
+graph_offset = Vector2(-277.33624, -15.823273)
 nodes/output/position = Vector2(560, 160)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_wa84s")
 nodes/TimeScale/position = Vector2(80, 260)

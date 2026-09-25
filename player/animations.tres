@@ -5,8 +5,11 @@
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kxtgu"]
 animation = &"idle"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rpeqp"]
-animation = &"kick"
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pceem"]
+animation = &"kick_hit"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_keqfs"]
+animation = &"kick_miss"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_rpeqp"]
 advance_mode = 2
@@ -17,23 +20,38 @@ advance_mode = 2
 switch_mode = 2
 advance_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_aug3q"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_62d2p"]
+advance_mode = 0
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nc42t"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ekghx"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_w7cey"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_pceem"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_keqfs"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jggml"]
 switch_mode = 2
 advance_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xqd5o"]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0urx3"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_80it5"]
+switch_mode = 2
+advance_mode = 2
 
 [resource]
 states/End/position = Vector2(1013, 128)
 states/Start/position = Vector2(131, 120)
 states/idle/node = SubResource("AnimationNodeAnimation_kxtgu")
 states/idle/position = Vector2(450, 208)
-states/kick/node = SubResource("AnimationNodeAnimation_rpeqp")
-states/kick/position = Vector2(684, 139)
+states/kick_hit/node = SubResource("AnimationNodeAnimation_pceem")
+states/kick_hit/position = Vector2(721, 66)
+states/kick_miss/node = SubResource("AnimationNodeAnimation_keqfs")
+states/kick_miss/position = Vector2(689, 161)
 states/turn/node = ExtResource("1_pceem")
 states/turn/position = Vector2(450, 37)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_rpeqp"), "idle", "turn", SubResource("AnimationNodeStateMachineTransition_olk2d"), "turn", "idle", SubResource("AnimationNodeStateMachineTransition_v1alf"), "kick", "turn", SubResource("AnimationNodeStateMachineTransition_aug3q"), "kick", "idle", SubResource("AnimationNodeStateMachineTransition_nc42t"), "idle", "kick", SubResource("AnimationNodeStateMachineTransition_xqd5o"), "turn", "kick", SubResource("AnimationNodeStateMachineTransition_0urx3")]
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_rpeqp"), "idle", "turn", SubResource("AnimationNodeStateMachineTransition_olk2d"), "turn", "idle", SubResource("AnimationNodeStateMachineTransition_v1alf"), "kick_miss", "kick_hit", SubResource("AnimationNodeStateMachineTransition_62d2p"), "turn", "kick_hit", SubResource("AnimationNodeStateMachineTransition_ekghx"), "kick_hit", "turn", SubResource("AnimationNodeStateMachineTransition_w7cey"), "idle", "kick_miss", SubResource("AnimationNodeStateMachineTransition_pceem"), "idle", "kick_hit", SubResource("AnimationNodeStateMachineTransition_keqfs"), "kick_hit", "idle", SubResource("AnimationNodeStateMachineTransition_jggml"), "kick_miss", "idle", SubResource("AnimationNodeStateMachineTransition_80it5")]

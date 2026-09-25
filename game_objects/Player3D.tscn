@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://blxb51ypbdrqg" path="res://game_objects/player_3d.gd" id="1_wa84s"]
 [ext_resource type="Texture2D" uid="uid://dw1xae2suocg1" path="res://assets/sprite/alice.png" id="2_wa84s"]
+[ext_resource type="AnimationNodeStateMachine" uid="uid://c14uejte347bk" path="res://player/animations.tres" id="3_kxtgu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wa84s"]
 size = Vector3(0.6385498, 1.2646484, 0.2998047)
@@ -38,8 +39,8 @@ tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.2, 1, 0, 0.15, 0, 0.4, 1, 0, 0, 0)
 
-[sub_resource type="Animation" id="Animation_wa84s"]
-resource_name = "kick"
+[sub_resource type="Animation" id="Animation_xqd5o"]
+resource_name = "kick_hit"
 length = 0.25
 tracks/0/type = "rotation_3d"
 tracks/0/imported = false
@@ -47,7 +48,18 @@ tracks/0/enabled = true
 tracks/0/path = NodePath("ScaleAndDirection/Sprite3D")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.06666667, 1, 0, 1, 0, 0, 0.25, 1, 0, 0, 0, -1)
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 1, 0, 0, 0.23333333, 1, 0, 0, 0, -1)
+
+[sub_resource type="Animation" id="Animation_wa84s"]
+resource_name = "kick_miss"
+length = 0.7
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScaleAndDirection/Sprite3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 1, 0, 0, 0.23333333, 1, 0, 0, 0, -1, 0.43333334, 1, 0, -1, 0, 0, 0.7, 1, 0, 0, 0, 1)
 
 [sub_resource type="Animation" id="Animation_rpeqp"]
 resource_name = "turn"
@@ -64,8 +76,48 @@ tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.083333336, 1, 0, 0.3, 0, 0.2
 _data = {
 &"RESET": SubResource("Animation_kxtgu"),
 &"idle": SubResource("Animation_olk2d"),
-&"kick": SubResource("Animation_wa84s"),
+&"kick_hit": SubResource("Animation_xqd5o"),
+&"kick_miss": SubResource("Animation_wa84s"),
 &"turn": SubResource("Animation_rpeqp")
+}
+
+[sub_resource type="Animation" id="Animation_aug3q"]
+length = 0.001
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScaleAndDirection")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_v1alf"]
+resource_name = "turn_left"
+length = 0.19999999999999998
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScaleAndDirection")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.2, 1, 0, 1, 0, 0)
+
+[sub_resource type="Animation" id="Animation_nc42t"]
+resource_name = "turn_right"
+length = 0.19999999999999998
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScaleAndDirection")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 1, 0, 0, 0.2, 1, 0, 0, 0, 1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_aug3q"]
+_data = {
+&"RESET": SubResource("Animation_aug3q"),
+&"turn_left": SubResource("Animation_v1alf"),
+&"turn_right": SubResource("Animation_nc42t")
 }
 
 [node name="Player3d" type="RigidBody3D" unique_id=733247983]
@@ -88,6 +140,7 @@ transform = Transform3D(0.302, 0, 0, 0, 0.302, 0, 0, 0, 0.302, 0, 0, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="ScaleAndDirection" unique_id=705725850]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1.0363672, 0, 0, 0, 1, 0, 0.10910149, 0)
 flip_h = true
 texture = ExtResource("2_wa84s")
 
@@ -100,3 +153,15 @@ shape = SubResource("BoxShape3D_kxtgu")
 
 [node name="PlayerAnimations" type="AnimationPlayer" parent="." unique_id=1453755451]
 libraries/ = SubResource("AnimationLibrary_kxtgu")
+
+[node name="Turning" type="AnimationPlayer" parent="." unique_id=1393882599]
+unique_name_in_owner = true
+libraries/ = SubResource("AnimationLibrary_aug3q")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=983584561]
+unique_name_in_owner = true
+root_node = NodePath("%AnimationTree/..")
+tree_root = ExtResource("3_kxtgu")
+anim_player = NodePath("../PlayerAnimations")
+parameters/turn/TimeScale/scale = 1.0
+parameters/turn/Direction/blend_amount = 0.0

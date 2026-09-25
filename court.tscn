@@ -27,8 +27,12 @@ script = ExtResource("2_0uhp5")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.511648)
 
-[node name="Player3d" parent="." unique_id=733247983 instance=ExtResource("1_klx28")]
+[node name="Player1" parent="." unique_id=733247983 instance=ExtResource("1_klx28")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.147914, 1.102423, 0)
+
+[node name="Player2" parent="." unique_id=1557334906 instance=ExtResource("1_klx28")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.852086, 1.102423, 0)
+player_device = 0
 
 [node name="Ball3d" parent="." unique_id=1208449855 instance=ExtResource("2_ih5bv")]
 unique_name_in_owner = true
@@ -66,5 +70,7 @@ transform = Transform3D(0.6777291, 0.31832865, 0.6628349, -0.7353116, 0.29340023
 shadow_enabled = true
 directional_shadow_mode = 0
 
-[connection signal="create_fx" from="Player3d" to="." method="_on_player_3d_create_fx"]
-[connection signal="on_hit_ball" from="Player3d" to="." method="_on_player_3d_on_hit_ball"]
+[connection signal="create_fx" from="Player1" to="." method="_on_player_3d_create_fx"]
+[connection signal="on_hit_ball" from="Player1" to="." method="_on_player_3d_on_hit_ball"]
+[connection signal="create_fx" from="Player2" to="." method="_on_player_3d_create_fx"]
+[connection signal="on_hit_ball" from="Player2" to="." method="_on_player_3d_on_hit_ball"]

@@ -1,5 +1,7 @@
 extends RigidBody3D
 
+@export var player_device = 16
+
 var direction = 1
 const MOVEMENT_SPEED = 7
 const JUMP_POWER = 7
@@ -54,10 +56,27 @@ func kick():
 	else:
 		ball.apply_impulse(Vector3(18 * hit_ball_in_direction, 0, 0))
 
-func _physics_process(delta: float) -> void:
-	var x = int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left"))
+func get_left_right():
+	if player_device == 16:
+		return Input.get_axis("left", "right")
+	return Input.get_joy_axis(player_device, JOY_AXIS_LEFT_X)
 
-	apply_central_force(Vector3(x, 0, 0)  * MOVEMENT_SPEED)
+func is_up_pressed():
+	print(Input.get_joy_axis(player_device, JOY_AXIS_LEFT_Y))
+	if player_device == 16:
+		return Input.is_action_pressed("up")
+	return Input.get_joy_axis(player_device, JOY_AXIS_LEFT_Y) < -.5
+
+func is_kick_pressed():
+	if player_device == 16:
+		return Input.is_action_pressed("kick")
+	return Input.is_joy_button_pressed(player_device, JOY_BUTTON_X)
+
+func _physics_process(delta: float) -> void:
+	var x = get_left_right()
+	print(x)
+
+	apply_central_force(Vector3(x, 0, 0) * MOVEMENT_SPEED)
 	
 	if sign(x) != direction and x != 0:
 		direction = sign(x)
@@ -72,18 +91,18 @@ func _physics_process(delta: float) -> void:
 			Animations.travel("turn")
 			%Turning.play("turn_right")
 
-	if Input.is_action_just_pressed("kick"):
+	if is_kick_pressed():
 		time_since_kick_pressed = 0
 	time_since_kick_pressed += delta
 	if time_since_kick_pressed < KICK_TIME_ALLOW:
 		kick()
 
-	if Input.is_action_just_pressed("up") and on_floor:
+	if is_up_pressed() and on_floor:
 		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
-	var input_direction = Input.get_vector("left", "right", "up", "down")
-	linear_velocity.x = input_direction.x * MOVEMENT_SPEED
+	var input_direction = get_left_right()
+	linear_velocity.x = input_direction * MOVEMENT_SPEED
 	# https://forum.godotengine.org/t/how-to-check-if-rigid-body-is-on-floor/65679/3
 	var i := 0
 	on_floor = false

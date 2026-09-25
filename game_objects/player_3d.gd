@@ -14,6 +14,7 @@ const KICK_TIME_ALLOW = .15
 var time_since_kick_pressed = 1000
 
 signal create_fx(fx: PackedScene, pos: Vector3)
+signal on_hit_ball
 
 @onready var Animations = %AnimationTree.get("parameters/playback")
 
@@ -29,12 +30,10 @@ func kick():
 	time_since_kick_pressed = 10000
 	
 	var ball: RigidBody3D = bodies[ball_index]
+	on_hit_ball.emit()
 	
 	var global_position_2D = Vector2(global_position.x, global_position.y)
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
-
-	create_fx.emit(FXManager.pressure_ring, ball.global_position)
-
 
 	var ball_angle = global_position_2D.angle_to_point(ball_global_position_2D) + PI / 2
 	

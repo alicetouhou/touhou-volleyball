@@ -102,4 +102,6 @@ texture_filter = 2
 material = SubResource("mat")
 sprite_frames = SubResource("frames")
 autoplay = "default"
+frame = 11
+frame_progress = 1.0
 offset = Vector2(-5.12, 0)

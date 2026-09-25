@@ -20,6 +20,7 @@ size = 10.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.147914, 1.102423, 0)
 
 [node name="Ball3d" parent="." unique_id=1208449855 instance=ExtResource("2_ih5bv")]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.845355, 5.8920703, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=763583146]
@@ -31,3 +32,4 @@ shape = SubResource("WorldBoundaryShape3D_hb3xx")
 unique_name_in_owner = true
 
 [connection signal="create_fx" from="Player3d" to="." method="_on_player_3d_create_fx"]
+[connection signal="on_hit_ball" from="Player3d" to="." method="_on_player_3d_on_hit_ball"]

@@ -27,11 +27,14 @@ func kick():
 
 	Animations.travel("kick_hit")
 	time_since_kick_pressed = 10000
-
-	var ball = bodies[ball_index]
+	
+	var ball: RigidBody3D = bodies[ball_index]
 	
 	var global_position_2D = Vector2(global_position.x, global_position.y)
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
+
+	create_fx.emit(FXManager.pressure_ring, ball.global_position)
+
 
 	var ball_angle = global_position_2D.angle_to_point(ball_global_position_2D) + PI / 2
 	
@@ -41,11 +44,11 @@ func kick():
 		ball_angle -= PI
 
 	if ball_angle <= PI / 4:
-		print("down")
+		ball.apply_impulse(Vector3(5 * direction, -5, 0))
 	elif ball_angle <= PI / 4 * 3:
-		print("forward")
+		ball.apply_impulse(Vector3(10 * direction, 1, 0))
 	elif ball_angle <= PI:
-		print("up")
+		ball.apply_impulse(Vector3(5 * direction, 5, 0))
 
 func _ready() -> void:
 	pass

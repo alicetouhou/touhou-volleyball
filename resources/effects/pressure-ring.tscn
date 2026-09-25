@@ -2,9 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://ctacmsg2ioliu" path="res://resources/effects/pressure-ring.png" id="1_sheet"]
 
-[sub_resource type="CanvasItemMaterial" id="mat"]
-blend_mode = 1
-
 [sub_resource type="AtlasTexture" id="f0"]
 atlas = ExtResource("1_sheet")
 region = Rect2(0, 0, 256, 256)
@@ -150,11 +147,12 @@ animations = [{
 }],
 "loop": 0,
 "name": &"default",
-"speed": 24.0
+"speed": 60.0
 }]
 
-[node name="pressure-ring" type="AnimatedSprite2D" unique_id=1230631851]
+[node name="pressure-ring" type="AnimatedSprite3D" unique_id=1312264776]
 texture_filter = 2
-material = SubResource("mat")
 sprite_frames = SubResource("frames")
 autoplay = "default"
+frame = 19
+frame_progress = 1.0

@@ -61,6 +61,23 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 1, 0, 0, 0.23333333, 1, 0, 0, 0, -1, 0.43333334, 1, 0, -1, 0, 0, 0.7, 1, 0, 0, 0, 1)
 
+[sub_resource type="Animation" id="Animation_0urx3"]
+resource_name = "start_run"
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScaleAndDirection/Sprite3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.03333333, 1, 0, 0, -0.156434, 0.987688, 0.2, 1, 0, 0, 0, 1)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ScaleAndDirection/Sprite3D")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.03333333, 1, 0.5, 0.5, 0, 0.2, 1, 0, 0, 0)
+
 [sub_resource type="Animation" id="Animation_rpeqp"]
 resource_name = "turn"
 length = 0.2
@@ -78,6 +95,7 @@ _data = {
 &"idle": SubResource("Animation_olk2d"),
 &"kick_hit": SubResource("Animation_xqd5o"),
 &"kick_miss": SubResource("Animation_wa84s"),
+&"start_run": SubResource("Animation_0urx3"),
 &"turn": SubResource("Animation_rpeqp")
 }
 
@@ -140,7 +158,6 @@ transform = Transform3D(0.302, 0, 0, 0, 0.302, 0, 0, 0, 0.302, 0, 0, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="ScaleAndDirection" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0363672, 0, 0, 0, 1, 0, 0.10910149, 0)
 flip_h = true
 texture = ExtResource("2_wa84s")
 

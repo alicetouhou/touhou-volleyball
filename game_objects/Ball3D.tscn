@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://dndlisrcw5um6" path="res://game_objects/ball_3d.gd" id="1_1awvx"]
 [ext_resource type="Texture2D" uid="uid://cb70ljle7mf4h" path="res://volleyball.png" id="2_1awvx"]
-[ext_resource type="PackedScene" uid="uid://cju0moh5e1qfg" path="res://resources/effects/pressure-ring.tscn" id="3_fn5kg"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1awvx"]
 bounce = 0.99
@@ -24,6 +23,3 @@ texture = ExtResource("2_1awvx")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2050033133]
 shape = SubResource("SphereShape3D_1awvx")
-
-[node name="pressure_ring" parent="." unique_id=1312264776 instance=ExtResource("3_fn5kg")]
-unique_name_in_owner = true

@@ -2,5 +2,22 @@
 
 [ext_resource type="Script" uid="uid://bd50et6aw3p6l" path="res://game_objects/fx_manager.gd" id="1_plexv"]
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_plexv"]
+blend_mode = 1
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_os57d"]
+viewport_path = NodePath("Viewport")
+
 [node name="FxManager" type="Node3D" unique_id=1008124586]
 script = ExtResource("1_plexv")
+
+[node name="Viewport" type="SubViewport" parent="." unique_id=299343873]
+unique_name_in_owner = true
+transparent_bg = true
+size = Vector2i(1920, 1080)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=146541829]
+material = SubResource("CanvasItemMaterial_plexv")
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("ViewportTexture_os57d")

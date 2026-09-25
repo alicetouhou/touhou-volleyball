@@ -178,10 +178,8 @@ animations = [{
 "speed": 24.0
 }]
 
-[node name="hit-sparks" type="AnimatedSprite3D" unique_id=1409114744]
-offset = Vector2(0, 15.36)
+[node name="hit-sparks" type="AnimatedSprite2D" unique_id=157004289]
 texture_filter = 2
 sprite_frames = SubResource("frames")
 autoplay = "default"
-frame = 23
-frame_progress = 1.0
+offset = Vector2(0, 15.36)

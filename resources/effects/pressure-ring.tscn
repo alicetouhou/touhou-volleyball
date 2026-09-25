@@ -150,7 +150,7 @@ animations = [{
 "speed": 60.0
 }]
 
-[node name="pressure-ring" type="AnimatedSprite3D" unique_id=1312264776]
+[node name="pressure-ring" type="AnimatedSprite2D" unique_id=1792338127]
 texture_filter = 2
 sprite_frames = SubResource("frames")
 autoplay = "default"

@@ -182,4 +182,6 @@ animations = [{
 texture_filter = 2
 sprite_frames = SubResource("frames")
 autoplay = "default"
+frame = 23
+frame_progress = 1.0
 offset = Vector2(0, -56.32)

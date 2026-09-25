@@ -3,8 +3,8 @@ extends RigidBody3D
 @export var player_device = 16
 
 var direction = 1
-const MOVEMENT_SPEED = 7
-const JUMP_POWER = 7
+const MOVEMENT_SPEED = 9
+const JUMP_POWER = 10
 
 const UP_KICK_POWER = Vector2()
 const FORWARD_KICK_POWER = Vector2()
@@ -44,22 +44,11 @@ func kick():
 	var global_position_2D = Vector2(global_position.x, global_position.y)
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
 
-	var ball_angle = global_position_2D.angle_to_point(ball_global_position_2D) + PI / 2
-	
-	while ball_angle < 0:
-		ball_angle += PI
-	while ball_angle > PI:
-		ball_angle -= PI
-	
-	# Always hit the ball torward the center of the court
-	var hit_ball_in_direction = direction
+	var ball_direction = global_position_2D.direction_to(ball_global_position_2D)
+	var force = Vector2(7, 7) * (ball_direction)
+	ball.linear_velocity = Vector3(force.x, force.y, 0) + linear_velocity
 
-	if is_up_pressed():
-		ball.apply_impulse(Vector3(5 * hit_ball_in_direction, 10, 0))
-	elif is_down_pressed():
-		ball.apply_impulse(Vector3(10 * hit_ball_in_direction, -10, 0))
-	else:
-		ball.apply_impulse(Vector3(18 * hit_ball_in_direction, 0, 0))
+	
 
 func get_left_right():
 	if player_device == 16:
@@ -111,6 +100,11 @@ func _physics_process(delta: float) -> void:
 	if is_up_pressed() and on_floor and can_jump:
 		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
 		can_jump = false
+	# Fast falling
+	if is_down_pressed() and not on_floor:
+		gravity_scale = 7
+	if on_floor:
+		gravity_scale = 1
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var input_direction = get_left_right()

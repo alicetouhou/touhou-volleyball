@@ -81,6 +81,9 @@ background_mode = 2
 background_color = Color(0.46610004, 0.78460175, 0.79, 1)
 sky = SubResource("Sky_utqu1")
 
+[sub_resource type="BoxMesh" id="BoxMesh_os57d"]
+size = Vector3(0.18664551, 2.0996094, 8.5581665)
+
 [node name="TouhouVolleyball" type="Node3D" unique_id=1885262703]
 script = ExtResource("1_8eugd")
 
@@ -139,6 +142,10 @@ environment = SubResource("Environment_utqu1")
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=345739650]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.106257, 2.9032006, 6.9366546)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1699854194]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0048217773, 0.5498047, 0.247406)
+mesh = SubResource("BoxMesh_os57d")
 
 [connection signal="create_fx" from="Player1" to="." method="_on_player_3d_create_fx"]
 [connection signal="on_hit_ball" from="Player1" to="." method="_on_player_3d_on_hit_ball"]

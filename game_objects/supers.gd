@@ -3,10 +3,18 @@ extends Node
 func run(game: Game, player: Player):
 	var name = player.character.name
 	
-	reimu(game, player)
+	if name == "Reimu":
+		reimu(game, player)
+	if name == "Alice":
+		alice(game, player)
+	if name == "Yuyuko":
+		yuyuko(game, player)
 
 func reimu(game: Game, player: Player):
-	var ball = game.get_ball()
-	
-	ball.apply_central_impulse(ball.linear_velocity.normalized() * 100)
-	
+	pass
+
+func alice(game: Game, player: Player):
+	pass
+
+func yuyuko(game: Game, player: Player):
+	pass

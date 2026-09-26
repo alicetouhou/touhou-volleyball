@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://cg2tpefngkhr6"]
 
-[ext_resource type="Script" uid="uid://0khalhvv6a3o" path="res://characters/character_resource.gd" id="1_mf6uj"]
+[ext_resource type="Script" uid="uid://0khalhvv6a3o" path="res://resources/character_resource.gd" id="1_mf6uj"]
 [ext_resource type="Texture2D" uid="uid://bluw2veqruu0j" path="res://assets/sprite/yuyuko.png" id="2_4yi35"]
 
 [resource]

@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://iy2hssrv4u5f" path="res://court.tscn" id="1_jtv5c"]
 [ext_resource type="Script" uid="uid://145sow77ik4" path="res://lobby/lobby.gd" id="1_qfux7"]
 [ext_resource type="Script" uid="uid://b4ewub2hwtw7" path="res://lobby/level.gd" id="1_uj4ub"]
+[ext_resource type="Script" uid="uid://b2hib1xb0kfid" path="res://lobby/character_display.gd" id="2_4veey"]
 [ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="2_mnguq"]
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="3_dk04u"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
@@ -36,34 +37,45 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="LobbyOverlay" unique_id=1161531551]
+[node name="Network" type="HBoxContainer" parent="LobbyOverlay" unique_id=1161531551]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Host" type="Button" parent="LobbyOverlay/HBoxContainer" unique_id=1233517059]
+[node name="Host" type="Button" parent="LobbyOverlay/Network" unique_id=1233517059]
 layout_mode = 2
 text = "Host game"
 
-[node name="Join" type="Button" parent="LobbyOverlay/HBoxContainer" unique_id=1608839525]
+[node name="Join" type="Button" parent="LobbyOverlay/Network" unique_id=1608839525]
 layout_mode = 2
 text = "Join game"
 
-[node name="IP" type="LineEdit" parent="LobbyOverlay/HBoxContainer" unique_id=1308138871]
+[node name="IP" type="LineEdit" parent="LobbyOverlay/Network" unique_id=1308138871]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "127.0.0.1"
 
-[node name="Disconnect" type="Button" parent="LobbyOverlay/HBoxContainer" unique_id=1057834319]
+[node name="Disconnect" type="Button" parent="LobbyOverlay/Network" unique_id=1057834319]
 visible = false
 layout_mode = 2
 text = "Disconnect"
 
-[node name="Start" type="Button" parent="LobbyOverlay/HBoxContainer" unique_id=2113218593]
+[node name="Start" type="Button" parent="LobbyOverlay/Network" unique_id=2113218593]
 visible = false
 layout_mode = 2
 text = "Start game"
+
+[node name="Characters" type="HBoxContainer" parent="LobbyOverlay" unique_id=1158666434]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = -150
+script = ExtResource("2_4veey")
 
 [node name="Level" type="Node3D" parent="." unique_id=489659158]
 script = ExtResource("1_uj4ub")
@@ -151,21 +163,21 @@ offset_top = 994.0
 offset_right = 1537.0
 offset_bottom = 994.0
 
-[connection signal="connection_stopped" from="." to="LobbyOverlay/HBoxContainer/Host" method="show"]
-[connection signal="connection_stopped" from="." to="LobbyOverlay/HBoxContainer/Join" method="show"]
-[connection signal="connection_stopped" from="." to="LobbyOverlay/HBoxContainer/IP" method="show"]
-[connection signal="connection_stopped" from="." to="LobbyOverlay/HBoxContainer/Disconnect" method="hide"]
-[connection signal="connection_stopped" from="." to="LobbyOverlay/HBoxContainer/Start" method="hide"]
-[connection signal="server_connected" from="." to="LobbyOverlay/HBoxContainer/Host" method="hide"]
-[connection signal="server_connected" from="." to="LobbyOverlay/HBoxContainer/Join" method="hide"]
-[connection signal="server_connected" from="." to="LobbyOverlay/HBoxContainer/IP" method="hide"]
-[connection signal="server_connected" from="." to="LobbyOverlay/HBoxContainer/Disconnect" method="show"]
-[connection signal="server_started" from="." to="LobbyOverlay/HBoxContainer/Host" method="hide"]
-[connection signal="server_started" from="." to="LobbyOverlay/HBoxContainer/Join" method="hide"]
-[connection signal="server_started" from="." to="LobbyOverlay/HBoxContainer/IP" method="hide"]
-[connection signal="server_started" from="." to="LobbyOverlay/HBoxContainer/Disconnect" method="show"]
-[connection signal="server_started" from="." to="LobbyOverlay/HBoxContainer/Start" method="show"]
-[connection signal="pressed" from="LobbyOverlay/HBoxContainer/Host" to="." method="host_game"]
-[connection signal="pressed" from="LobbyOverlay/HBoxContainer/Join" to="." method="join_game"]
-[connection signal="pressed" from="LobbyOverlay/HBoxContainer/Disconnect" to="." method="stop_connection"]
-[connection signal="pressed" from="LobbyOverlay/HBoxContainer/Start" to="." method="start_game"]
+[connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Host" method="show"]
+[connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Join" method="show"]
+[connection signal="connection_stopped" from="." to="LobbyOverlay/Network/IP" method="show"]
+[connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Disconnect" method="hide"]
+[connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Start" method="hide"]
+[connection signal="server_connected" from="." to="LobbyOverlay/Network/Host" method="hide"]
+[connection signal="server_connected" from="." to="LobbyOverlay/Network/Join" method="hide"]
+[connection signal="server_connected" from="." to="LobbyOverlay/Network/IP" method="hide"]
+[connection signal="server_connected" from="." to="LobbyOverlay/Network/Disconnect" method="show"]
+[connection signal="server_started" from="." to="LobbyOverlay/Network/Host" method="hide"]
+[connection signal="server_started" from="." to="LobbyOverlay/Network/Join" method="hide"]
+[connection signal="server_started" from="." to="LobbyOverlay/Network/IP" method="hide"]
+[connection signal="server_started" from="." to="LobbyOverlay/Network/Disconnect" method="show"]
+[connection signal="server_started" from="." to="LobbyOverlay/Network/Start" method="show"]
+[connection signal="pressed" from="LobbyOverlay/Network/Host" to="." method="host_game"]
+[connection signal="pressed" from="LobbyOverlay/Network/Join" to="." method="join_game"]
+[connection signal="pressed" from="LobbyOverlay/Network/Disconnect" to="." method="stop_connection"]
+[connection signal="pressed" from="LobbyOverlay/Network/Start" to="." method="start_game"]

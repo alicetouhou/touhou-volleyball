@@ -35,6 +35,7 @@ import/blender/enabled=false
 ball=""
 player=""
 ground=""
+cpu=""
 
 [input]
 

@@ -1,13 +1,12 @@
 [gd_scene format=3 uid="uid://iy2hssrv4u5f"]
 
 [ext_resource type="Script" uid="uid://t3o0p7kh8s7r" path="res://court.gd" id="1_8eugd"]
-[ext_resource type="PackedScene" uid="uid://cbyawmu8vbekl" path="res://game_objects/Player3D.tscn" id="1_klx28"]
+[ext_resource type="PackedScene" uid="uid://cbyawmu8vbekl" path="res://game_objects/player/Player3D.tscn" id="1_klx28"]
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="2_0uhp5"]
-[ext_resource type="PackedScene" uid="uid://reki74cx25co" path="res://game_objects/Ball3D.tscn" id="2_ih5bv"]
+[ext_resource type="PackedScene" uid="uid://reki74cx25co" path="res://game_objects/ball/Ball3D.tscn" id="2_ih5bv"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/FXManager.tscn" id="3_acrlw"]
 [ext_resource type="Resource" uid="uid://daocjniky22cb" path="res://characters/reimu.tres" id="5_3ygy1"]
 [ext_resource type="Resource" uid="uid://cg2tpefngkhr6" path="res://characters/yuyuko.tres" id="5_s44sn"]
-[ext_resource type="Resource" uid="uid://c3pe4h02ji3xr" path="res://characters/marisa.tres" id="7_bq33w"]
 [ext_resource type="PackedScene" uid="uid://dkik7frfitaga" path="res://assets/net.glb" id="7_pujm6"]
 [ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="8_pujm6"]
 
@@ -103,20 +102,17 @@ script = ExtResource("2_0uhp5")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.511648)
 
-[node name="Player1" parent="." unique_id=733247983 node_paths=PackedStringArray("ball") instance=ExtResource("1_klx28")]
+[node name="Player1" parent="." unique_id=733247983 instance=ExtResource("1_klx28")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.147914, 1.102423, 0)
+player_device = 16
 character_one = ExtResource("5_s44sn")
-character_two = ExtResource("5_3ygy1")
-ball = NodePath("../Ball3d")
 
-[node name="Player2" parent="." unique_id=1827797252 node_paths=PackedStringArray("ball") instance=ExtResource("1_klx28")]
+[node name="Player2" parent="." unique_id=1827797252 instance=ExtResource("1_klx28")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4307375, 1.102423, 0)
 player_device = 0
 character_one = ExtResource("5_3ygy1")
-character_two = ExtResource("7_bq33w")
-ball = NodePath("../Ball3d")
 
 [node name="Ball3d" parent="." unique_id=1208449855 instance=ExtResource("2_ih5bv")]
 unique_name_in_owner = true
@@ -207,13 +203,5 @@ offset_top = 994.0
 offset_right = 1537.0
 offset_bottom = 994.0
 
-[connection signal="create_fx" from="Player1" to="." method="_on_player_3d_create_fx"]
-[connection signal="on_hit_ball" from="Player1" to="." method="_on_player_3d_on_hit_ball"]
-[connection signal="super_charge_updated" from="Player1" to="." method="_on_player_1_super_charge_updated"]
-[connection signal="super_used" from="Player1" to="." method="_on_player_1_super_used"]
-[connection signal="create_fx" from="Player2" to="." method="_on_player_3d_create_fx"]
-[connection signal="on_hit_ball" from="Player2" to="." method="_on_player_3d_on_hit_ball"]
-[connection signal="super_charge_updated" from="Player2" to="." method="_on_player_2_super_charge_updated"]
-[connection signal="super_used" from="Player2" to="." method="_on_player_2_super_used"]
 [connection signal="body_entered" from="Ball3d" to="." method="_on_ball_3d_body_entered"]
 [connection signal="create_fx" from="Ball3d" to="." method="_on_ball_3d_create_fx"]

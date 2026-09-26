@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://cbyawmu8vbekl"]
 
-[ext_resource type="Script" uid="uid://blxb51ypbdrqg" path="res://game_objects/player_3d.gd" id="1_wa84s"]
+[ext_resource type="Script" uid="uid://blxb51ypbdrqg" path="res://game_objects/player/player_3d.gd" id="1_bn5eq"]
 [ext_resource type="Texture2D" uid="uid://bluw2veqruu0j" path="res://assets/sprite/yuyuko.png" id="2_kxtgu"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://c14uejte347bk" path="res://player/animations.tres" id="3_kxtgu"]
+[ext_resource type="Script" uid="uid://bgiixcdk64eli" path="res://game_objects/player/action_manager.gd" id="4_bn5eq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wa84s"]
 size = Vector3(0.6385498, 1.0792236, 0.2998047)
@@ -15,7 +16,7 @@ length = 0.001
 tracks/0/type = "rotation_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScaleAndDirection/Sprite3D")
+tracks/0/path = NodePath("Texture/Sprite3D")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
@@ -27,14 +28,14 @@ loop_mode = 1
 tracks/0/type = "scale_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScaleAndDirection/Sprite3D")
+tracks/0/path = NodePath("Texture/Sprite3D")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 1, 1, 1, 0.2, 1, 1, 1.05, 1, 0.4, 1, 1, 1, 1)
 tracks/1/type = "position_3d"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ScaleAndDirection/Sprite3D")
+tracks/1/path = NodePath("Texture/Sprite3D")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.2, 1, 0, 0.15, 0, 0.4, 1, 0, 0, 0)
@@ -45,7 +46,7 @@ length = 0.25
 tracks/0/type = "rotation_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScaleAndDirection/Sprite3D")
+tracks/0/path = NodePath("Texture/Sprite3D")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 1, 0, 0, 0.23333333, 1, 0, 0, 0, -1)
@@ -56,7 +57,7 @@ length = 0.7
 tracks/0/type = "rotation_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScaleAndDirection/Sprite3D")
+tracks/0/path = NodePath("Texture/Sprite3D")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 1, 0, 0, 0.23333333, 1, 0, 0, 0, -1, 0.43333334, 1, 0, -1, 0, 0, 0.7, 1, 0, 0, 0, 1)
@@ -66,14 +67,14 @@ resource_name = "start_run"
 tracks/0/type = "rotation_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScaleAndDirection/Sprite3D")
+tracks/0/path = NodePath("Texture/Sprite3D")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.03333333, 1, 0, 0, -0.156434, 0.987688, 0.2, 1, 0, 0, 0, 1)
 tracks/1/type = "position_3d"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ScaleAndDirection/Sprite3D")
+tracks/1/path = NodePath("Texture/Sprite3D")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.03333333, 1, 0.5, 0.5, 0, 0.2, 1, 0, 0, 0)
@@ -84,7 +85,7 @@ length = 0.2
 tracks/0/type = "position_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScaleAndDirection/Sprite3D")
+tracks/0/path = NodePath("Texture/Sprite3D")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.083333336, 1, 0, 0.3, 0, 0.2, 1, 0, 0, 0)
@@ -104,7 +105,7 @@ length = 0.001
 tracks/0/type = "rotation_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScaleAndDirection")
+tracks/0/path = NodePath("Texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
@@ -115,7 +116,7 @@ length = 0.2
 tracks/0/type = "rotation_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScaleAndDirection")
+tracks/0/path = NodePath("Texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.2, 1, 0, 1, 0, 0)
@@ -126,7 +127,7 @@ length = 0.2
 tracks/0/type = "rotation_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScaleAndDirection")
+tracks/0/path = NodePath("Texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 1, 0, 0, 0.2, 1, 0, 0, 0, 1)
@@ -138,9 +139,24 @@ _data = {
 &"turn_right": SubResource("Animation_nc42t")
 }
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_km8ha"]
-radius = 0.25
-height = 0.9
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kxtgu"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:linear_velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:angular_velocity")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g5q24"]
+properties/0/path = NodePath("ActionSync:direction")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [node name="Player3d" type="RigidBody3D" unique_id=733247983]
 collision_layer = 2
@@ -150,49 +166,58 @@ axis_lock_angular_y = true
 axis_lock_angular_z = true
 contact_monitor = true
 max_contacts_reported = 4
-script = ExtResource("1_wa84s")
+script = ExtResource("1_bn5eq")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1588437195]
+[node name="Collider" type="CollisionShape3D" parent="." unique_id=1588437195]
 transform = Transform3D(0.8672086, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.039611816, 0.021972656)
 shape = SubResource("BoxShape3D_wa84s")
 
-[node name="SubViewport" type="SubViewport" parent="." unique_id=530659774]
-transparent_bg = true
-
-[node name="ScaleAndDirection" type="Node3D" parent="." unique_id=1883257529]
+[node name="Texture" type="Node3D" parent="." unique_id=1883257529]
 unique_name_in_owner = true
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
-[node name="Sprite3D" type="Sprite3D" parent="ScaleAndDirection" unique_id=705725850]
+[node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0000262, 0, 0, 0, 1, 0, 7.856691e-05, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0155375, 0, 0, 0, 1, 0, 0.046612702, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 
-[node name="KickHitbox" type="Area3D" parent="." unique_id=1627492970]
+[node name="KickCollider" type="Area3D" parent="." unique_id=1627492970]
 unique_name_in_owner = true
 collision_mask = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="KickHitbox" unique_id=996229372 groups=["player"]]
+[node name="Collider" type="CollisionShape3D" parent="KickCollider" unique_id=996229372 groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103637695, -0.10105133, 0)
 shape = SubResource("BoxShape3D_kxtgu")
 
-[node name="PlayerAnimations" type="AnimationPlayer" parent="." unique_id=1453755451]
+[node name="Animations" type="Node" parent="." unique_id=815204776]
+
+[node name="PlayerAnimations" type="AnimationPlayer" parent="Animations" unique_id=1453755451]
+root_node = NodePath("../..")
 libraries/ = SubResource("AnimationLibrary_kxtgu")
 
-[node name="Turning" type="AnimationPlayer" parent="." unique_id=1393882599]
+[node name="Turning" type="AnimationPlayer" parent="Animations" unique_id=1393882599]
 unique_name_in_owner = true
+root_node = NodePath("../..")
 libraries/ = SubResource("AnimationLibrary_aug3q")
 
-[node name="AnimationTree" type="AnimationTree" parent="." unique_id=983584561]
+[node name="AnimationTree" type="AnimationTree" parent="Animations" unique_id=983584561]
 unique_name_in_owner = true
-root_node = NodePath("%AnimationTree/..")
+root_node = NodePath("%AnimationTree/../..")
 tree_root = ExtResource("3_kxtgu")
 anim_player = NodePath("../PlayerAnimations")
 parameters/turn/TimeScale/scale = 1.0
 parameters/turn/Direction/blend_amount = 0.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=324289998]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.051332235)
-cast_shadow = 3
-mesh = SubResource("CapsuleMesh_km8ha")
+[node name="Networking" type="Node" parent="." unique_id=320817667]
+
+[node name="ServerSync" type="MultiplayerSynchronizer" parent="Networking" unique_id=1005482676]
+editor_description = "This sync node handles anything the server has authority over.
+"
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_kxtgu")
+
+[node name="ActionSync" type="MultiplayerSynchronizer" parent="Networking" unique_id=580136649]
+unique_name_in_owner = true
+replication_config = SubResource("SceneReplicationConfig_g5q24")
+script = ExtResource("4_bn5eq")

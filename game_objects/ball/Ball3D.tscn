@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://reki74cx25co"]
 
-[ext_resource type="Script" uid="uid://dndlisrcw5um6" path="res://game_objects/ball_3d.gd" id="1_1awvx"]
+[ext_resource type="Script" uid="uid://dndlisrcw5um6" path="res://game_objects/ball/ball_3d.gd" id="1_1awvx"]
 [ext_resource type="Texture2D" uid="uid://cb70ljle7mf4h" path="res://volleyball.png" id="2_1awvx"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1awvx"]
@@ -11,6 +11,20 @@ bounce = 0.99
 radius = 0.46174127
 
 [sub_resource type="SphereMesh" id="SphereMesh_km8ha"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_1jdt5"]
+properties/0/path = NodePath(".:linear_velocity")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:angular_velocity")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:position")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:rotation")
+properties/3/spawn = true
+properties/3/replication_mode = 1
 
 [node name="Ball3d" type="RigidBody3D" unique_id=1208449855 groups=["ball"]]
 collision_layer = 4
@@ -35,3 +49,6 @@ shape = SubResource("SphereShape3D_1awvx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.047618628)
 cast_shadow = 3
 mesh = SubResource("SphereMesh_km8ha")
+
+[node name="ServerSync" type="MultiplayerSynchronizer" parent="." unique_id=1199347144]
+replication_config = SubResource("SceneReplicationConfig_1jdt5")

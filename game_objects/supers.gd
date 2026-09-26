@@ -39,3 +39,10 @@ func yuyuko(game: Game, player: Player):
 	
 	player.scale = Vector3(1, 1, 1)
 	
+	pass
+	
+func marisa(game: Game, player: Player):
+	player.can_move = false
+	var fx = game.get_fx_manager()
+	game.create_fx(fx.perfect_burst, player.global_position)
+	await get_tree().create_timer(0.3).timeout

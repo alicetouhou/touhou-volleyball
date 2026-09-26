@@ -3,7 +3,8 @@ class_name Player
 extends RigidBody3D
 
 @export var player_device = 16
-@export var character: CharacterResource
+@export var character_one: CharacterResource
+@export var character_two: CharacterResource
 @export var ball: RigidBody3D
 
 var direction = 1
@@ -25,6 +26,11 @@ var can_jump = true
 var can_move = true
 const SUPER_COOLDOWN = .2
 var time_since_super = 0.
+
+const SWITCH_CHARACTER_COOLDOWN = .5
+var time_since_switch_character = 100
+var current_character_number = 1
+var current_character: CharacterResource = character_one
 
 var super_charge: float = 0:
 	set(v):
@@ -106,8 +112,14 @@ func is_super_pressed():
 		return Input.is_action_just_pressed("super")
 	return Input.is_joy_button_pressed(player_device, JOY_BUTTON_Y)
 
+func is_switch_character_pressed():
+	if player_device == 16:
+		return Input.is_action_just_pressed("switch_character")
+	return Input.is_joy_button_pressed(player_device, JOY_BUTTON_A)
+
+
 func _ready() -> void:
-	%Sprite3D.texture = character.texture
+	%Sprite3D.texture = character_one.texture
 
 func _physics_process(delta: float) -> void:
 	if is_super_pressed() and time_since_super > SUPER_COOLDOWN:
@@ -163,6 +175,23 @@ func _physics_process(delta: float) -> void:
 	if sign(ball.position.x) != last_ball_position:
 		last_ball_position = sign(ball.position.x)
 		can_charge_super = true
+
+	time_since_switch_character += delta
+	if is_switch_character_pressed() and time_since_switch_character > SWITCH_CHARACTER_COOLDOWN:
+		Animations.travel("kick_hit")
+		if current_character_number == 1:
+			current_character_number = 2
+			current_character = character_two
+		else:
+			current_character_number = 1
+			current_character = character_one
+		time_since_switch_character = 0
+		
+		await get_tree().create_timer(.1).timeout
+		if current_character_number == 1:
+			%Sprite3D.texture = character_one.texture
+		else:
+			%Sprite3D.texture = character_two.texture
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var input_direction = get_left_right()

@@ -1,7 +1,7 @@
 extends Node
 
 func run(game: Game, player: Player):
-	var name = player.character.name
+	var name = player.current_character.name
 	
 	if name == "Reimu":
 		reimu(game, player)

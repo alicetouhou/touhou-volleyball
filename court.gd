@@ -63,6 +63,9 @@ func _on_ball_3d_body_entered(body: Node) -> void:
 func get_ball() -> RigidBody3D:
 	return %Ball3d
 
+func get_fx_manager() -> FXManager:
+	return %FxManager
+
 func _on_player_1_super_used() -> void:
 	Supers.run(self, %Player1)
 

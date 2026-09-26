@@ -28,19 +28,18 @@ signal super_used
 
 @onready var Animations = %AnimationTree.get("parameters/playback")
 
-func kick():
+func kick(velocity = 7) -> RigidBody3D:
 	Animations.travel("kick_miss")
 	var bodies = %KickHitbox.get_overlapping_bodies()
 	var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
-
 	if ball_index < 0:
 		return
+	var ball: RigidBody3D = bodies[ball_index]
 
 	Animations.travel("kick_hit")
 	time_since_kick_pressed = 10000
 	time_since_kick = 0
 	
-	var ball: RigidBody3D = bodies[ball_index]
 	on_hit_ball.emit()
 	create_fx.emit(FXManager.pummel_pop, (ball.global_position + global_position) / 2)
 	create_fx.emit(FXManager.spark_spit, (ball.global_position + global_position) / 2)
@@ -49,10 +48,10 @@ func kick():
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
 
 	var ball_direction = global_position_2D.direction_to(ball_global_position_2D)
-	var force = Vector2(7, 7) * (ball_direction)
+	var force = Vector2(velocity, velocity) * (ball_direction)
 	ball.linear_velocity = Vector3(force.x, force.y, 0) + linear_velocity
 
-	
+	return ball
 
 func get_left_right():
 	if player_device == 16:

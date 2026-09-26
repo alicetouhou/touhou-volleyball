@@ -206,7 +206,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"default",
-"speed": 24.0
+"speed": 60.0
 }]
 
 [node name="holy-pillar" type="AnimatedSprite2D" unique_id=1199916776]

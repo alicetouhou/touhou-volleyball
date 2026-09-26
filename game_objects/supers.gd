@@ -9,6 +9,8 @@ func run(game: Game, player: Player):
 		alice(game, player)
 	if name == "Yuyuko":
 		yuyuko(game, player)
+	if name == "Marisa":
+		marisa(game, player)
 
 func reimu(game: Game, player: Player):
 	if player.super_charge < 1:
@@ -42,5 +44,7 @@ func yuyuko(game: Game, player: Player):
 func marisa(game: Game, player: Player):
 	player.can_move = false
 	var fx = game.get_fx_manager()
-	game.create_fx(fx.perfect_burst, player.global_position)
+	fx.create_at_pos(fx.perfect_burst, player.global_position + Vector3(0.5,0.0,0.0))
+	fx.create_at_pos(fx.holy_pillar, player.global_position + Vector3(0.5,0.0,0.0))
 	await get_tree().create_timer(0.3).timeout
+	player.can_move = true

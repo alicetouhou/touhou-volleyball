@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://dyb2jtxhyda56"]
+
+[ext_resource type="Script" uid="uid://0khalhvv6a3o" path="res://characters/character_resource.gd" id="1_rmhf4"]
+[ext_resource type="Texture2D" uid="uid://gd6c4ssober7" path="res://assets/sprite/marisa.png" id="2_rmhf4"]
+
+[resource]
+script = ExtResource("1_rmhf4")
+name = "Marisa"
+texture = ExtResource("2_rmhf4")
+metadata/_custom_type_script = "uid://0khalhvv6a3o"

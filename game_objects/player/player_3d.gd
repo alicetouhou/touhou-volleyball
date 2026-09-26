@@ -12,6 +12,8 @@ signal super_charge_updated(value: float)
 const MOVEMENT_SPEED := 9
 const JUMP_POWER := 10
 
+const SET_ANGLE := PI/4 # radians
+
 const KICK_TIME_GRACE := .15
 const KICK_COOLDOWN := .3
 
@@ -71,8 +73,16 @@ func kick(velocity = 7):
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
 
 	var ball_direction = global_position_2D.direction_to(ball_global_position_2D)
-	var force = Vector2(velocity, velocity) * (ball_direction)
-	ball.linear_velocity = Vector3(force.x, force.y, 0) + linear_velocity
+	var force = velocity * (ball_direction)
+	
+	if %ActionSync.direction.y > 0 and acos(ball_direction.dot(Vector2.DOWN) <= SET_ANGLE):
+		ball.linear_velocity = Vector3.ZERO
+		ball.linear_velocity.y = velocity + linear_velocity.y
+	else:
+		ball.linear_velocity = Vector3(force.x, force.y, 0) + linear_velocity
+	
+	if %ActionSync.direction.y < 0:
+		ball.linear_velocity *= 2
 	
 	super_charge += ball.linear_velocity.length() / 50.
 
@@ -93,7 +103,9 @@ func _physics_process(delta: float) -> void:
 
 	# Fast falling
 	if %ActionSync.direction.y < 0 and not on_floor:
-		gravity_scale = 7
+		if linear_velocity.y > 0:
+			linear_velocity.y = 0
+		gravity_scale = 14
 	else:
 		gravity_scale = 1
 	

@@ -103,15 +103,17 @@ script = ExtResource("2_0uhp5")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.511648)
 
-[node name="Player1" parent="." unique_id=733247983 instance=ExtResource("1_klx28")]
+[node name="Player1" parent="." unique_id=733247983 node_paths=PackedStringArray("ball") instance=ExtResource("1_klx28")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.147914, 1.102423, 0)
+ball = NodePath("../Ball3d")
 
-[node name="Player2" parent="." unique_id=1827797252 instance=ExtResource("1_klx28")]
+[node name="Player2" parent="." unique_id=1827797252 node_paths=PackedStringArray("ball") instance=ExtResource("1_klx28")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4307375, 1.102423, 0)
 player_device = 1
 character = ExtResource("5_utqu1")
+ball = NodePath("../Ball3d")
 
 [node name="Ball3d" parent="." unique_id=1208449855 instance=ExtResource("2_ih5bv")]
 unique_name_in_owner = true

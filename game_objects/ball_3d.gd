@@ -2,7 +2,7 @@ extends Node3D
 var on_floor: bool = false
 var floor: Object
 signal create_fx(fx: PackedScene, pos: Vector3)
-	
+
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	# https://forum.godotengine.org/t/how-to-check-if-rigid-body-is-on-floor/65679/3
 	var i := 0

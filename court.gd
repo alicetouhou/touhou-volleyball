@@ -13,14 +13,7 @@ func _on_player_3d_create_fx(fx: PackedScene, pos: Vector3) -> void:
 
 func _on_player_3d_on_hit_ball() -> void:
 	%FxManager.create_with_parent_3D(FXManager.pressure_ring, %Ball3d)
-	
-	var ball_speed = %Ball3d.linear_velocity
-	
-	if %Ball3d.linear_velocity.length() > 10:
-		%Camera3D.add_trauma(.1)
-	else:
-		%Camera3D.add_trauma(.05)
-
+	%Camera3D.add_trauma(.1)
 
 
 func _on_ball_3d_create_fx(fx: PackedScene, pos: Vector3) -> void:
@@ -28,7 +21,6 @@ func _on_ball_3d_create_fx(fx: PackedScene, pos: Vector3) -> void:
 
 func start_round():
 	%Ball3d.linear_velocity = Vector3.ZERO
-	%Ball3d.angular_velocity = Vector3.ZERO
 	%Player1.linear_velocity = Vector3.ZERO
 	%Player2.linear_velocity = Vector3.ZERO
 	%Ball3d.process_mode = Node.PROCESS_MODE_DISABLED
@@ -80,11 +72,3 @@ func _on_player_1_super_used() -> void:
 
 func _on_player_2_super_used() -> void:
 	Supers.run(self, %Player2)
-
-
-func _on_player_1_super_charge_updated(value: float) -> void:
-	%PlayerOneSuperCharge.set_charge(value)
-
-
-func _on_player_2_super_charge_updated(value: float) -> void:
-	%PlayerTwoSuperCharge.set_charge(value)

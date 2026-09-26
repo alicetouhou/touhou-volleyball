@@ -167,7 +167,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="ScaleAndDirection" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0447383, 0, 0, 0, 1, 0, 0.13421476, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0084462, 0, 0, 0, 1, 0, 0.025338516, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 

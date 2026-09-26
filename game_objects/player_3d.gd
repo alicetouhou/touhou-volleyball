@@ -4,6 +4,7 @@ extends RigidBody3D
 
 @export var player_device = 16
 @export var character: CharacterResource
+@export var ball: RigidBody3D
 
 var direction = 1
 const MOVEMENT_SPEED = 9
@@ -17,7 +18,7 @@ var on_floor: bool = false
 var floor: Object
 
 const KICK_TIME_ALLOW = .15
-var KICK_COOLDOWN = .1
+var KICK_COOLDOWN = .3
 var time_since_kick_pressed = 100
 var time_since_kick = 100
 var can_jump = true
@@ -35,6 +36,10 @@ signal create_fx(fx: PackedScene, pos: Vector3)
 signal on_hit_ball
 signal super_used
 signal super_charge_updated(value: float)
+
+var can_charge_super = true
+var last_ball_position = 0
+
 
 @onready var Animations = %AnimationTree.get("parameters/playback")
 
@@ -61,8 +66,8 @@ func kick(velocity = 7) -> RigidBody3D:
 	var force = Vector2(velocity, velocity) * (ball_direction)
 	ball.linear_velocity = Vector3(force.x, force.y, 0) + linear_velocity
 	
-	if ball.linear_velocity.length_squared() > 100:
-		super_charge += .25
+	if can_charge_super:
+		super_charge += .333
 
 	return ball
 
@@ -136,6 +141,10 @@ func _physics_process(delta: float) -> void:
 		time_since_super = 0
 		super_used.emit()
 	time_since_super += delta
+
+	if sign(ball.position.x) != last_ball_position:
+		last_ball_position = sign(ball.position.x)
+		can_charge_super = true
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var input_direction = get_left_right()

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="touhou-volleyball"
-run/main_scene="uid://iy2hssrv4u5f"
+run/main_scene="uid://c8lfngdce82fl"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 

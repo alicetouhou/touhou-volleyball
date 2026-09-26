@@ -20,6 +20,11 @@ const SUPER_COOLDOWN = .2
 ## Player's character
 @export var character: CharacterResource
 
+@export var player_id: int :
+	set(value):
+		player_id = value
+		%ActionSync.set_multiplayer_authority(value)
+
 ## Horizontal movement sign
 var direction := 1
 

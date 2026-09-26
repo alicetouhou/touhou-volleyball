@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ca4cs8h4j08ay"]
 
-[ext_resource type="Script" uid="uid://bd50et6aw3p6l" path="res://game_objects/fx_manager.gd" id="1_plexv"]
+[ext_resource type="Script" uid="uid://bd50et6aw3p6l" path="res://game_objects/vfx/fx_manager.gd" id="1_plexv"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_plexv"]
 blend_mode = 1
@@ -20,4 +20,5 @@ size = Vector2i(1920, 1080)
 material = SubResource("CanvasItemMaterial_plexv")
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 texture = SubResource("ViewportTexture_os57d")

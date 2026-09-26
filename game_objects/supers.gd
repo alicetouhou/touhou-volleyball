@@ -1,15 +1,15 @@
 extends Node
 
 func run(game: Game, player: Player):
-	var name = player.current_character.name
+	var character_name = player.character.name
 	
-	if name == "Reimu":
+	if character_name == "Reimu":
 		reimu(game, player)
-	if name == "Alice":
+	if character_name == "Alice":
 		alice(game, player)
-	if name == "Yuyuko":
+	if character_name == "Yuyuko":
 		yuyuko(game, player)
-	if name == "Marisa":
+	if character_name == "Marisa":
 		marisa(game, player)
 
 func reimu(game: Game, player: Player):

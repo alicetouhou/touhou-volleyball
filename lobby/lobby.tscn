@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://c8lfngdce82fl"]
+
+[ext_resource type="PackedScene" uid="uid://iy2hssrv4u5f" path="res://court.tscn" id="1_jtv5c"]
+[ext_resource type="Script" uid="uid://145sow77ik4" path="res://lobby/lobby.gd" id="1_qfux7"]
+[ext_resource type="Script" uid="uid://b4ewub2hwtw7" path="res://lobby/level.gd" id="1_uj4ub"]
+[ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="2_mnguq"]
+[ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="3_dk04u"]
+[ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
+
+[node name="Lobby" type="Node" unique_id=1193217656]
+script = ExtResource("1_qfux7")
+
+[node name="LobbyOverlay" type="Control" parent="." unique_id=1015092632]
+top_level = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LobbyOverlay" unique_id=1161531551]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Host" type="Button" parent="LobbyOverlay/HBoxContainer" unique_id=1233517059]
+layout_mode = 2
+text = "Host game"
+
+[node name="Join" type="Button" parent="LobbyOverlay/HBoxContainer" unique_id=1608839525]
+layout_mode = 2
+text = "Join game"
+
+[node name="IP" type="LineEdit" parent="LobbyOverlay/HBoxContainer" unique_id=1308138871]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "127.0.0.1"
+
+[node name="Start" type="Button" parent="LobbyOverlay/HBoxContainer" unique_id=2113218593]
+layout_mode = 2
+text = "Start game"
+
+[node name="Level" type="Node3D" parent="." unique_id=489659158]
+script = ExtResource("1_uj4ub")
+
+[node name="TouhouVolleyball" parent="Level" unique_id=1885262703 instance=ExtResource("1_jtv5c")]
+
+[node name="Markers" type="Node3D" parent="Level" unique_id=1428041500]
+
+[node name="P1BallSpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1785701356]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4, 0)
+
+[node name="P2BallSpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1561185774]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4, 0)
+
+[node name="P1SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=158125368]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.46894157, 0)
+
+[node name="P2SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=759686758]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.46894157, 0)
+
+[node name="Players" type="Node3D" parent="Level" unique_id=1411736408]
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="Level" unique_id=2073793907]
+_spawnable_scenes = PackedStringArray("uid://cbyawmu8vbekl")
+spawn_path = NodePath("../Players")
+spawn_limit = 2
+
+[node name="Ball" type="Node3D" parent="Level" unique_id=979437667]
+
+[node name="BallSpawner" type="MultiplayerSpawner" parent="Level" unique_id=1104166831]
+_spawnable_scenes = PackedStringArray("uid://reki74cx25co")
+spawn_path = NodePath("../Ball")
+
+[node name="Camera" type="Camera3D" parent="Level" unique_id=757775853]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.9976108, 0.06908454, 0, -0.06908454, 0.9976108, 0, 4.368427, 8.134905)
+current = true
+size = 10.0
+script = ExtResource("3_dk04u")
+
+[node name="FxManager" parent="Level/Camera" unique_id=1008124586 instance=ExtResource("4_qfux7")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.511648)
+
+[node name="UI" type="Control" parent="." unique_id=2110848446]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Score" type="Label" parent="UI" unique_id=1518340030]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 573.0
+offset_top = 197.0
+offset_right = 2043.0
+offset_bottom = 879.0
+theme_override_font_sizes/font_size = 250
+text = "Score!"
+
+[node name="ChargeBars" type="Control" parent="UI" unique_id=1779165279]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayerOneSuperCharge" parent="UI/ChargeBars" unique_id=163459216 instance=ExtResource("2_mnguq")]
+layout_mode = 1
+offset_left = 69.0
+offset_top = 994.0
+offset_right = 69.0
+offset_bottom = 994.0
+
+[node name="PlayerTwoSuperCharge" parent="UI/ChargeBars" unique_id=1505399695 instance=ExtResource("2_mnguq")]
+layout_mode = 1
+offset_left = 1537.0
+offset_top = 994.0
+offset_right = 1537.0
+offset_bottom = 994.0
+
+[connection signal="pressed" from="LobbyOverlay/HBoxContainer/Host" to="." method="host_game"]
+[connection signal="pressed" from="LobbyOverlay/HBoxContainer/Join" to="." method="join_game"]
+[connection signal="pressed" from="LobbyOverlay/HBoxContainer/Start" to="Level" method="start_game"]

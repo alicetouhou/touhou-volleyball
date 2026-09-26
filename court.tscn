@@ -1,14 +1,6 @@
 [gd_scene format=3 uid="uid://iy2hssrv4u5f"]
 
-[ext_resource type="Script" uid="uid://t3o0p7kh8s7r" path="res://court.gd" id="1_8eugd"]
-[ext_resource type="PackedScene" uid="uid://cbyawmu8vbekl" path="res://game_objects/player/Player3D.tscn" id="1_klx28"]
-[ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="2_0uhp5"]
-[ext_resource type="PackedScene" uid="uid://reki74cx25co" path="res://game_objects/ball/Ball3D.tscn" id="2_ih5bv"]
-[ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/FXManager.tscn" id="3_acrlw"]
-[ext_resource type="Resource" uid="uid://daocjniky22cb" path="res://characters/reimu.tres" id="5_3ygy1"]
-[ext_resource type="Resource" uid="uid://cg2tpefngkhr6" path="res://characters/yuyuko.tres" id="5_s44sn"]
 [ext_resource type="PackedScene" uid="uid://dkik7frfitaga" path="res://assets/net.glb" id="7_pujm6"]
-[ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="8_pujm6"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_hb3xx"]
 
@@ -89,34 +81,6 @@ sky = SubResource("Sky_utqu1")
 size = Vector3(1, 0.5303345, 1.0037842)
 
 [node name="TouhouVolleyball" type="Node3D" unique_id=1885262703]
-script = ExtResource("1_8eugd")
-
-[node name="Camera3D" type="Camera3D" parent="." unique_id=586917617]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.9976108, 0.06908454, 0, -0.06908454, 0.9976108, 0, 4.368427, 8.134905)
-current = true
-size = 10.0
-script = ExtResource("2_0uhp5")
-
-[node name="FxManager" parent="Camera3D" unique_id=1008124586 instance=ExtResource("3_acrlw")]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.511648)
-
-[node name="Player1" parent="." unique_id=733247983 instance=ExtResource("1_klx28")]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.147914, 1.102423, 0)
-player_device = 16
-character_one = ExtResource("5_s44sn")
-
-[node name="Player2" parent="." unique_id=1827797252 instance=ExtResource("1_klx28")]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4307375, 1.102423, 0)
-player_device = 0
-character_one = ExtResource("5_3ygy1")
-
-[node name="Ball3d" parent="." unique_id=1208449855 instance=ExtResource("2_ih5bv")]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.845355, 5.8920703, 0)
 
 [node name="Ground" type="StaticBody3D" parent="." unique_id=763583146 groups=["ground"]]
 
@@ -154,32 +118,6 @@ environment = SubResource("Environment_utqu1")
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="." unique_id=345739650]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.106257, 2.9032006, 6.9366546)
 
-[node name="P1BallSpawnPoint" type="Node3D" parent="." unique_id=1299655512]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4, 0)
-
-[node name="P2BallSpawnPoint" type="Node3D" parent="." unique_id=222651851]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4, 0)
-
-[node name="P1SpawnPoint" type="Node3D" parent="." unique_id=97738085]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.46894157, 0)
-
-[node name="P2SpawnPoint" type="Node3D" parent="." unique_id=1480902267]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.46894157, 0)
-
-[node name="Score" type="Label" parent="." unique_id=627109362]
-unique_name_in_owner = true
-visible = false
-offset_left = 573.0
-offset_top = 197.0
-offset_right = 2043.0
-offset_bottom = 879.0
-theme_override_font_sizes/font_size = 250
-text = "Score!"
-
 [node name="Wall" type="StaticBody3D" parent="." unique_id=1444280582]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Wall" unique_id=506340396]
@@ -188,20 +126,3 @@ shape = SubResource("BoxShape3D_km8ha")
 
 [node name="net" parent="Wall" unique_id=2125422396 instance=ExtResource("7_pujm6")]
 transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, 0, 0, 0)
-
-[node name="PlayerOneSuperCharge" parent="." unique_id=163459216 instance=ExtResource("8_pujm6")]
-unique_name_in_owner = true
-offset_left = 69.0
-offset_top = 994.0
-offset_right = 69.0
-offset_bottom = 994.0
-
-[node name="PlayerTwoSuperCharge" parent="." unique_id=1505876483 instance=ExtResource("8_pujm6")]
-unique_name_in_owner = true
-offset_left = 1537.0
-offset_top = 994.0
-offset_right = 1537.0
-offset_bottom = 994.0
-
-[connection signal="body_entered" from="Ball3d" to="." method="_on_ball_3d_body_entered"]
-[connection signal="create_fx" from="Ball3d" to="." method="_on_ball_3d_create_fx"]

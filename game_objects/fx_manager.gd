@@ -11,6 +11,8 @@ const pummel_pop = preload("res://resources/effects/pommel-pop.tscn")
 const spark_spit = preload("res://resources/effects/spark-spit.tscn")
 const crush_slam = preload("res://resources/effects/crush-slam.tscn")
 const crit_burst = preload("res://resources/effects/crit-burst.tscn")
+const holy_pillar = preload("res://resources/effects/holy-pillar.tscn")
+const perfect_burst = preload("res://resources/effects/perfect-burst.tscn")
 
 func _process(delta: float) -> void:
 	for u in update_positions:

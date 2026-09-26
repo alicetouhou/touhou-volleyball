@@ -22,6 +22,7 @@ var KICK_COOLDOWN = .3
 var time_since_kick_pressed = 100
 var time_since_kick = 100
 var can_jump = true
+var can_move = true
 const SUPER_COOLDOWN = .2
 var time_since_super = 0.
 
@@ -100,6 +101,16 @@ func _ready() -> void:
 	%Sprite3D.texture = character.texture
 
 func _physics_process(delta: float) -> void:
+	if is_super_pressed() and time_since_super > SUPER_COOLDOWN:
+		time_since_super = 0
+	if character.super_cost < super_charge:
+		super_charge -= character.super_cost
+		super_used.emit()
+	time_since_super += delta
+	
+	if !can_move:
+		return
+	
 	var x = get_left_right()
 
 	apply_central_force(Vector3(x, 0, 0) * MOVEMENT_SPEED)

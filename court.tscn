@@ -5,8 +5,17 @@
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="2_0uhp5"]
 [ext_resource type="PackedScene" uid="uid://reki74cx25co" path="res://game_objects/Ball3D.tscn" id="2_ih5bv"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/FXManager.tscn" id="3_acrlw"]
+[ext_resource type="Script" uid="uid://0khalhvv6a3o" path="res://characters/character_resource.gd" id="5_s44sn"]
 [ext_resource type="Resource" uid="uid://cg2tpefngkhr6" path="res://characters/yuyuko.tres" id="5_utqu1"]
-[ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="8_pujm6"]
+[ext_resource type="Texture2D" uid="uid://dw1xae2suocg1" path="res://assets/sprite/alice.png" id="6_bq33w"]
+[ext_resource type="PackedScene" uid="uid://0ns202mi65xm" path="res://game_objects/SuperCharge.tscn" id="8_pujm6"]
+
+[sub_resource type="Resource" id="Resource_ua07t"]
+script = ExtResource("5_s44sn")
+name = "Alice"
+texture = ExtResource("6_bq33w")
+super_expression = "Super.alice()"
+metadata/_custom_type_script = "uid://0khalhvv6a3o"
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_hb3xx"]
 
@@ -107,6 +116,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.511648)
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.147914, 1.102423, 0)
 ball = NodePath("../Ball3d")
+character = SubResource("Resource_ua07t")
 
 [node name="Player2" parent="." unique_id=1827797252 node_paths=PackedStringArray("ball") instance=ExtResource("1_klx28")]
 unique_name_in_owner = true

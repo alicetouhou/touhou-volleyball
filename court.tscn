@@ -99,9 +99,11 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.511648)
 
 [node name="Player1" parent="." unique_id=733247983 instance=ExtResource("1_klx28")]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.147914, 1.102423, 0)
 
 [node name="Player2" parent="." unique_id=1827797252 instance=ExtResource("1_klx28")]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4307375, 1.102423, 0)
 player_device = 0
 
@@ -109,21 +111,23 @@ player_device = 0
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.845355, 5.8920703, 0)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=763583146]
+[node name="Ground" type="StaticBody3D" parent="." unique_id=763583146 groups=["ground"]]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=2013359004]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=2013359004]
 transform = Transform3D(2.7227015, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.046759725, 0)
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=1985249417]
+[node name="Walls" type="StaticBody3D" parent="." unique_id=1172494766]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Walls" unique_id=431771958]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, -11.5, 0, 0)
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
-[node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D" unique_id=1339365208]
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Walls" unique_id=1874634084]
 transform = Transform3D(-1, -8.742278e-08, 0, 8.742278e-08, -1, 0, 0, 0, 1, 0, 10.33122, 0)
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
-[node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D" unique_id=1000831129]
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Walls" unique_id=746872875]
 transform = Transform3D(1.3113416e-07, -1, 0, 1, 1.3113416e-07, 0, 0, 0, 1, 11.5, 6, 0)
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
@@ -147,8 +151,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.106257, 2.9032006, 6.93665
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0048217773, 0.5498047, 0.247406)
 mesh = SubResource("BoxMesh_os57d")
 
+[node name="P1BallSpawnPoint" type="Node3D" parent="." unique_id=1299655512]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4, 0)
+
+[node name="P2BallSpawnPoint" type="Node3D" parent="." unique_id=222651851]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4, 0)
+
+[node name="P1SpawnPoint" type="Node3D" parent="." unique_id=97738085]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.46894157, 0)
+
+[node name="P2SpawnPoint" type="Node3D" parent="." unique_id=1480902267]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.46894157, 0)
+
+[node name="CountdownTimer" type="Label" parent="." unique_id=627109362]
+unique_name_in_owner = true
+offset_left = 787.0
+offset_top = 224.0
+offset_right = 1750.0
+offset_bottom = 906.0
+theme_override_font_sizes/font_size = 500
+text = "3"
+
 [connection signal="create_fx" from="Player1" to="." method="_on_player_3d_create_fx"]
 [connection signal="on_hit_ball" from="Player1" to="." method="_on_player_3d_on_hit_ball"]
 [connection signal="create_fx" from="Player2" to="." method="_on_player_3d_create_fx"]
 [connection signal="on_hit_ball" from="Player2" to="." method="_on_player_3d_on_hit_ball"]
+[connection signal="body_entered" from="Ball3d" to="." method="_on_ball_3d_body_entered"]
 [connection signal="create_fx" from="Ball3d" to="." method="_on_ball_3d_create_fx"]

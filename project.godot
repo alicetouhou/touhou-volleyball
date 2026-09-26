@@ -26,6 +26,7 @@ window/stretch/aspect="expand"
 
 ball=""
 player=""
+ground=""
 
 [input]
 

@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://iy2hssrv4u5f" path="res://court.tscn" id="1_jtv5c"]
 [ext_resource type="Script" uid="uid://145sow77ik4" path="res://lobby/lobby.gd" id="1_qfux7"]
 [ext_resource type="Script" uid="uid://b4ewub2hwtw7" path="res://lobby/level.gd" id="1_uj4ub"]
+[ext_resource type="Script" uid="uid://diobd0p7y0qov" path="res://lobby/lobby_overlay.gd" id="2_4veey"]
 [ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="2_mnguq"]
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="3_dk04u"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
@@ -18,6 +19,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_4veey")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="LobbyOverlay" unique_id=1161531551]
 layout_mode = 0
@@ -38,7 +40,13 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "127.0.0.1"
 
+[node name="Disconnect" type="Button" parent="LobbyOverlay/HBoxContainer" unique_id=1057834319]
+visible = false
+layout_mode = 2
+text = "Disconnect"
+
 [node name="Start" type="Button" parent="LobbyOverlay/HBoxContainer" unique_id=2113218593]
+visible = false
 layout_mode = 2
 text = "Start game"
 
@@ -127,6 +135,21 @@ offset_top = 994.0
 offset_right = 1537.0
 offset_bottom = 994.0
 
+[connection signal="connection_stopped" from="." to="LobbyOverlay/HBoxContainer/Host" method="show"]
+[connection signal="connection_stopped" from="." to="LobbyOverlay/HBoxContainer/Join" method="show"]
+[connection signal="connection_stopped" from="." to="LobbyOverlay/HBoxContainer/IP" method="show"]
+[connection signal="connection_stopped" from="." to="LobbyOverlay/HBoxContainer/Start" method="hide"]
+[connection signal="connection_stopped" from="." to="LobbyOverlay/HBoxContainer/Disconnect" method="hide"]
+[connection signal="server_connected" from="." to="LobbyOverlay/HBoxContainer/Host" method="hide"]
+[connection signal="server_connected" from="." to="LobbyOverlay/HBoxContainer/Join" method="hide"]
+[connection signal="server_connected" from="." to="LobbyOverlay/HBoxContainer/IP" method="hide"]
+[connection signal="server_connected" from="." to="LobbyOverlay/HBoxContainer/Disconnect" method="show"]
+[connection signal="server_started" from="." to="LobbyOverlay/HBoxContainer/Host" method="hide"]
+[connection signal="server_started" from="." to="LobbyOverlay/HBoxContainer/Join" method="hide"]
+[connection signal="server_started" from="." to="LobbyOverlay/HBoxContainer/IP" method="hide"]
+[connection signal="server_started" from="." to="LobbyOverlay/HBoxContainer/Start" method="show"]
+[connection signal="server_started" from="." to="LobbyOverlay/HBoxContainer/Disconnect" method="show"]
 [connection signal="pressed" from="LobbyOverlay/HBoxContainer/Host" to="." method="host_game"]
 [connection signal="pressed" from="LobbyOverlay/HBoxContainer/Join" to="." method="join_game"]
-[connection signal="pressed" from="LobbyOverlay/HBoxContainer/Start" to="Level" method="start_game"]
+[connection signal="pressed" from="LobbyOverlay/HBoxContainer/Disconnect" to="." method="stop_connection"]
+[connection signal="pressed" from="LobbyOverlay/HBoxContainer/Start" to="." method="start_game"]

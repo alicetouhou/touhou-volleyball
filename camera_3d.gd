@@ -18,6 +18,13 @@ func _process(delta):
 		trauma = max(trauma - decay * delta, 0)
 		shake()
 
+func _physics_process(delta: float) -> void:
+	var ball_position = %Ball3d.position
+	
+	position.x = -1 * sign(ball_position.x) * pow(abs(ball_position.x), 1. / 3.) / 20.
+	
+	look_at(Vector3(-position.x, position.y, 0))
+
 func shake():
 	var amount = trauma
 	rotation.z = max_roll * amount * randf_range(-1, 1)

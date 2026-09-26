@@ -54,6 +54,10 @@ func find_ball():
 
 func kick(velocity = 7):
 	Animations.travel("kick_miss")
+	
+	var ball = find_ball()
+	if not ball:
+		return
 
 
 	Animations.travel("kick_hit")

@@ -72,3 +72,11 @@ func _on_player_1_super_used() -> void:
 
 func _on_player_2_super_used() -> void:
 	Supers.run(self, %Player2)
+
+
+func _on_player_1_super_charge_updated(value: float) -> void:
+	%PlayerOneSuperCharge.set_charge(value)
+
+
+func _on_player_2_super_charge_updated(value: float) -> void:
+	%PlayerTwoSuperCharge.set_charge(value)

@@ -68,7 +68,8 @@ func kick(velocity = 7) -> RigidBody3D:
 	ball.linear_velocity = Vector3(force.x, force.y, 0) + linear_velocity
 	
 	if can_charge_super:
-		super_charge += .333
+		super_charge += ball.linear_velocity.length() / 100.
+		can_charge_super = false
 
 	return ball
 

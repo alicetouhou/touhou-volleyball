@@ -1,6 +1,7 @@
 extends RigidBody3D
 
 @export var player_device = 16
+@export var character: CharacterResource
 
 var direction = 1
 const MOVEMENT_SPEED = 9
@@ -69,6 +70,9 @@ func is_kick_pressed():
 	if player_device == 16:
 		return Input.is_action_pressed("kick")
 	return Input.is_joy_button_pressed(player_device, JOY_BUTTON_X)
+
+func _ready() -> void:
+	%Sprite3D.texture = character.texture
 
 func _physics_process(delta: float) -> void:
 	var x = get_left_right()

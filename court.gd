@@ -39,9 +39,9 @@ func start_round():
 	%Ball3d.process_mode = Node.PROCESS_MODE_INHERIT
 
 func end_round():
-	if %Ball3d.position.x < 0:
-		players_turn = 1
 	if %Ball3d.position.x >= 0:
+		players_turn = 1
+	if %Ball3d.position.x < 0:
 		players_turn = 2
 
 	if not round_playing:

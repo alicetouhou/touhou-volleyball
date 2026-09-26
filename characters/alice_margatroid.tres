@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://ibljn5odxrx"]
+
+[ext_resource type="Script" uid="uid://0khalhvv6a3o" path="res://characters/character_resource.gd" id="1_wq3rk"]
+[ext_resource type="Texture2D" uid="uid://dw1xae2suocg1" path="res://assets/sprite/alice.png" id="2_ffq4r"]
+
+[resource]
+script = ExtResource("1_wq3rk")
+name = "Alice Margatroid"
+texture = ExtResource("2_ffq4r")
+metadata/_custom_type_script = "uid://0khalhvv6a3o"

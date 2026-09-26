@@ -7,5 +7,5 @@
 script = ExtResource("1_pb36u")
 name = "Reimu"
 texture = ExtResource("2_pb36u")
-super_expression = "Super.reimu()"
+super_cost = 1
 metadata/_custom_type_script = "uid://0khalhvv6a3o"

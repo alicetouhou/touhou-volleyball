@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="2_0uhp5"]
 [ext_resource type="PackedScene" uid="uid://reki74cx25co" path="res://game_objects/Ball3D.tscn" id="2_ih5bv"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/FXManager.tscn" id="3_acrlw"]
-[ext_resource type="Resource" uid="uid://ibljn5odxrx" path="res://characters/alice_margatroid.tres" id="5_3ygy1"]
 [ext_resource type="Resource" uid="uid://cg2tpefngkhr6" path="res://characters/yuyuko.tres" id="5_utqu1"]
 [ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="8_pujm6"]
 
@@ -107,12 +106,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.511648)
 [node name="Player1" parent="." unique_id=733247983 instance=ExtResource("1_klx28")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.147914, 1.102423, 0)
-character = ExtResource("5_3ygy1")
 
 [node name="Player2" parent="." unique_id=1827797252 instance=ExtResource("1_klx28")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4307375, 1.102423, 0)
-player_device = 0
+player_device = 1
 character = ExtResource("5_utqu1")
 
 [node name="Ball3d" parent="." unique_id=1208449855 instance=ExtResource("2_ih5bv")]

@@ -62,7 +62,7 @@ func kick(velocity = 7) -> RigidBody3D:
 	ball.linear_velocity = Vector3(force.x, force.y, 0) + linear_velocity
 	
 	if ball.linear_velocity.length_squared() > 100:
-		super_charge += .5
+		super_charge += .25
 
 	return ball
 
@@ -134,9 +134,7 @@ func _physics_process(delta: float) -> void:
 
 	if is_super_pressed() and time_since_super > SUPER_COOLDOWN:
 		time_since_super = 0
-		if character.super_cost < super_charge:
-			super_charge -= character.super_cost
-			super_used.emit()
+		super_used.emit()
 	time_since_super += delta
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:

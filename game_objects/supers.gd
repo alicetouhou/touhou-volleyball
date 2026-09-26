@@ -11,9 +11,12 @@ func run(game: Game, player: Player):
 		yuyuko(game, player)
 
 func reimu(game: Game, player: Player):
+	if player.super_charge < 1:
+		return
 	var fx = game.get_fx_manager()
 	var ball = player.kick(50)
 	if ball:
+		player.super_charge -= 1
 		ball.create_fx.emit(fx.crit_burst, (ball.global_position + player.global_position) / 2)
 		await get_tree().create_timer(0.05).timeout
 		ball.create_fx.emit(fx.crit_burst, ball.global_position)
@@ -26,4 +29,13 @@ func alice(game: Game, player: Player):
 	pass
 
 func yuyuko(game: Game, player: Player):
-	pass
+	if player.super_charge < 1:
+		return
+
+	player.super_charge -= 1
+	player.scale = Vector3(3, 3, 3)
+	
+	await get_tree().create_timer(3).timeout
+	
+	player.scale = Vector3(1, 1, 1)
+	

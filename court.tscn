@@ -167,14 +167,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.46894157, 0)
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.46894157, 0)
 
-[node name="CountdownTimer" type="Label" parent="." unique_id=627109362]
+[node name="Score" type="Label" parent="." unique_id=627109362]
 unique_name_in_owner = true
-offset_left = 787.0
-offset_top = 224.0
-offset_right = 1750.0
-offset_bottom = 906.0
-theme_override_font_sizes/font_size = 500
-text = "3"
+visible = false
+offset_left = 573.0
+offset_top = 197.0
+offset_right = 2043.0
+offset_bottom = 879.0
+theme_override_font_sizes/font_size = 250
+text = "Score!"
 
 [connection signal="create_fx" from="Player1" to="." method="_on_player_3d_create_fx"]
 [connection signal="on_hit_ball" from="Player1" to="." method="_on_player_3d_on_hit_ball"]

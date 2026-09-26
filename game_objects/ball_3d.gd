@@ -1,7 +1,14 @@
-extends Node3D
+extends RigidBody3D
 var on_floor: bool = false
 var floor: Object
 signal create_fx(fx: PackedScene, pos: Vector3)
+
+var speed_percent = 1.0
+
+func set_speed_percent(p: float):
+	linear_velocity = linear_velocity / (speed_percent / p)
+	gravity_scale = p
+
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	# https://forum.godotengine.org/t/how-to-check-if-rigid-body-is-on-floor/65679/3

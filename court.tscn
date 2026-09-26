@@ -112,7 +112,7 @@ ball = NodePath("../Ball3d")
 [node name="Player2" parent="." unique_id=1827797252 node_paths=PackedStringArray("ball") instance=ExtResource("1_klx28")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4307375, 1.102423, 0)
-player_device = 1
+player_device = 0
 ball = NodePath("../Ball3d")
 
 [node name="Ball3d" parent="." unique_id=1208449855 instance=ExtResource("2_ih5bv")]

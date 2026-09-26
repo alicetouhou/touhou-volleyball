@@ -27,4 +27,3 @@ func alice(game: Game, player: Player):
 
 func yuyuko(game: Game, player: Player):
 	pass
-

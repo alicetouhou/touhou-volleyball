@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/FXManager.tscn" id="3_acrlw"]
 [ext_resource type="Resource" uid="uid://ibljn5odxrx" path="res://characters/alice_margatroid.tres" id="5_3ygy1"]
 [ext_resource type="Resource" uid="uid://cg2tpefngkhr6" path="res://characters/yuyuko.tres" id="5_utqu1"]
-[ext_resource type="PackedScene" uid="uid://0ns202mi65xm" path="res://game_objects/SuperCharge.tscn" id="8_pujm6"]
+[ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="8_pujm6"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_hb3xx"]
 

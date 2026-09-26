@@ -44,13 +44,17 @@ var last_ball_position = 0
 
 @onready var Animations = %AnimationTree.get("parameters/playback")
 
-func kick(velocity = 7) -> RigidBody3D:
-	Animations.travel("kick_miss")
+func find_ball():
 	var bodies = %KickHitbox.get_overlapping_bodies()
 	var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
 	if ball_index < 0:
 		return
 	var ball: RigidBody3D = bodies[ball_index]
+	return ball
+
+func kick(velocity = 7):
+	Animations.travel("kick_miss")
+
 
 	Animations.travel("kick_hit")
 	time_since_kick_pressed = 10000

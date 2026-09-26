@@ -21,6 +21,7 @@ func _on_ball_3d_create_fx(fx: PackedScene, pos: Vector3) -> void:
 
 func start_round():
 	%Ball3d.linear_velocity = Vector3.ZERO
+	%Ball3d.speed_percent = 1.0
 	%Player1.linear_velocity = Vector3.ZERO
 	%Player2.linear_velocity = Vector3.ZERO
 	%Ball3d.process_mode = Node.PROCESS_MODE_DISABLED

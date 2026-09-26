@@ -16,9 +16,13 @@ func reimu(game: Game, player: Player):
 	if player.super_charge < 1:
 		return
 	var fx = game.get_fx_manager()
-	var ball = player.kick(50)
+	var ball = player.find_ball()
 	if ball:
 		player.super_charge -= 1
+
+		var direction = -sign(ball.position.x)
+		ball.apply_central_impulse(Vector3(15 * direction, 5, 0))
+
 		ball.create_fx.emit(fx.crit_burst, (ball.global_position + player.global_position) / 2)
 		await get_tree().create_timer(0.05).timeout
 		ball.create_fx.emit(fx.crit_burst, ball.global_position)

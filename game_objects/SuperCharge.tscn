@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://0ns202mi65xm"]
+
+[ext_resource type="Script" uid="uid://hafwedlyocll" path="res://game_objects/super_charge.gd" id="1_i8d04"]
+
+[sub_resource type="Gradient" id="Gradient_i8d04"]
+offsets = PackedFloat32Array(0.0065789474, 0.1513158, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0xfd7"]
+gradient = SubResource("Gradient_i8d04")
+width = 3
+
+[node name="SuperCharge" type="Control" unique_id=163459216]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i8d04")
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=120609924]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 6.0
+offset_right = 300.0
+offset_bottom = 37.0
+max_value = 3.0
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1095357583]
+layout_mode = 0
+offset_left = 100.0
+offset_right = 103.0
+offset_bottom = 40.0
+texture = SubResource("GradientTexture1D_0xfd7")
+
+[node name="TextureRect2" type="TextureRect" parent="." unique_id=1895077284]
+layout_mode = 0
+offset_left = 200.0
+offset_right = 203.0
+offset_bottom = 40.0
+texture = SubResource("GradientTexture1D_0xfd7")

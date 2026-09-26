@@ -21,10 +21,20 @@ var KICK_COOLDOWN = .1
 var time_since_kick_pressed = 100
 var time_since_kick = 100
 var can_jump = true
+const SUPER_COOLDOWN = .2
+var time_since_super = 0.
+
+var super_charge: float = 0:
+	set(v):
+		super_charge = clamp(v, 0, 3)
+		super_charge_updated.emit(super_charge)
+	get():
+		return super_charge
 
 signal create_fx(fx: PackedScene, pos: Vector3)
 signal on_hit_ball
 signal super_used
+signal super_charge_updated(value: float)
 
 @onready var Animations = %AnimationTree.get("parameters/playback")
 
@@ -51,8 +61,9 @@ func kick():
 	var ball_direction = global_position_2D.direction_to(ball_global_position_2D)
 	var force = Vector2(7, 7) * (ball_direction)
 	ball.linear_velocity = Vector3(force.x, force.y, 0) + linear_velocity
-
 	
+	if ball.linear_velocity.length_squared() > 100:
+		super_charge += .5
 
 func get_left_right():
 	if player_device == 16:
@@ -109,6 +120,8 @@ func _physics_process(delta: float) -> void:
 
 	if not on_floor:
 		can_jump = true
+	if not is_up_pressed():
+		can_jump = true
 	if is_up_pressed() and on_floor and can_jump:
 		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
 		can_jump = false
@@ -118,8 +131,12 @@ func _physics_process(delta: float) -> void:
 	if on_floor:
 		gravity_scale = 1
 
-	if is_super_pressed():
-		super_used.emit()
+	if is_super_pressed() and time_since_super > SUPER_COOLDOWN:
+		time_since_super = 0
+		if character.super_cost < super_charge:
+			super_charge -= character.super_cost
+			super_used.emit()
+	time_since_super += delta
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var input_direction = get_left_right()

@@ -68,5 +68,6 @@ func on_players_updated(new_player_dict: Dictionary) -> void:
 	players_updated.emit(players)
 
 func start_game() -> void:
-	$LobbyOverlay.hide_overlay.rpc()
-	$Level.start_game.rpc()
+	%UI.show()
+	%LobbyOverlay.hide()
+	$Level.start_game.rpc_id(1)

@@ -27,6 +27,7 @@ func start_game() -> void:
 	ball = preload("res://game_objects/ball/Ball3D.tscn").instantiate()
 	ball.freeze = true
 	ball.create_fx.connect(create_fx)
+	ball.body_entered.connect(ball_collided)
 	ball_container.add_child(ball, true)
 	
 	# Players

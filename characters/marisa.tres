@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://dyb2jtxhyda56"]
+[gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://c3pe4h02ji3xr"]
 
 [ext_resource type="Script" uid="uid://0khalhvv6a3o" path="res://characters/character_resource.gd" id="1_rmhf4"]
 [ext_resource type="Texture2D" uid="uid://gd6c4ssober7" path="res://assets/sprite/marisa.png" id="2_rmhf4"]

@@ -1,4 +1,5 @@
 extends Node3D
+class_name Game
 
 var players_turn = 1
 var round_playing = false
@@ -58,3 +59,6 @@ func end_round():
 func _on_ball_3d_body_entered(body: Node) -> void:
 	if body.is_in_group("ground"):
 		end_round()
+
+func get_ball() -> RigidBody3D:
+	return %Ball3d

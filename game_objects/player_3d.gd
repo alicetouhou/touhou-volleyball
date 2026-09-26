@@ -6,7 +6,7 @@ extends RigidBody3D
 @export var character: CharacterResource
 @export var ball: RigidBody3D
 
-var direction = 1
+var direction: float = 1
 const MOVEMENT_SPEED = 9
 const JUMP_POWER = 10
 
@@ -112,6 +112,8 @@ func _physics_process(delta: float) -> void:
 	
 	var x = get_left_right()
 
+	if x == null:
+		return
 	apply_central_force(Vector3(x, 0, 0) * MOVEMENT_SPEED)
 	
 	if sign(x) != direction and x != 0:
@@ -136,7 +138,7 @@ func _physics_process(delta: float) -> void:
 
 	if not on_floor:
 		can_jump = true
-	if not is_up_pressed():
+	if not is_up_pressed() and player_device >= -1:
 		can_jump = true
 	if is_up_pressed() and on_floor and can_jump:
 		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
@@ -158,7 +160,8 @@ func _physics_process(delta: float) -> void:
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var input_direction = get_left_right()
-	linear_velocity.x = input_direction * MOVEMENT_SPEED
+	if input_direction != null:
+		linear_velocity.x = input_direction * MOVEMENT_SPEED
 	# https://forum.godotengine.org/t/how-to-check-if-rigid-body-is-on-floor/65679/3
 	var i := 0
 	on_floor = false

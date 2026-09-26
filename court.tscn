@@ -6,7 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://reki74cx25co" path="res://game_objects/Ball3D.tscn" id="2_ih5bv"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/FXManager.tscn" id="3_acrlw"]
 [ext_resource type="Resource" uid="uid://cg2tpefngkhr6" path="res://characters/yuyuko.tres" id="5_utqu1"]
-[ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="8_pujm6"]
+[ext_resource type="Script" uid="uid://dkcw3semdasjm" path="res://game_objects/cpu_player.gd" id="6_pujm6"]
+[ext_resource type="Resource" uid="uid://daocjniky22cb" path="res://characters/reimu.tres" id="7_s44sn"]
+[ext_resource type="PackedScene" uid="uid://0ns202mi65xm" path="res://game_objects/SuperCharge.tscn" id="8_pujm6"]
+[ext_resource type="Texture2D" uid="uid://vsimlmjv380n" path="res://icon.svg" id="10_bq33w"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_hb3xx"]
 
@@ -112,7 +115,16 @@ ball = NodePath("../Ball3d")
 [node name="Player2" parent="." unique_id=1827797252 node_paths=PackedStringArray("ball") instance=ExtResource("1_klx28")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4307375, 1.102423, 0)
+visible = false
 player_device = 0
+ball = NodePath("../Ball3d")
+
+[node name="PlayerCPU" parent="." unique_id=973914942 node_paths=PackedStringArray("ball") instance=ExtResource("1_klx28")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4307375, 1.102423, 0)
+script = ExtResource("6_pujm6")
+player_device = -99
+character = ExtResource("7_s44sn")
 ball = NodePath("../Ball3d")
 
 [node name="Ball3d" parent="." unique_id=1208449855 instance=ExtResource("2_ih5bv")]
@@ -205,6 +217,10 @@ offset_top = 994.0
 offset_right = 1537.0
 offset_bottom = 994.0
 
+[node name="PredictionSpot" type="Sprite3D" parent="." unique_id=2045705701]
+transform = Transform3D(0.37999997, 0, 0, 0, 0.39999998, 0, 0, 0, 1, 0, 0, 0)
+texture = ExtResource("10_bq33w")
+
 [connection signal="create_fx" from="Player1" to="." method="_on_player_3d_create_fx"]
 [connection signal="on_hit_ball" from="Player1" to="." method="_on_player_3d_on_hit_ball"]
 [connection signal="super_charge_updated" from="Player1" to="." method="_on_player_1_super_charge_updated"]
@@ -213,5 +229,9 @@ offset_bottom = 994.0
 [connection signal="on_hit_ball" from="Player2" to="." method="_on_player_3d_on_hit_ball"]
 [connection signal="super_charge_updated" from="Player2" to="." method="_on_player_2_super_charge_updated"]
 [connection signal="super_used" from="Player2" to="." method="_on_player_2_super_used"]
+[connection signal="create_fx" from="PlayerCPU" to="." method="_on_player_cpu_create_fx"]
+[connection signal="on_hit_ball" from="PlayerCPU" to="." method="_on_player_cpu_on_hit_ball"]
+[connection signal="super_charge_updated" from="PlayerCPU" to="." method="_on_player_cpu_super_charge_updated"]
+[connection signal="super_used" from="PlayerCPU" to="." method="_on_player_cpu_super_used"]
 [connection signal="body_entered" from="Ball3d" to="." method="_on_ball_3d_body_entered"]
 [connection signal="create_fx" from="Ball3d" to="." method="_on_ball_3d_create_fx"]

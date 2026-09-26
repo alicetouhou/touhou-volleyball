@@ -23,6 +23,8 @@ func start_round():
 	%Ball3d.linear_velocity = Vector3.ZERO
 	%Player1.linear_velocity = Vector3.ZERO
 	%Player2.linear_velocity = Vector3.ZERO
+	%PlayerCPU.linear_velocity = Vector3.ZERO
+	%PlayerCPU.started = false
 	%Ball3d.process_mode = Node.PROCESS_MODE_DISABLED
 
 	if players_turn == 1:
@@ -32,9 +34,12 @@ func start_round():
 	
 	%Player1.position = %P1SpawnPoint.position
 	%Player2.position = %P2SpawnPoint.position
+	%PlayerCPU.position = %P2SpawnPoint.position
 
 	await get_tree().create_timer(1).timeout
 
+	%PlayerCPU.started = true
+	%PlayerCPU.can_jump = true
 	round_playing = true
 
 	%Ball3d.process_mode = Node.PROCESS_MODE_INHERIT
@@ -80,3 +85,20 @@ func _on_player_1_super_charge_updated(value: float) -> void:
 
 func _on_player_2_super_charge_updated(value: float) -> void:
 	%PlayerTwoSuperCharge.set_charge(value)
+
+
+func _on_player_cpu_create_fx(fx: PackedScene, pos: Vector3) -> void:
+	%FxManager.create_at_pos(fx, pos)
+
+
+func _on_player_cpu_on_hit_ball() -> void:
+	%FxManager.create_with_parent_3D(FXManager.pressure_ring, %Ball3d)
+	%Camera3D.add_trauma(.1)
+
+
+func _on_player_cpu_super_used() -> void:
+	Supers.run(self, %PlayerCPU)
+
+
+func _on_player_cpu_super_charge_updated(value: float) -> void:
+	pass # Replace with function body.

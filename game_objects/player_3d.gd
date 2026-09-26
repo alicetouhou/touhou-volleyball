@@ -14,6 +14,7 @@ const JUMP_POWER = 10
 const UP_KICK_POWER = Vector2()
 const FORWARD_KICK_POWER = Vector2()
 const DOWN_KICK_POWER = Vector2()
+const UP_DEAD_ANGLE = PI/4 # In radians
 
 var on_floor: bool = false
 var floor: Object
@@ -78,7 +79,10 @@ func kick(velocity = 7):
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
 
 	var ball_direction = global_position_2D.direction_to(ball_global_position_2D)
-	var force = Vector2(velocity, velocity) * (ball_direction)
+	
+	if is_up_pressed() and acos(ball_direction.dot(Vector2(0,1))) <= UP_DEAD_ANGLE:
+		ball_direction = Vector2(0,1)
+	var force = Vector2(velocity, velocity) * (ball_direction) * (2 if is_down_pressed() else 1)
 	ball.linear_velocity = Vector3(force.x, force.y, 0) + linear_velocity
 	
 	if can_charge_super:
@@ -163,7 +167,9 @@ func _physics_process(delta: float) -> void:
 		can_jump = false
 	# Fast falling
 	if is_down_pressed() and not on_floor:
-		gravity_scale = 7
+		if linear_velocity.y > 0:
+			linear_velocity.y = 0
+		gravity_scale = 14
 	if on_floor:
 		gravity_scale = 1
 

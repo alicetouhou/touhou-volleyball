@@ -1,14 +1,17 @@
 extends MultiplayerSynchronizer
 
 
+## If true, blocks client input.
+@export var disabled := false
+
 ## Client's target for movement (except jumping).
-@export var direction = Vector2i.ZERO
+@export var direction := Vector2i.ZERO
 
 ## Simulated on_action_just_pressed via rpc.
 ## Reset per-client in _physics_process of player.
-@export var kicking = false
-@export var jumping = false
-@export var supering = false
+@export var kicking := false
+@export var jumping := false
+@export var supering := false
 
 @rpc("call_local")
 func kick() -> void:
@@ -28,6 +31,9 @@ func _ready():
 ## Only runs on client, see _ready.
 ## TODO: Add multiple inputs.
 func _process(_delta: float) -> void:
+	if disabled:
+		return
+
 	direction = Input.get_vector("left", "right", "down", "up")
 	if direction.y > 0: # Jumping is handled by 
 		direction.y = 0

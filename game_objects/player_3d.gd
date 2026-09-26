@@ -1,3 +1,5 @@
+class_name Player
+
 extends RigidBody3D
 
 @export var player_device = 16
@@ -22,6 +24,7 @@ var can_jump = true
 
 signal create_fx(fx: PackedScene, pos: Vector3)
 signal on_hit_ball
+signal super_used
 
 @onready var Animations = %AnimationTree.get("parameters/playback")
 
@@ -71,6 +74,11 @@ func is_kick_pressed():
 		return Input.is_action_pressed("kick")
 	return Input.is_joy_button_pressed(player_device, JOY_BUTTON_X)
 
+func is_super_pressed():
+	if player_device == 16:
+		return Input.is_action_just_pressed("super")
+	return Input.is_joy_button_pressed(player_device, JOY_BUTTON_Y)
+
 func _ready() -> void:
 	%Sprite3D.texture = character.texture
 
@@ -109,6 +117,9 @@ func _physics_process(delta: float) -> void:
 		gravity_scale = 7
 	if on_floor:
 		gravity_scale = 1
+
+	if is_super_pressed():
+		super_used.emit()
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var input_direction = get_left_right()

@@ -192,7 +192,9 @@ shape = SubResource("BoxShape3D_km8ha")
 
 [connection signal="create_fx" from="Player1" to="." method="_on_player_3d_create_fx"]
 [connection signal="on_hit_ball" from="Player1" to="." method="_on_player_3d_on_hit_ball"]
+[connection signal="super_used" from="Player1" to="." method="_on_player_1_super_used"]
 [connection signal="create_fx" from="Player2" to="." method="_on_player_3d_create_fx"]
 [connection signal="on_hit_ball" from="Player2" to="." method="_on_player_3d_on_hit_ball"]
+[connection signal="super_used" from="Player2" to="." method="_on_player_2_super_used"]
 [connection signal="body_entered" from="Ball3d" to="." method="_on_ball_3d_body_entered"]
 [connection signal="create_fx" from="Ball3d" to="." method="_on_ball_3d_create_fx"]

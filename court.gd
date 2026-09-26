@@ -62,3 +62,10 @@ func _on_ball_3d_body_entered(body: Node) -> void:
 
 func get_ball() -> RigidBody3D:
 	return %Ball3d
+
+func _on_player_1_super_used() -> void:
+	Supers.run(self, %Player1)
+
+
+func _on_player_2_super_used() -> void:
+	Supers.run(self, %Player2)

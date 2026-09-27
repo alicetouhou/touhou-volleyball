@@ -46,12 +46,19 @@ func start_game() -> void:
 		
 		player.name = str(peer) if peer > 0 else "cpu"
 		player.player_id = peer
-		%ChargeBars.get_child(i).name = str(peer)
+		
+		var charge_bar = preload("res://game_objects/SuperCharge.tscn").instantiate()
+		charge_bar.name = str(peer)
+		var side = 0
+		if i >= floori(len(client_ids) / 2.):
+			side = 1
+		%ChargeBars.get_child(side).add_child(charge_bar)
+		
 		
 		player.on_hit_ball.connect(player_hit_ball)
 		player.super_used.connect(func(): player_super_used(peer))
 		player.super_charge_updated.connect(
-			func(value): %ChargeBars.get_node(str(peer)).set_charge(value)
+			func(value): charge_bar.set_charge.rpc(value)
 		)
 		player.create_fx.connect(create_fx)
 		

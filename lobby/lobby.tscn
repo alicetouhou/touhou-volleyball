@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://b4ewub2hwtw7" path="res://lobby/level.gd" id="1_uj4ub"]
 [ext_resource type="Script" uid="uid://b2hib1xb0kfid" path="res://lobby/character_selection/character_display.gd" id="2_4veey"]
 [ext_resource type="Script" uid="uid://ct5g5rqqffh3e" path="res://lobby/dedicated_server.gd" id="2_l3xxi"]
-[ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="2_mnguq"]
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="3_dk04u"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
 [ext_resource type="Script" uid="uid://bvamk6gb8rnnl" path="res://lobby/pinger.gd" id="9_8367x"]
@@ -134,11 +133,13 @@ unique_name_in_owner = true
 
 [node name="UI" type="Control" parent="." unique_id=2110848446]
 unique_name_in_owner = true
-visible = false
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="Score" type="Label" parent="UI" unique_id=1518340030]
 unique_name_in_owner = true
@@ -151,25 +152,40 @@ offset_bottom = 879.0
 theme_override_font_sizes/font_size = 250
 text = "Score!"
 
-[node name="ChargeBars" type="Control" parent="UI" unique_id=1779165279]
+[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1155132226]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ChargeBars" type="HBoxContainer" parent="UI/MarginContainer" unique_id=911987775]
 unique_name_in_owner = true
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 2
+alignment = 1
 
-[node name="PlayerOneSuperCharge" parent="UI/ChargeBars" unique_id=163459216 instance=ExtResource("2_mnguq")]
-layout_mode = 1
-offset_left = 69.0
-offset_top = 994.0
-offset_right = 69.0
-offset_bottom = 994.0
+[node name="Left" type="HBoxContainer" parent="UI/MarginContainer/ChargeBars" unique_id=99195865]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
 
-[node name="PlayerTwoSuperCharge" parent="UI/ChargeBars" unique_id=1505399695 instance=ExtResource("2_mnguq")]
-layout_mode = 1
-offset_left = 1537.0
-offset_top = 994.0
-offset_right = 1537.0
-offset_bottom = 994.0
+[node name="Right" type="HBoxContainer" parent="UI/MarginContainer/ChargeBars" unique_id=184197928]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="LeftSpawner" type="MultiplayerSpawner" parent="UI/MarginContainer/ChargeBars" unique_id=1325570613]
+_spawnable_scenes = PackedStringArray("uid://dmts882ab45pw")
+spawn_path = NodePath("../Left")
+
+[node name="RightSpawner" type="MultiplayerSpawner" parent="UI/MarginContainer/ChargeBars" unique_id=201732546]
+_spawnable_scenes = PackedStringArray("uid://dmts882ab45pw")
+spawn_path = NodePath("../Right")
 
 [node name="Ping" type="Label" parent="." unique_id=2048528193]
 anchors_preset = 1

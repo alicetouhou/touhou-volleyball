@@ -28,19 +28,12 @@ func trigger_super() -> void:
 
 func is_action_pressed(action: StringName):
 	if input_device > -99:
-		var input_event = InputEventAction.new()
-		input_event.action = action
-		input_event.device = input_device
-		return Input.is_action_pressed(action, input_event)
-	return is_action_pressed(action)
-
-func is_action_just_pressed(action: StringName):
-	if input_device > -99:
-		var input_event = InputEventAction.new()
-		input_event.action = action
-		input_event.device = input_device
-		return Input.is_action_just_pressed_by_event(action, input_event)
-	return is_action_just_pressed(action)
+		var ev = InputMap.action_get_events(action)
+		for e: InputEvent in ev:
+			if e.is_action_pressed(action):
+				InputMap.action_erase_event(action, e)
+				return true
+	return Input.is_action_pressed(action)
 
 func _ready():
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
@@ -52,13 +45,13 @@ func _process(_delta: float) -> void:
 	
 	direction = Vector2.ZERO
 
-	if Input.is_action_pressed("left"):
+	if is_action_pressed("left"):
 		direction.x -= 1
-	if Input.is_action_pressed("right"):
+	if is_action_pressed("right"):
 		direction.x += 1
-	if Input.is_action_pressed("up"):
+	if is_action_pressed("up"):
 		direction.y += 1
-	if Input.is_action_pressed("down"):
+	if is_action_pressed("down"):
 		direction.y -= 1
 	if Input.is_action_just_pressed("up"):
 		jump.rpc()

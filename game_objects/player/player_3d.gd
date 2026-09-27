@@ -29,7 +29,11 @@ const DUST_SETTLE_FX = preload("res://resources/effects/dust-settle.tscn")
 const POMMEL_POP_FX = preload("res://resources/effects/pommel-pop.tscn")
 
 var movement_scale = 1.
-
+var input_device: int = -99:
+	set(v):
+		%ActionSync.input_device = v
+	get():
+		return input_device
 
 @export var player_id: int :
 	set(value):

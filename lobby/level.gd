@@ -54,6 +54,8 @@ func start_game() -> void:
 		)
 		player.create_fx.connect(create_fx)
 		
+		player.input_device = peer.input_device
+		
 		players.add_child(player, true)
 		i += 1
 	

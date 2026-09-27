@@ -91,7 +91,7 @@ func _physics_process(delta: float) -> void:
 			can_jump = false
 	
 	if intention == Intention.BLOCK:
-		print("block")
+		pass
 	if intention == Intention.WAIT:
 		if global_position.distance_squared_to(ball.global_position) >= 1.75:
 			can_kick = true

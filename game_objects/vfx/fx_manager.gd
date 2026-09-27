@@ -22,14 +22,26 @@ func project_pos_to_viewport(c: Vector3):
 	var camera: Camera3D = get_viewport().get_camera_3d()
 	return camera.unproject_position(c)
 
-func create_at_pos(fx: PackedScene, pos: Vector3):
+func create_at_pos(fx: PackedScene, pos: Vector3, reflect = false):
 	var f: AnimatedSprite2D = fx.instantiate()
 	%Viewport.add_child(f)
 	f.position = project_pos_to_viewport(pos)
+	if reflect:
+		f.scale.y *= -1
+	print(f.scale)
 	f.play()
 	f.animation_finished.connect(func():
 		f.queue_free()
 	)
+	
+func create_particle_at_pos(particle: String, pos: Vector3, reflect = false):
+	var f: GPUParticles2D
+	if particle == "master_spark_star":
+		f = %MasterSparkStar
+	if particle == "master_spark_heart":
+		f = %MasterSparkHeart
+	f.position = project_pos_to_viewport(pos)
+	f.emitting = true
 
 func create_with_parent_3D(fx: PackedScene, parent: Node3D):
 	var f: AnimatedSprite2D = fx.instantiate()

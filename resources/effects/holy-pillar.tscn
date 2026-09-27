@@ -222,7 +222,7 @@ animations = [{
 [node name="holy-pillar" type="AnimatedSprite2D" unique_id=1199916776]
 texture_filter = 2
 material = SubResource("ShaderMaterial_bchlu")
-position = Vector2(127, -1)
+position = Vector2(61, -1)
 rotation = 1.5707964
 scale = Vector2(2, 2)
 sprite_frames = SubResource("frames")

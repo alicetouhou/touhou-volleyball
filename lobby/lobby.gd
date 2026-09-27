@@ -6,8 +6,9 @@ signal players_updated(player_dict)
 signal server_failed
 signal server_connected
 signal connection_stopped
+signal give_start_authority
 
-const PORT = 7000
+const PORT = 34357
 const IP_ADDRESS = "127.0.0.1"
 const MAX_PLAYERS = 2
 const DEFAULT_PLAYER = {"character": "alice_margatroid.tres"}
@@ -62,6 +63,9 @@ func stop_connection() -> void:
 	players = {}
 
 func peer_connected(id: int) -> void:
+	if len(players) == 0:
+		$DedicatedServerStart.set_multiplayer_authority(id)
+		give_start_permission.rpc_id(id)
 	players[id] = DEFAULT_PLAYER.duplicate()
 	players[id]["number"] = len(players)
 	players[id]["color"] = COLORS[len(players) - 1]
@@ -83,7 +87,24 @@ func on_players_updated(new_player_dict: Dictionary) -> void:
 	players = new_player_dict
 	players_updated.emit(players)
 
+@rpc("call_local")
+func give_start_permission() -> void:
+	give_start_authority.emit()
+
 func start_game() -> void:
+	if not multiplayer.is_server():
+		return
 	%UI.show()
 	%LobbyOverlay.hide()
 	$Level.start_game.rpc_id(1)
+
+func _ready() -> void:
+	if OS.has_feature("dedicated_server"):
+		var server = ENetMultiplayerPeer.new()
+		var err = server.create_server(PORT, MAX_PLAYERS)
+		if not err:
+			server_started.emit()
+			multiplayer.peer_connected.connect(peer_connected)
+			multiplayer.peer_disconnected.connect(peer_disconnected)
+			connected = true
+			multiplayer.multiplayer_peer = server

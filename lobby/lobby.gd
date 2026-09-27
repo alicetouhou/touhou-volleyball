@@ -10,8 +10,8 @@ signal give_start_authority
 
 const PORT = 34357
 const IP_ADDRESS = "127.0.0.1"
-const MAX_PLAYERS = 2
-const COLORS = [Color.RED, Color.BLUE]
+const MAX_PLAYERS = 4
+const COLORS = [Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE]
 
 var connected = false
 var players: Array[PlayerPeer]
@@ -82,11 +82,7 @@ func peer_connected(id: int, input_device: int = -99) -> PlayerPeer:
 		$DedicatedServerStart.set_multiplayer_authority(id)
 		give_start_permission.rpc_id(id)
 		
-	var p
-	if is_multiplayer_authority():
-		p = PlayerPeer.new_local_player(id)
-	else:
-		p = PlayerPeer.new_player(id)
+	var p = PlayerPeer.new_player(id)
 
 	p.number = len(players) + 1
 	p.color = COLORS[len(players)]
@@ -94,19 +90,19 @@ func peer_connected(id: int, input_device: int = -99) -> PlayerPeer:
 	if id == 1:
 		p.character = (%Characters.selected.resource_path.split("/") as Array).back()
 	players.push_back(p)
-	on_players_updated.rpc(players)
+	on_players_updated.rpc(PlayerPeer.serialize(players))
 	return p
 
 func peer_disconnected(id: int) -> void:
 	players.erase(get_player_by_id(id))
-	on_players_updated.rpc(players)
+	on_players_updated.rpc(PlayerPeer.serialize(players))
 	
 	if len(players) == 0:
 		%UI.hide()
 		%LobbyOverlay.show()
 		$Level.reset()
 
-func get_player_by_id(id: int):
+func get_player_by_id(id: int) -> PlayerPeer:
 	for p in players:
 		if p.peer_id == id:
 			return p
@@ -118,8 +114,8 @@ func set_player_character(resource_path: String) -> void:
 	players_updated.emit(players)
 
 @rpc("call_local")
-func on_players_updated(new_player_dict: Array[PlayerPeer]) -> void:
-	players = new_player_dict
+func on_players_updated(new_players) -> void:
+	players = PlayerPeer.parse(new_players)
 	players_updated.emit(players)
 
 @rpc("call_local")

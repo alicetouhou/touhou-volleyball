@@ -2,8 +2,8 @@ class_name Ball
 extends RigidBody3D
 var on_floor: bool = false
 var floor: Object
-var movement_scale: float = 1.0
-var new_movement_scale: float = 1.0
+var velocity_multiplier: float = 1.0
+var new_velocity_multiplier: float = 1.0
 var time: float = 0.0
 var time_acceleration: float = 1.0
 signal create_fx(fx: PackedScene, pos: Vector3)
@@ -33,13 +33,18 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if on_floor and state.linear_velocity.y > 15.:
 		create_fx.emit(FXManager.crush_slam, global_position + Vector3(0, -.6, 0))
 		
-	linear_velocity *= lerp(movement_scale,new_movement_scale,clamp(time,0.0,1.0))
-	angular_velocity *= movement_scale
+	linear_velocity *= lerp(velocity_multiplier,new_velocity_multiplier,clamp(time,0.0,1.0))
+	angular_velocity *= lerp(velocity_multiplier,new_velocity_multiplier,clamp(time,0.0,1.0))
 
 func _process(delta: float) -> void:
 	time += delta * time_acceleration
 
 func set_velocity_multiplier(new_speed: float, acceleration: float):
+	if acceleration < 0.0:
+		velocity_multiplier = new_speed
+		new_velocity_multiplier = new_speed
+		time = 1000.0
+		time_acceleration = 1.0
 	time = 0
 	time_acceleration = acceleration
-	new_movement_scale = new_speed
+	new_velocity_multiplier = new_speed

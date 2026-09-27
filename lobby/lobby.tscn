@@ -4,9 +4,10 @@
 [ext_resource type="Script" uid="uid://145sow77ik4" path="res://lobby/lobby.gd" id="1_qfux7"]
 [ext_resource type="Script" uid="uid://b4ewub2hwtw7" path="res://lobby/level.gd" id="1_uj4ub"]
 [ext_resource type="Script" uid="uid://b2hib1xb0kfid" path="res://lobby/character_selection/character_display.gd" id="2_4veey"]
-[ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="2_mnguq"]
+[ext_resource type="Script" uid="uid://ct5g5rqqffh3e" path="res://lobby/dedicated_server.gd" id="2_l3xxi"]
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="3_dk04u"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
+[ext_resource type="Script" uid="uid://bvamk6gb8rnnl" path="res://lobby/pinger.gd" id="9_8367x"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_4veey"]
 properties/0/path = NodePath(".:visible")
@@ -18,14 +19,26 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("Score:visible")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath("../DedicatedServerStart:authority")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("ScoreBoard:text")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_gm6uc"]
+font_size = 128
 
 [node name="Lobby" type="Node" unique_id=1193217656]
 script = ExtResource("1_qfux7")
 
-[node name="ViewSync" type="MultiplayerSynchronizer" parent="." unique_id=1833647378]
+[node name="TopLevelSync" type="MultiplayerSynchronizer" parent="." unique_id=1833647378]
 editor_description = "Syncronises UI elements being shown and hidden. For lobby, game UI and score screen."
 root_path = NodePath("../UI")
 replication_config = SubResource("SceneReplicationConfig_4veey")
+
+[node name="DedicatedServerStart" type="Node" parent="." unique_id=2101241253]
+script = ExtResource("2_l3xxi")
 
 [node name="LobbyOverlay" type="Control" parent="." unique_id=1015092632]
 unique_name_in_owner = true
@@ -105,10 +118,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.46894157, 0)
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.46894157, 0)
 
+[node name="P3SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1425394337]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6773343, 0.46894157, 0)
+
+[node name="P4SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1654558373]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.716914, 0.46894157, 0)
+
 [node name="Players" type="Node3D" parent="Level" unique_id=1411736408]
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="Level" unique_id=2073793907]
-_spawnable_scenes = PackedStringArray("uid://cbyawmu8vbekl")
+_spawnable_scenes = PackedStringArray("uid://cbyawmu8vbekl", "uid://xq2fjwwy8qix")
 spawn_path = NodePath("../Players")
 spawn_limit = 2
 
@@ -132,9 +153,24 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 visible = false
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ScoreBoard" type="Label" parent="UI" unique_id=393610659]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "0 - 0"
+label_settings = SubResource("LabelSettings_gm6uc")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Score" type="Label" parent="UI" unique_id=1518340030]
 unique_name_in_owner = true
@@ -147,31 +183,57 @@ offset_bottom = 879.0
 theme_override_font_sizes/font_size = 250
 text = "Score!"
 
-[node name="ChargeBars" type="Control" parent="UI" unique_id=1779165279]
+[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1155132226]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ChargeBars" type="HBoxContainer" parent="UI/MarginContainer" unique_id=911987775]
 unique_name_in_owner = true
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 2
+alignment = 1
 
-[node name="PlayerOneSuperCharge" parent="UI/ChargeBars" unique_id=163459216 instance=ExtResource("2_mnguq")]
-layout_mode = 1
-offset_left = 69.0
-offset_top = 994.0
-offset_right = 69.0
-offset_bottom = 994.0
+[node name="Left" type="HBoxContainer" parent="UI/MarginContainer/ChargeBars" unique_id=99195865]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
 
-[node name="PlayerTwoSuperCharge" parent="UI/ChargeBars" unique_id=1505399695 instance=ExtResource("2_mnguq")]
-layout_mode = 1
-offset_left = 1537.0
-offset_top = 994.0
-offset_right = 1537.0
-offset_bottom = 994.0
+[node name="Right" type="HBoxContainer" parent="UI/MarginContainer/ChargeBars" unique_id=184197928]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="LeftSpawner" type="MultiplayerSpawner" parent="UI/MarginContainer/ChargeBars" unique_id=1325570613]
+_spawnable_scenes = PackedStringArray("uid://dmts882ab45pw")
+spawn_path = NodePath("../Left")
+
+[node name="RightSpawner" type="MultiplayerSpawner" parent="UI/MarginContainer/ChargeBars" unique_id=201732546]
+_spawnable_scenes = PackedStringArray("uid://dmts882ab45pw")
+spawn_path = NodePath("../Right")
+
+[node name="Ping" type="Label" parent="." unique_id=2048528193]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+text = "0ms"
+script = ExtResource("9_8367x")
 
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Host" method="show"]
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Join" method="show"]
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/IP" method="show"]
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Disconnect" method="hide"]
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Start" method="hide"]
+[connection signal="give_start_authority" from="." to="LobbyOverlay/Network/Start" method="show"]
 [connection signal="players_updated" from="." to="LobbyOverlay/Characters" method="players_updated"]
 [connection signal="server_connected" from="." to="LobbyOverlay/Network/Host" method="hide"]
 [connection signal="server_connected" from="." to="LobbyOverlay/Network/Join" method="hide"]
@@ -183,7 +245,9 @@ offset_bottom = 994.0
 [connection signal="server_started" from="." to="LobbyOverlay/Network/Disconnect" method="show"]
 [connection signal="server_started" from="." to="LobbyOverlay/Network/Start" method="show"]
 [connection signal="pressed" from="LobbyOverlay/Network/Local" to="." method="local_game"]
+[connection signal="start_game" from="DedicatedServerStart" to="." method="start_game"]
 [connection signal="pressed" from="LobbyOverlay/Network/Host" to="." method="host_game"]
 [connection signal="pressed" from="LobbyOverlay/Network/Join" to="." method="join_game"]
 [connection signal="pressed" from="LobbyOverlay/Network/Disconnect" to="." method="stop_connection"]
 [connection signal="pressed" from="LobbyOverlay/Network/Start" to="." method="start_game"]
+[connection signal="pressed" from="LobbyOverlay/Network/Start" to="DedicatedServerStart" method="start_dedicated_game"]

@@ -12,10 +12,13 @@ var ball: RigidBody3D
 var serving := 0
 ## If true, the round is currently running.
 var round_running := false
+## Score [left, right]
+var score = [0, 0]
 
 @onready var ball_positions = [%P1BallSpawnPoint.global_position, %P2BallSpawnPoint.global_position]
-@onready var player_positions = [%P1SpawnPoint.global_position, %P2SpawnPoint.global_position]
+@onready var player_positions = [%P1SpawnPoint.global_position, %P2SpawnPoint.global_position, %P3SpawnPoint.global_position, %P4SpawnPoint.global_position]
 @onready var players = $Players
+@onready var camera = %Camera
 
 ## Spawn the required nodes and initiate first play on all clients
 @rpc("call_local")
@@ -46,16 +49,20 @@ func start_game() -> void:
 		player.name = str(peer) if peer.peer_id > -1 else "cpu"
 
 		# Disable input for CPUs and players on other computers
-		if peer.peer_id < 0 or not peer.is_local:
+		if peer.peer_id < 0:
 			player.disable_input()
 		
-		player.player_id = peer.peer_id
-		%ChargeBars.get_child(i).name = str(peer)
+		var charge_bar = preload("res://game_objects/SuperCharge.tscn").instantiate()
+		charge_bar.name = str(peer)
+		var side = 0
+		if i >= floori(len(connected_players) / 2.):
+			side = 1
+		%ChargeBars.get_child(side).add_child(charge_bar)
 		
 		player.on_hit_ball.connect(player_hit_ball)
 		player.super_used.connect(func(): player_super_used(peer.peer_id))
 		player.super_charge_updated.connect(
-			func(value): %ChargeBars.get_node(str(peer)).set_charge(value)
+			func(value): charge_bar.set_charge.rpc(value)
 		)
 		player.create_fx.connect(create_fx)
 		
@@ -111,6 +118,8 @@ func end_round() -> void:
 	round_running = false
 	get_tree().call_group("cpu", "update_game_state", false)
 	
+	score[serving] += 1
+	%ScoreBoard.text = "%s - %s" % score
 	%Score.show()
 	await get_tree().create_timer(.75).timeout
 	%Score.hide()

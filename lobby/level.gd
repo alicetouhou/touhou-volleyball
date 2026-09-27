@@ -12,6 +12,8 @@ var ball: RigidBody3D
 var serving := 0
 ## If true, the round is currently running.
 var round_running := false
+## Score [left, right]
+var score = [0, 0]
 
 @onready var ball_positions = [%P1BallSpawnPoint.global_position, %P2BallSpawnPoint.global_position]
 @onready var player_positions = [%P1SpawnPoint.global_position, %P2SpawnPoint.global_position, %P3SpawnPoint.global_position, %P4SpawnPoint.global_position]
@@ -112,6 +114,8 @@ func end_round() -> void:
 	round_running = false
 	get_tree().call_group("cpu", "update_game_state", false)
 	
+	score[serving] += 1
+	%ScoreBoard.text = "%s - %s" % score
 	%Score.show()
 	await get_tree().create_timer(.75).timeout
 	%Score.hide()

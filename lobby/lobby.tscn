@@ -22,6 +22,12 @@ properties/2/replication_mode = 1
 properties/3/path = NodePath("../DedicatedServerStart:authority")
 properties/3/spawn = true
 properties/3/replication_mode = 1
+properties/4/path = NodePath("ScoreBoard:text")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_gm6uc"]
+font_size = 128
 
 [node name="Lobby" type="Node" unique_id=1193217656]
 script = ExtResource("1_qfux7")
@@ -141,6 +147,7 @@ unique_name_in_owner = true
 
 [node name="UI" type="Control" parent="." unique_id=2110848446]
 unique_name_in_owner = true
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -148,6 +155,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="ScoreBoard" type="Label" parent="UI" unique_id=393610659]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "0 - 0"
+label_settings = SubResource("LabelSettings_gm6uc")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Score" type="Label" parent="UI" unique_id=1518340030]
 unique_name_in_owner = true

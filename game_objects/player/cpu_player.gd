@@ -9,6 +9,13 @@ enum Intention {
 	Wait
 }
 var intention: Intention = Intention.Wait
+var actpoints: Array[Array] = [] # [t, L, R, U, D, J, Z, X, C]
+var ball_target: Array = [] # [t, x, y, z]
+
+const SPIKE_THRESHOLD_V = 20
+const SPIKE_THRESHOLD_Y = 6
+var x = 0
+var y = 0.
 
 var ball_predictions: Array[Vector3] = []
 var player_predictions: Array[Vector3] = []
@@ -35,17 +42,30 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	ball_predictions = predict_ball_locations(delta)
-
+	
+	# Cancel intention if something changed.
+	if not Vector3(ball_target[1], ball_target[2], ball_target[3]).is_equal_approx(ball_predictions[ball_target[0]]):
+		intention = Intention.Wait
+		actpoints = []
+		ball_target = []
+	
 	var gravity = get_gravity()
 	# Check each prediction
 	player_predictions = []
 	for i in len(ball_predictions):
+		var p = ball_predictions[i]
+		if abs(p.x) <= 0.5 and p.y < SPIKE_THRESHOLD_Y:
+			if abs(global_position.x - p.x) - 0.75 * MOVEMENT_SPEED <= i:
+				var dropf20 = ceil(SPIKE_THRESHOLD_V / abs(14 * gravity.y) / delta)
+				var u_y = 10 if linear_velocity.y > 0 else linear_velocity.y
+				if i < dropf20 + ceil((sqrt(pow(linear_velocity.y, 2) + (2 * gravity.y * (p.y - global_position.x + (0.5*14 * gravity.y * pow(dropf20,2))))) - linear_velocity.y) / gravity.y):
+					net_spike(delta)
+		
 		player_predictions.push_back(
 			global_position +
-			Vector3(0, JUMP_POWER * delta * 5 * (i + 1 ) + gravity.y * (i+1) * (i+1) * delta * 2.5, 0)
+			Vector3(0, JUMP_POWER * delta * 5 * (i+1) + gravity.y * (i+1) * (i+1) * delta * 2.5, 0)
 		)
 		# Will jumping put us in a good position?
-		var p = ball_predictions[i]
 		if (
 			i >= 1 and
 			player_predictions[i].y > position.y + 2. and
@@ -107,3 +127,9 @@ func predict_ball_locations(delta: float) -> Array[Vector3]:
 		else:
 			return predictions
 	return predictions
+
+func net_spike(delta: float):
+	intention = Intention.Spike
+	actpoints = []
+	
+	

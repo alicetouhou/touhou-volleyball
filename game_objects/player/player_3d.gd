@@ -116,7 +116,7 @@ func _physics_process(delta: float) -> void:
 	# Jumping
 	if %ActionSync.jumping and on_floor:
 		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
-
+	
 	# Fast falling
 	if %ActionSync.direction.y < 0 and not on_floor:
 		if linear_velocity.y > 0:

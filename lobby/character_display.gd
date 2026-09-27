@@ -19,9 +19,25 @@ static func load_asset(path : String) -> Resource:
 	else:
 		return load(path)
 
-# Called when the node enters the scene tree for the first time.
+var selected: CharacterResource
+
+func unpress_others(character: CharacterResource) -> void:
+	selected = character
+	if $"/root/Lobby".connected:
+		$"/root/Lobby".set_player_character.rpc((selected.resource_path.split("/") as Array).back())
+	for child in get_children():
+		child.radio_unpressed()
+
 func _ready() -> void:
+	var first = true
 	for file in DirAccess.open("res://resources/characters").get_files():
 		var character_card := preload("res://lobby/character.tscn").instantiate()
 		character_card.character = load_asset("res://resources/characters/%s" % file)
+		if first:
+			selected = character_card.character
+			character_card.hovered()
+			character_card.button_pressed = true
+			first = false
+		character_card.pressed.connect(unpress_others)
 		add_child(character_card)
+		

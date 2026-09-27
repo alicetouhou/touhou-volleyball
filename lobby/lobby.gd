@@ -10,7 +10,7 @@ signal give_start_authority
 
 const PORT = 34357
 const IP_ADDRESS = "127.0.0.1"
-const MAX_PLAYERS = 4
+const MAX_PLAYERS = 32
 const DEFAULT_PLAYER = {"character": "alice_margatroid.tres"}
 const COLORS = [Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE]
 
@@ -68,7 +68,7 @@ func peer_connected(id: int) -> void:
 		give_start_permission.rpc_id(id)
 	players[id] = DEFAULT_PLAYER.duplicate()
 	players[id]["number"] = len(players)
-	players[id]["color"] = COLORS[len(players) - 1]
+	players[id]["color"] = COLORS[wrap(len(players) - 1, 0, len(COLORS))]
 	if id == 1:
 		players[id]["character"] = (%Characters.selected.resource_path.split("/") as Array).back()
 	on_players_updated.rpc(players)

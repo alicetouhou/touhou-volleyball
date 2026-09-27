@@ -40,7 +40,7 @@ func start_game() -> void:
 	
 	# Players
 	var client_ids: Array = get_parent().players.keys()
-	if len(client_ids) == 1:
+	if len(client_ids) % 2 == 1:
 		client_ids.push_back(-1)
 	var i = 0
 	for peer in client_ids:
@@ -88,7 +88,7 @@ func start_round() -> void:
 	for i in players.get_child_count():
 		var player: Node3D = players.get_child(i)
 		player.linear_velocity = Vector3.ZERO
-		player.global_position = player_positions[i]
+		player.global_position = player_positions[wrap(i, 0, len(player_positions))]
 		
 	ball.linear_velocity = Vector3.ZERO
 	ball.speed_percent = 1.0

@@ -24,6 +24,13 @@ const SUPER_COOLDOWN = .2
 ## Player's character
 @export var character: CharacterResource
 
+## VFX Scenes
+const DUST_SETTLE_FX = preload("res://resources/effects/dust-settle.tscn")
+const POMMEL_POP_FX = preload("res://resources/effects/pommel-pop.tscn")
+
+var movement_scale = 1.
+
+
 @export var player_id: int :
 	set(value):
 		player_id = value
@@ -158,3 +165,6 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		if normal.dot(Vector3.UP) > 0.3: # this can be dialed in
 			on_floor = true
 		i += 1
+		
+	linear_velocity *= movement_scale
+	angular_velocity *= movement_scale

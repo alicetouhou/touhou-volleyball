@@ -2,8 +2,18 @@
 
 [ext_resource type="Texture2D" uid="uid://dulhloqkt0k5s" path="res://resources/effects/holy-pillar.png" id="1_sheet"]
 
-[sub_resource type="CanvasItemMaterial" id="mat"]
-blend_mode = 1
+[sub_resource type="Shader" id="Shader_g1icp"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.7.1.stable's CanvasItemMaterial.
+
+shader_type canvas_item;
+render_mode blend_add;
+
+void fragment() {
+	COLOR.a *= clamp(UV.x * 10. + 0.5,0.,1.);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bchlu"]
+shader = SubResource("Shader_g1icp")
 
 [sub_resource type="AtlasTexture" id="f0"]
 atlas = ExtResource("1_sheet")
@@ -211,8 +221,10 @@ animations = [{
 
 [node name="holy-pillar" type="AnimatedSprite2D" unique_id=1199916776]
 texture_filter = 2
-material = SubResource("mat")
+material = SubResource("ShaderMaterial_bchlu")
+position = Vector2(127, -1)
 rotation = 1.5707964
+scale = Vector2(2, 2)
 sprite_frames = SubResource("frames")
 autoplay = "default"
 frame = 27

@@ -79,7 +79,7 @@ func kick(velocity = 7):
 	var global_position_2D = Vector2(global_position.x, global_position.y)
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
 
-	create_fx.emit(FXManager.pummel_pop, ball.global_position + global_position / 2)
+	create_fx.emit(FXManager.pummel_pop, ball.position)
 
 	var ball_direction = global_position_2D.direction_to(ball_global_position_2D)
 	var force = velocity * (ball_direction)

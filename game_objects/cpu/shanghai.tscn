@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://chjcjk4nvp7gp"]
+
+[ext_resource type="Script" uid="uid://c6b3jopeae53h" path="res://game_objects/cpu/shanghai.gd" id="1_7x5mh"]
+[ext_resource type="Texture2D" uid="uid://bhtecvyy11ul4" path="res://assets/sprites/characters/shanghai.png" id="1_l2pjn"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_km8ha"]
+radius = 0.38476563
+height = 1.2485352
+
+[node name="Shanghai" type="RigidBody3D" unique_id=1278164841]
+collision_layer = 2
+collision_mask = 9
+script = ExtResource("1_7x5mh")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1545152456]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+texture = ExtResource("1_l2pjn")
+
+[node name="KickArea" type="Area3D" parent="." unique_id=2027144870]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="KickArea" unique_id=1335000090]
+shape = SubResource("CapsuleShape3D_km8ha")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=547456437]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.18786621, 0)
+shape = SubResource("CapsuleShape3D_km8ha")

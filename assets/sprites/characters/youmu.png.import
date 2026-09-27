@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cdojsw5bpwq6r"
-path="res://.godot/imported/reimu.png-3dcadb363aa58650c552e52d432abaac.ctex"
+uid="uid://dgtsjmpmf7ve"
+path="res://.godot/imported/youmu.png-ef8ced4f1ae6602ad3a26c9289c71e3f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/reimu.png"
-dest_files=["res://.godot/imported/reimu.png-3dcadb363aa58650c552e52d432abaac.ctex"]
+source_file="res://assets/sprites/characters/youmu.png"
+dest_files=["res://.godot/imported/youmu.png-ef8ced4f1ae6602ad3a26c9289c71e3f.ctex"]
 
 [params]
 

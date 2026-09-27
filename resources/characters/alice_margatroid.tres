@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://ibljn5odxrx"]
 
-[ext_resource type="Script" uid="uid://0khalhvv6a3o" path="res://resources/character_resource.gd" id="1_wq3rk"]
-[ext_resource type="Texture2D" uid="uid://dw1xae2suocg1" path="res://assets/sprite/alice.png" id="2_ffq4r"]
+[ext_resource type="Script" uid="uid://0khalhvv6a3o" path="res://resources/character_resource.gd" id="1_a41tf"]
+[ext_resource type="Texture2D" uid="uid://dw1xae2suocg1" path="res://assets/sprites/characters/alice.png" id="2_ujln7"]
 
 [resource]
-script = ExtResource("1_wq3rk")
+script = ExtResource("1_a41tf")
 name = "Alice"
-texture = ExtResource("2_ffq4r")
+texture = ExtResource("2_ujln7")
 metadata/_custom_type_script = "uid://0khalhvv6a3o"

@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://fv8ffbtkd5l6"]
+
+[ext_resource type="Texture2D" uid="uid://buew1b0346o07" path="res://assets/sprites/tokens/player.svg" id="1_wiibm"]
+[ext_resource type="Script" uid="uid://tk1ngw5t4q11" path="res://lobby/character_selection/set_puck.gd" id="2_otxn7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5jpe0"]
+font_size = 32
+font_color = Color(0.5529556, 0.55295557, 0.55295557, 1)
+
+[node name="Puck" type="TextureRect" unique_id=1903787676]
+modulate = Color(0.8784314, 0.28235295, 0.27450982, 1)
+offset_right = 100.0
+offset_bottom = 100.0
+texture = ExtResource("1_wiibm")
+stretch_mode = 6
+script = ExtResource("2_otxn7")
+
+[node name="Label" type="Label" parent="." unique_id=945468996]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "P1"
+label_settings = SubResource("LabelSettings_5jpe0")
+horizontal_alignment = 1
+vertical_alignment = 1

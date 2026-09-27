@@ -9,9 +9,11 @@ signal connection_stopped
 
 const PORT = 7000
 const IP_ADDRESS = "127.0.0.1"
-const MAX_PLAYERS = 4
-const DEFAULT_PLAYER = {}
+const MAX_PLAYERS = 2
+const DEFAULT_PLAYER = {"character": "alice_margatroid.tres"}
+const COLORS = [Color.RED, Color.BLUE]
 
+var connected = false
 var players: Dictionary[int, Dictionary] = {}
 
 func host_game() -> Error:
@@ -22,6 +24,7 @@ func host_game() -> Error:
 		multiplayer.peer_connected.connect(peer_connected)
 		multiplayer.peer_disconnected.connect(peer_disconnected)
 		peer_connected(1)
+		connected = true
 		multiplayer.multiplayer_peer = server
 	return err
 
@@ -38,6 +41,7 @@ func join_game() -> Error:
 	
 	var err = client.create_client(target_ip, PORT)
 	if not err:
+		connected = true
 		multiplayer.multiplayer_peer = client
 	return err
 
@@ -50,17 +54,29 @@ func stop_connection() -> void:
 		multiplayer.connected_to_server.disconnect(server_connected.emit)
 		multiplayer.connection_failed.disconnect(server_failed.emit)
 		multiplayer.server_disconnected.disconnect(stop_connection)
+	
+	connected = false
+	
 	connection_stopped.emit()
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	players = {}
 
 func peer_connected(id: int) -> void:
 	players[id] = DEFAULT_PLAYER.duplicate()
+	players[id]["number"] = len(players)
+	players[id]["color"] = COLORS[len(players) - 1]
+	if id == 1:
+		players[id]["character"] = (%Characters.selected.resource_path.split("/") as Array).back()
 	on_players_updated.rpc(players)
 
 func peer_disconnected(id: int) -> void:
 	players.erase(id)
 	on_players_updated.rpc(players)
+
+@rpc("any_peer", "call_local")
+func set_player_character(resource_path: String) -> void:
+	players[multiplayer.get_remote_sender_id()]["character"] = resource_path
+	players_updated.emit(players)
 
 @rpc("call_local")
 func on_players_updated(new_player_dict: Dictionary) -> void:

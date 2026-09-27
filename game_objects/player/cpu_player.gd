@@ -1,19 +1,19 @@
 extends Player
 
 enum Intention {
-	Block,
-	Reposition,
-	Return,
-	Set,
-	Spike,
-	Wait
+	BLOCK,
+	REPOSITION,
+	RETURN,
+	SET,
+	SPIKE,
+	WAIT
 }
-var intention: Intention = Intention.Wait
+var intention: Intention = Intention.WAIT
 var actpoints: Array[Array] = [] # [t, L, R, U, D, J, Z, X, C]
 var ball_target: Array = [] # [t, x, y, z]
 
-const SPIKE_THRESHOLD_V = 20
-const SPIKE_THRESHOLD_Y = 6
+const BLOCK_THRESHOLD_V = 5
+const BLOCK_THRESHOLD_Y = 6
 var x = 0
 var y = 0.
 
@@ -44,8 +44,8 @@ func _physics_process(delta: float) -> void:
 	ball_predictions = predict_ball_locations(delta)
 	
 	# Cancel intention if something changed.
-	if not Vector3(ball_target[1], ball_target[2], ball_target[3]).is_equal_approx(ball_predictions[ball_target[0]]):
-		intention = Intention.Wait
+	if ball_target.size() > 0 and  not Vector3(ball_target[1], ball_target[2], ball_target[3]).is_equal_approx(ball_predictions[ball_target[0]]):
+		intention = Intention.WAIT
 		actpoints = []
 		ball_target = []
 	
@@ -54,12 +54,14 @@ func _physics_process(delta: float) -> void:
 	player_predictions = []
 	for i in len(ball_predictions):
 		var p = ball_predictions[i]
-		if abs(p.x) <= 0.5 and p.y < SPIKE_THRESHOLD_Y:
-			if abs(global_position.x - p.x) - 0.75 * MOVEMENT_SPEED <= i:
-				var dropf20 = ceil(SPIKE_THRESHOLD_V / abs(14 * gravity.y) / delta)
-				var u_y = 10 if linear_velocity.y > 0 else linear_velocity.y
-				if i < dropf20 + ceil((sqrt(pow(linear_velocity.y, 2) + (2 * gravity.y * (p.y - global_position.x + (0.5*14 * gravity.y * pow(dropf20,2))))) - linear_velocity.y) / gravity.y):
-					net_spike(delta)
+		if abs(p.x) <= 0.5 and p.y < BLOCK_THRESHOLD_Y:
+			if abs(global_position.x - p.x) - 0.75 * MOVEMENT_SPEED <= i / 60:
+				var dropf20 = ceil(BLOCK_THRESHOLD_V / abs(14 * gravity.y) / delta)
+				var u_y = 10 if linear_velocity.y <= 0 else linear_velocity.y
+				if i / 60 < dropf20 + ceil((sqrt(pow(u_y, 2) + (2 * gravity.y * (p.y - global_position.y + (0.5*14 * gravity.y * pow(dropf20,2))))) - u_y) / gravity.y) + (ceil(sqrt(pow(u_y, 2) + 2*14*gravity.y*global_position.y) - u_y) if linear_velocity.y < 0 else 0):
+					if not (linear_velocity.y > 0 and i / 60 < (u_y + sqrt(pow(u_y, 2) + 2 * gravity.y * (p.y - global_position.y))) / 2 * gravity.y):
+						intention = Intention.BLOCK
+						ball_target = [i, p.x, p.y, p.z]
 		
 		player_predictions.push_back(
 			global_position +
@@ -81,7 +83,7 @@ func _physics_process(delta: float) -> void:
 	if global_position.distance_squared_to(ball.global_position) >= 1.75:
 		can_kick = true
 	if (
-		global_position.distance_squared_to(ball.global_position) <= 1 and
+		global_position.distance_squared_to(ball.global_position) <= 1.75 and
 		ball.global_position < global_position + Vector3(1.5,0.,0.) and
 		can_kick
 	):
@@ -127,9 +129,3 @@ func predict_ball_locations(delta: float) -> Array[Vector3]:
 		else:
 			return predictions
 	return predictions
-
-func net_spike(delta: float):
-	intention = Intention.Spike
-	actpoints = []
-	
-	

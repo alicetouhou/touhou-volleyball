@@ -50,8 +50,11 @@ func start_game() -> void:
 
 		# Disable input for CPUs and players on other computers
 		player.player_id = peer.peer_id
-		if peer.peer_id < 0:
+		if peer.peer_id < 0 or (player.player_id != multiplayer.get_unique_id() and not peer.local_co_op):
 			player.disable_input()
+
+		if peer.local_co_op:
+			player.set_multiplayer_authority(multiplayer.get_unique_id())
 		
 		var charge_bar = preload("res://game_objects/SuperCharge.tscn").instantiate()
 		charge_bar.name = str(peer)

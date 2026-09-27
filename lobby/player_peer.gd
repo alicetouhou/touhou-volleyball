@@ -10,6 +10,7 @@ var input_device = -99
 var character: String = "alice_margatroid.tres"
 var color: Color
 var number: int
+var local_co_op := false
 
 static func new_player(id) -> PlayerPeer:
 	var p = PlayerPeer.new()
@@ -31,6 +32,7 @@ static func serialize(players: Array[PlayerPeer]):
 			"character": p.character,
 			"color": p.color,
 			"number": p.number,
+			"local_co_op": p.local_co_op,
 		})
 	
 	return out
@@ -45,6 +47,7 @@ static func parse(players: Array) -> Array[PlayerPeer]:
 		p.character = info["character"]
 		p.color = Color(info["color"])
 		p.number = info["number"]
+		p.local_co_op = info["local_co_op"]
 		out.push_back(p)
 	
 	return out

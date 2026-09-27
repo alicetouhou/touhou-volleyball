@@ -47,7 +47,6 @@ func reimu(game: Level, player: Player):
 	player.set_velocity_multiplier(1.0,1.0)
 
 func alice(game: Level, player: Player):
-			
 	var shanghai_instance = shanghai.instantiate()
 	game.players.add_child(shanghai_instance)
 	shanghai_instance.global_position = player.global_position + Vector3(-0.5,0.5,0.0)

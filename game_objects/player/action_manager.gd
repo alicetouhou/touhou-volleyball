@@ -48,6 +48,11 @@ func sync_strength(d: String, power: float) -> void:
 # The `Input` class does not allow you to check if an input was performed by a specific
 # device so we need to use the _input method :(
 func _input(event: InputEvent) -> void:
+	if disable_input:
+		return
+	if not is_multiplayer_authority():
+		return
+
 	if input_device > -99 and event.device != input_device:
 		return
 
@@ -72,6 +77,8 @@ func _input(event: InputEvent) -> void:
 
 ## Only runs on client, see disabled is set when player is created.
 func _process(_delta: float) -> void:
+	if not is_multiplayer_authority():
+		return
 	if disable_input:
 		return
 

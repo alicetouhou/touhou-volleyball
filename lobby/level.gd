@@ -47,7 +47,7 @@ func start_game() -> void:
 	for peer: PlayerPeer in connected_players:
 		var player: Player = (player_scene if peer.peer_id > -1 else cpu_scene).instantiate()
 		
-		player.name = str(peer) if peer.peer_id > -1 else "cpu"
+		player.name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
 
 		# Disable input for CPUs and players on other computers
 		player.player_id = peer.peer_id
@@ -65,7 +65,7 @@ func start_game() -> void:
 		%ChargeBars.get_child(side).add_child(charge_bar)
 		
 		player.on_hit_ball.connect(player_hit_ball)
-		player.super_used.connect(func(): player_super_used(peer.peer_id))
+		player.super_used.connect(func(): player_super_used(peer))
 		player.super_charge_updated.connect(
 			func(value): charge_bar.set_charge.rpc(value)
 		)
@@ -144,8 +144,8 @@ func player_hit_ball() -> void:
 	%FxManager.create_with_parent_3D(FXManager.pressure_ring, ball)
 	%Camera.add_trauma(.1)
 
-func player_super_used(player: int) -> void:
-	Supers.run(self, players.get_node(str(player)))
+func player_super_used(player: PlayerPeer) -> void:
+	Supers.run(self, players.get_node("%s-%s" % [player.peer_id, player.input_device]))
 	
 func get_fx_manager():
 	return %FxManager

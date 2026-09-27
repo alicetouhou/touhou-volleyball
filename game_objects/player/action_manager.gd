@@ -31,9 +31,10 @@ func _ready():
 ## Only runs on client, see _ready.
 ## TODO: Add multiple inputs.
 func _process(_delta: float) -> void:
-	direction = Vector2.ZERO
 	if disabled:
 		return
+	
+	direction = Vector2.ZERO
 	
 	if Input.is_action_pressed("left"):
 		direction.x -= 1

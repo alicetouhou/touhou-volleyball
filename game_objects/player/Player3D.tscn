@@ -10,7 +10,7 @@
 size = Vector3(0.6385498, 1.0792236, 0.2998047)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kxtgu"]
-size = Vector3(1.9367676, 1.9572601, 1)
+size = Vector3(2, 2, 1)
 
 [sub_resource type="Animation" id="Animation_kxtgu"]
 length = 0.001
@@ -174,7 +174,7 @@ script = ExtResource("1_bn5eq")
 character = ExtResource("2_bp3gs")
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1588437195]
-transform = Transform3D(0.8672086, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.039611816, 0.021972656)
+transform = Transform3D(0.8672086, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_wa84s")
 
 [node name="Texture" type="Node3D" parent="." unique_id=1883257529]
@@ -183,7 +183,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0485675, 0, 0, 0, 1, 0, 0.14570248, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0248445, 0, 0, 0, 1, 0, 0.07453364, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 
@@ -192,7 +192,7 @@ unique_name_in_owner = true
 collision_mask = 4
 
 [node name="Collider" type="CollisionShape3D" parent="KickCollider" unique_id=996229372 groups=["player"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103637695, -0.10105133, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
 shape = SubResource("BoxShape3D_kxtgu")
 
 [node name="Animations" type="Node" parent="." unique_id=815204776]

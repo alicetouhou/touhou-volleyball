@@ -1,5 +1,15 @@
 extends Player
 
+enum Intention {
+	Block,
+	Reposition,
+	Return,
+	Set,
+	Spike,
+	Wait
+}
+var intention: Intention = Intention.Wait
+
 var ball_predictions: Array[Vector3] = []
 var player_predictions: Array[Vector3] = []
 
@@ -48,11 +58,11 @@ func _physics_process(delta: float) -> void:
 			%ActionSync.jump.rpc()
 			can_jump = false
 			
-	if global_position.distance_squared_to(ball.global_position) >= 1:
+	if global_position.distance_squared_to(ball.global_position) >= 1.75:
 		can_kick = true
 	if (
 		global_position.distance_squared_to(ball.global_position) <= 1 and
-		ball.global_position < global_position and
+		ball.global_position < global_position + Vector3(1.5,0.,0.) and
 		can_kick
 	):
 		%ActionSync.kick.rpc()
@@ -81,9 +91,9 @@ func predict_ball_locations(delta: float) -> Array[Vector3]:
 	var g = ball.gravity_scale * get_gravity()
 	var p = ball.position
 	var v = ball.linear_velocity
-	var t = delta * 5
+	var t = delta
 	var predictions: Array[Vector3] = []
-	for i in range(0,20):
+	for i in range(0,100):
 		var new_pos = p + v * t + 0.5 * g * t * t
 		
 		if new_pos.x < -11.5:
@@ -93,7 +103,7 @@ func predict_ball_locations(delta: float) -> Array[Vector3]:
 				
 		predictions.push_back(new_pos)
 		if new_pos.y > 1.5:
-			t += delta * 5
+			t += delta
 		else:
 			return predictions
 	return predictions

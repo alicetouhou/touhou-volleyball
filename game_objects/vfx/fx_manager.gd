@@ -28,7 +28,6 @@ func create_at_pos(fx: PackedScene, pos: Vector3, reflect = false):
 	f.position = project_pos_to_viewport(pos)
 	if reflect:
 		f.scale.y *= -1
-	print(f.scale)
 	f.play()
 	f.animation_finished.connect(func():
 		f.queue_free()

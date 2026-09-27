@@ -37,6 +37,7 @@ func start_game() -> void:
 	
 	# Players
 	var connected_players: Array = get_parent().players
+	print(connected_players)
 	if len(connected_players) == 1:
 		connected_players.push_back(PlayerPeer.new_cpu_player())
 	var i = 0

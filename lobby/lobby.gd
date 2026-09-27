@@ -91,7 +91,7 @@ func peer_connected(id: int, input_device: int = -99) -> void:
 	on_players_updated.rpc(players)
 
 func peer_disconnected(id: int) -> void:
-	players.erase(id)
+	players.erase(get_player_by_id(id))
 	on_players_updated.rpc(players)
 	
 	if len(players) == 0:

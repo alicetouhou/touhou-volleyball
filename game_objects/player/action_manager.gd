@@ -6,13 +6,19 @@ extends MultiplayerSynchronizer
 @export var input_device := -99
 
 ## Client's target for movement (except jumping).
-@export var direction := Vector2i.ZERO
+@export var direction := Vector2.ZERO
 
 ## Simulated on_action_just_pressed via rpc.
 ## Reset per-client in _physics_process of player.
 @export var kicking := false
 @export var jumping := false
 @export var supering := false
+
+# Input...
+var up_strength := 0.0
+var down_strength := 0.0
+var left_strength := 0.0
+var right_strength := 0.0
 
 @rpc("call_local")
 func kick() -> void:
@@ -26,14 +32,37 @@ func jump() -> void:
 func trigger_super() -> void:
 	supering = true
 
-func is_action_pressed(action: StringName):
-	if input_device > -99:
-		var ev = InputMap.action_get_events(action)
-		for e: InputEvent in ev:
-			if e.is_action_pressed(action):
-				InputMap.action_erase_event(action, e)
-				return true
-	return Input.is_action_pressed(action)
+@rpc("call_local")
+func sync_strength(d, power) -> void:
+	if d == "left":
+		left_strength = power
+	if d == "right":
+		right_strength = power
+	if d == "up":
+		up_strength = power
+	if d == "down":
+		down_strength = power
+
+func _input(event: InputEvent) -> void:
+	if input_device > -99 and event.device != input_device:
+		return
+
+	if event.is_action_pressed("left") or event.is_action_released("left"):
+		sync_strength.rpc("left", event.get_action_strength("left"))
+	if event.is_action_pressed("right") or event.is_action_released("right"):
+		sync_strength.rpc("right", event.get_action_strength("right"))
+	if event.is_action_pressed("up") or event.is_action_released("up"):
+		sync_strength.rpc("up", event.get_action_strength("up"))
+	if event.is_action_pressed("down") or event.is_action_released("down"):
+		sync_strength.rpc("down", event.get_action_strength("down"))
+
+	if event.is_action_pressed("up"):
+		jump.rpc()
+	if event.is_action_pressed("kick"):
+		kick.rpc()
+	if event.is_action_pressed("super"):
+		trigger_super.rpc()
+
 
 func _ready():
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
@@ -42,20 +71,10 @@ func _ready():
 func _process(_delta: float) -> void:
 	if disabled:
 		return
-	
+
 	direction = Vector2.ZERO
 
-	if is_action_pressed("left"):
-		direction.x -= 1
-	if is_action_pressed("right"):
-		direction.x += 1
-	if is_action_pressed("up"):
-		direction.y += 1
-	if is_action_pressed("down"):
-		direction.y -= 1
-	if Input.is_action_just_pressed("up"):
-		jump.rpc()
-	if Input.is_action_just_pressed("kick"):
-		kick.rpc()
-	if Input.is_action_just_pressed("super"):
-		trigger_super.rpc()
+	direction.x -= left_strength
+	direction.x += right_strength
+	direction.y += up_strength
+	direction.y -= down_strength

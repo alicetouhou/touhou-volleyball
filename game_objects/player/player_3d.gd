@@ -11,8 +11,8 @@ signal super_charge_updated(value: float)
 signal create_fx(fx: PackedScene, pos: Vector3)
 
 ## Config values
-const MOVEMENT_SPEED := 9
-const JUMP_POWER := 10
+const MOVEMENT_SPEED := 9.0
+const JUMP_POWER := 10.0
 
 const SET_ANGLE := PI/4 # radians
 
@@ -95,13 +95,13 @@ func kick(velocity = 7):
 	var ball_direction = global_position_2D.direction_to(ball_global_position_2D)
 	var force = velocity * (ball_direction)
 	
-	if %ActionSync.direction.y > 0 and acos(ball_direction.dot(Vector2.DOWN) <= SET_ANGLE):
+	if %ActionSync.direction.y > 0.0 and acos(ball_direction.dot(Vector2.DOWN) <= SET_ANGLE):
 		ball.linear_velocity = Vector3.ZERO
 		ball.linear_velocity.y = velocity + linear_velocity.y
 	else:
-		ball.linear_velocity = Vector3(force.x, force.y, 0) + linear_velocity
+		ball.linear_velocity = Vector3(force.x, force.y, 0.0) + linear_velocity
 	
-	if %ActionSync.direction.y < 0:
+	if %ActionSync.direction.y < 0.0:
 		ball.linear_velocity *= 2
 	
 	super_charge += ball.linear_velocity.length() / 75.

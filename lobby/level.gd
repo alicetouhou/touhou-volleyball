@@ -56,7 +56,6 @@ func start_game() -> void:
 			side = 1
 		%ChargeBars.get_child(side).add_child(charge_bar)
 		
-		
 		player.on_hit_ball.connect(player_hit_ball)
 		player.super_used.connect(func(): player_super_used(peer))
 		player.super_charge_updated.connect(
@@ -65,6 +64,8 @@ func start_game() -> void:
 		player.create_fx.connect(create_fx)
 		
 		players.add_child(player, true)
+		if peer > 0:
+			player.set_character.rpc.call_deferred($"/root/Lobby".players[peer]["character"])
 		i += 1
 	
 	get_tree().call_group("cpu", "cpu_init", ball, players.get_children())

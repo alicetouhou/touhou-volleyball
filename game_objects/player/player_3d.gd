@@ -145,7 +145,10 @@ func _process(delta: float) -> void:
 	time += delta * time_acceleration
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
-	linear_velocity.x = %ActionSync.direction.x * MOVEMENT_SPEED
+	if player_id == multiplayer.get_unique_id():
+		linear_velocity.x = %ActionSync.local_direction.x * MOVEMENT_SPEED
+	else:
+		linear_velocity.x = %ActionSync.direction.x * MOVEMENT_SPEED
 	
 	if sign(linear_velocity).x != direction and not linear_velocity.is_zero_approx():
 		direction = sign(linear_velocity).x

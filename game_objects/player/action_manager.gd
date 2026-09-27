@@ -4,8 +4,10 @@ extends MultiplayerSynchronizer
 ## If true, blocks client input.
 @export var disabled := false
 
-## Client's target for movement (except jumping).
+## Direction is the authoritive direction sent to the server.
 @export var direction := Vector2i.ZERO
+## Local direction is purely local and is used by the player on our client to reduce percieved delay.
+var local_direction := Vector2i.ZERO
 
 ## Simulated on_action_just_pressed via rpc.
 ## Reset per-client in _physics_process of player.
@@ -34,19 +36,24 @@ func _process(_delta: float) -> void:
 	if disabled:
 		return
 	
-	direction = Vector2.ZERO
+	local_direction = Vector2.ZERO
 	
 	if Input.is_action_pressed("left"):
-		direction.x -= 1
+		local_direction.x -= 1
 	if Input.is_action_pressed("right"):
-		direction.x += 1
+		local_direction.x += 1
 	if Input.is_action_pressed("up"):
-		direction.y += 1
+		local_direction.y += 1
 	if Input.is_action_pressed("down"):
-		direction.y -= 1
+		local_direction.y -= 1
+	direction = local_direction
+	
 	if Input.is_action_just_pressed("up"):
-		jump.rpc()
+		jump()
+		jump.rpc_id(1)
 	if Input.is_action_just_pressed("kick"):
-		kick.rpc()
+		kick()
+		kick.rpc_id(1)
 	if Input.is_action_just_pressed("super"):
-		trigger_super.rpc()
+		trigger_super()
+		trigger_super.rpc_id(1)

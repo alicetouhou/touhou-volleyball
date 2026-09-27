@@ -22,7 +22,11 @@ const KICK_COOLDOWN := .3
 const SUPER_COOLDOWN = .2
 
 ## Player's character
-@export var character: CharacterResource
+@export var character: CharacterResource :
+	set(value):
+		character = value
+		if value and has_node("%Sprite3D"):
+			%Sprite3D.texture = value.texture
 
 ## VFX Scenes
 const DUST_SETTLE_FX = preload("res://resources/effects/dust-settle.tscn")
@@ -116,6 +120,10 @@ func kick(velocity = 7, ball: Ball = null):
 # Used to disable input for CPUs and players on a different computer
 func disable_input():
 	%ActionSync.disable_input = true
+
+@rpc("call_local")
+func set_character(character_id: String) -> void:
+	character = load("res://resources/characters/%s" % character_id)
 
 ## All clients simulate process, but server will sync later with authority.
 func _physics_process(delta: float) -> void:

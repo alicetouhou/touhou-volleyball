@@ -1,12 +1,56 @@
 [gd_scene format=3 uid="uid://ca4cs8h4j08ay"]
 
 [ext_resource type="Script" uid="uid://bd50et6aw3p6l" path="res://game_objects/vfx/fx_manager.gd" id="1_plexv"]
+[ext_resource type="Texture2D" uid="uid://doqh7nv1p1gcr" path="res://assets/particles/master_spark_star.png" id="2_y2k6f"]
+[ext_resource type="Texture2D" uid="uid://dsg0mtbt5da1n" path="res://assets/particles/master_spark_heart.png" id="3_dmx00"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_plexv"]
 blend_mode = 1
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_os57d"]
 viewport_path = NodePath("Viewport")
+
+[sub_resource type="Curve" id="Curve_dmx00"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.033783793, 1), 0.0, 0.0, 0, 0, Vector2(0.5405406, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.011235952), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_y2k6f"]
+curve = SubResource("Curve_dmx00")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_km8ha"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(150, 0, 0)
+emission_shape = 3
+emission_box_extents = Vector3(200, 55, 1)
+spread = 15.353
+initial_velocity_min = 250.0
+initial_velocity_max = 300.0
+angular_velocity_min = -243.69002
+angular_velocity_max = 177.22998
+gravity = Vector3(1000, 0, 0)
+scale_min = 0.5
+color = Color(0.99215686, 0.9529412, 0.7647059, 1)
+alpha_curve = SubResource("CurveTexture_y2k6f")
+hue_variation_min = -0.010000022
+hue_variation_max = 0.009999977
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dmx00"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(150, 0, 0)
+emission_shape = 3
+emission_box_extents = Vector3(200, 55, 1)
+spread = 15.353
+initial_velocity_min = 250.0
+initial_velocity_max = 300.0
+angular_velocity_min = -487.38
+angular_velocity_max = 420.91998
+gravity = Vector3(1000, 0, 0)
+scale_min = 0.19999999
+scale_max = 0.79999995
+color = Color(0.99, 0.84579, 0.7623, 1)
+alpha_curve = SubResource("CurveTexture_y2k6f")
+hue_variation_min = -0.010000022
+hue_variation_max = 0.009999977
 
 [node name="FxManager" type="Node3D" unique_id=1008124586]
 script = ExtResource("1_plexv")
@@ -22,3 +66,25 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 texture = SubResource("ViewportTexture_os57d")
+
+[node name="MasterSparkStar" type="GPUParticles2D" parent="TextureRect" unique_id=383211996]
+unique_name_in_owner = true
+position = Vector2(104, 103)
+emitting = false
+amount = 20
+texture = ExtResource("2_y2k6f")
+lifetime = 0.35000000000000003
+one_shot = true
+randomness = 0.13
+process_material = SubResource("ParticleProcessMaterial_km8ha")
+
+[node name="MasterSparkHeart" type="GPUParticles2D" parent="TextureRect" unique_id=252810734]
+unique_name_in_owner = true
+position = Vector2(104, 103)
+emitting = false
+amount = 20
+texture = ExtResource("3_dmx00")
+lifetime = 0.35000000000000003
+one_shot = true
+randomness = 0.13
+process_material = SubResource("ParticleProcessMaterial_dmx00")

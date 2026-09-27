@@ -10,7 +10,8 @@ signal give_start_authority
 
 const PORT = 34357
 const IP_ADDRESS = "127.0.0.1"
-const MAX_PLAYERS = 4
+const MAX_PLAYERS = 32
+const DEFAULT_PLAYER = {"character": "alice_margatroid.tres"}
 const COLORS = [Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE]
 
 var connected = false
@@ -88,6 +89,7 @@ func peer_connected(id: int, input_device: int = -99) -> PlayerPeer:
 	p.input_device = input_device
 	if input_device != -99:
 		p.local_co_op = true
+
 	if id == 1:
 		p.character = (%Characters.selected.resource_path.split("/") as Array).back()
 	players.push_back(p)

@@ -67,27 +67,31 @@ func yuyuko(game: Level, player: Player):
 	player.scale = Vector3(1, 1, 1)
 		
 func marisa(level: Level, player: Player):
+	if (abs(level.ball.position.y - player.position.y) > 5. or abs(player.position.x - level.ball.position.x) > 10):
+		return
 	if player.super_charge < 3:
 		return
-
 	player.super_charge -= 3
 	
-	if (abs(level.ball.position.y - player.position.y) > 10. or player.position.x > level.ball.position.x or player.position.x - level.ball.position.x > 20):
-		return
+	var reflect = false
+	if player.position.x > level.ball.position.x:
+		reflect = true
 	
 	player.set_velocity_multiplier(0.0,0.5)
 	level.ball.set_velocity_multiplier(0.0, 0.5)
 	var fx = level.get_fx_manager()
 	
 	await get_tree().create_timer(0.2).timeout
-	fx.create_at_pos(fx.perfect_burst, player.global_position + Vector3(0.5,0.0,0.0))
-	fx.create_at_pos(fx.holy_pillar, player.global_position + Vector3(0.5,0.0,0.0))
+	fx.create_at_pos(fx.perfect_burst, player.global_position + Vector3(0.0,0.0,0.0))
+	fx.create_at_pos(fx.holy_pillar, player.global_position + Vector3(-1.0 if reflect else 1.0,0.0,0.0), reflect)
 	level.camera.add_trauma(0.1)
+	fx.create_particle_at_pos("master_spark_star", player.global_position, reflect)
+	fx.create_particle_at_pos("master_spark_heart", player.global_position, reflect)
 	await get_tree().create_timer(0.1).timeout
 	
 	level.camera.add_trauma(0.3)
 	level.ball.set_velocity_multiplier(1.0, 1.0)
-	level.ball.apply_central_impulse(Vector3(40.0,1.0,0.0))
+	level.ball.apply_central_impulse(Vector3(-40.0 if reflect else 40.0,1.0,0.0))
 	level.ball.set_collision_mask_value(4, false)
 	
 	for i in range(0,5):

@@ -40,8 +40,9 @@ func start_game() -> void:
 	
 	# Players
 	var connected_players: Array = get_parent().players
-	if len(connected_players) == 1:
+	if len(connected_players) % 2 == 1:
 		connected_players.push_back(PlayerPeer.new_cpu_player())
+
 	var i = 0
 	for peer: PlayerPeer in connected_players:
 		var player: Player = (player_scene if peer.peer_id > -1 else cpu_scene).instantiate()
@@ -73,6 +74,8 @@ func start_game() -> void:
 		player.input_device = peer.input_device
 		
 		players.add_child(player, true)
+		if peer.peer_id > 0:
+			player.set_character.rpc.call_deferred($"/root/Lobby".get_player_by_id(peer.peer_id).character)
 		i += 1
 	
 	get_tree().call_group("cpu", "cpu_init", ball, players.get_children())
@@ -96,7 +99,7 @@ func start_round() -> void:
 	for i in players.get_child_count():
 		var player: Node3D = players.get_child(i)
 		player.linear_velocity = Vector3.ZERO
-		player.global_position = player_positions[i]
+		player.global_position = player_positions[wrap(i, 0, len(player_positions))]
 		
 	ball.linear_velocity = Vector3.ZERO
 	ball.speed_percent = 1.0

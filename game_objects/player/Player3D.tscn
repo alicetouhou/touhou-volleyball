@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cbyawmu8vbekl"]
 
 [ext_resource type="Script" uid="uid://blxb51ypbdrqg" path="res://game_objects/player/player_3d.gd" id="1_bn5eq"]
-[ext_resource type="Resource" uid="uid://c3pe4h02ji3xr" path="res://resources/characters/marisa.tres" id="2_bp3gs"]
+[ext_resource type="Resource" uid="uid://daocjniky22cb" path="res://resources/characters/reimu.tres" id="2_bp3gs"]
 [ext_resource type="Texture2D" uid="uid://bluw2veqruu0j" path="res://assets/sprites/characters/yuyuko.png" id="2_kxtgu"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://c14uejte347bk" path="res://player/animations.tres" id="3_kxtgu"]
 [ext_resource type="Script" uid="uid://bgiixcdk64eli" path="res://game_objects/player/action_manager.gd" id="4_bn5eq"]
@@ -164,6 +164,7 @@ properties/0/replication_mode = 1
 
 [node name="Player3d" type="RigidBody3D" unique_id=733247983]
 collision_layer = 2
+collision_mask = 9
 axis_lock_linear_z = true
 axis_lock_angular_x = true
 axis_lock_angular_y = true
@@ -183,7 +184,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0248445, 0, 0, 0, 1, 0, 0.07453364, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0400909, 0, 0, 0, 1, 0, 0.12027289, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 

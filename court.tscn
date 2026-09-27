@@ -83,12 +83,14 @@ size = Vector3(1, 0.5303345, 1.0037842)
 [node name="TouhouVolleyball" type="Node3D" unique_id=1885262703]
 
 [node name="Ground" type="StaticBody3D" parent="." unique_id=763583146 groups=["ground"]]
+collision_layer = 9
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=2013359004]
 transform = Transform3D(2.7227015, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.046759725, 0)
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
 [node name="Walls" type="StaticBody3D" parent="." unique_id=1172494766]
+collision_layer = 8
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Walls" unique_id=431771958]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, -11.5, 0, 0)

@@ -109,3 +109,6 @@ func player_hit_ball() -> void:
 
 func player_super_used(player: int) -> void:
 	Supers.run(self, players.get_node(str(player)))
+	
+func get_fx_manager():
+	return %FxManager

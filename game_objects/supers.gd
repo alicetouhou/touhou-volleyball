@@ -1,6 +1,6 @@
 extends Node
 
-func run(game: Game, player: Player):
+func run(game: Level, player: Player):
 	var character_name = player.character.name
 	
 	if character_name == "Reimu":
@@ -12,7 +12,7 @@ func run(game: Game, player: Player):
 	if character_name == "Marisa":
 		marisa(game, player)
 
-func reimu(game: Game, player: Player):
+func reimu(game: Level, player: Player):
 	if player.super_charge < 1:
 		return
 	var fx = game.get_fx_manager()
@@ -31,10 +31,10 @@ func reimu(game: Game, player: Player):
 		await get_tree().create_timer(0.05).timeout
 		ball.create_fx.emit(fx.crit_burst, ball.global_position)
 
-func alice(game: Game, player: Player):
+func alice(game: Level, player: Player):
 	pass
 
-func yuyuko(game: Game, player: Player):
+func yuyuko(game: Level, player: Player):
 	if player.super_charge < 1:
 		return
 
@@ -45,7 +45,7 @@ func yuyuko(game: Game, player: Player):
 	
 	player.scale = Vector3(1, 1, 1)
 		
-func marisa(game: Game, player: Player):
+func marisa(game: Level, player: Player):
 	player.can_move = false
 	var fx = game.get_fx_manager()
 	fx.create_at_pos(fx.perfect_burst, player.global_position + Vector3(0.5,0.0,0.0))

@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://cbyawmu8vbekl"]
 
 [ext_resource type="Script" uid="uid://blxb51ypbdrqg" path="res://game_objects/player/player_3d.gd" id="1_bn5eq"]
-[ext_resource type="Texture2D" uid="uid://bluw2veqruu0j" path="res://assets/sprite/yuyuko.png" id="2_kxtgu"]
+[ext_resource type="Resource" uid="uid://c3pe4h02ji3xr" path="res://resources/characters/marisa.tres" id="2_bp3gs"]
+[ext_resource type="Texture2D" uid="uid://bluw2veqruu0j" path="res://assets/sprites/characters/yuyuko.png" id="2_kxtgu"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://c14uejte347bk" path="res://player/animations.tres" id="3_kxtgu"]
 [ext_resource type="Script" uid="uid://bgiixcdk64eli" path="res://game_objects/player/action_manager.gd" id="4_bn5eq"]
 
@@ -170,6 +171,7 @@ axis_lock_angular_z = true
 contact_monitor = true
 max_contacts_reported = 4
 script = ExtResource("1_bn5eq")
+character = ExtResource("2_bp3gs")
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1588437195]
 transform = Transform3D(0.8672086, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.039611816, 0.021972656)
@@ -181,7 +183,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0476987, 0, 0, 0, 1, 0, 0.1430961, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0381067, 0, 0, 0, 1, 0, 0.11432021, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 

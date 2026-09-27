@@ -7,6 +7,8 @@ signal on_hit_ball
 signal super_used
 ## Triggered when the super ability's charge changes
 signal super_charge_updated(value: float)
+## Ask the game area to have a FX
+signal create_fx(fx: PackedScene, pos: Vector3)
 
 ## Config values
 const MOVEMENT_SPEED := 9
@@ -21,6 +23,11 @@ const SUPER_COOLDOWN = .2
 
 ## Player's character
 @export var character: CharacterResource
+
+## VFX Scenes
+const DUST_SETTLE_FX = preload("res://resources/effects/dust-settle.tscn")
+const POMMEL_POP_FX = preload("res://resources/effects/pommel-pop.tscn")
+
 
 @export var player_id: int :
 	set(value):
@@ -73,9 +80,11 @@ func kick(velocity = 7):
 	
 	on_hit_ball.emit()
 	super_charge += ball.linear_velocity.length() / 75.
-	
+
 	var global_position_2D = Vector2(global_position.x, global_position.y)
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
+
+	create_fx.emit(POMMEL_POP_FX, global_position_2D + ball_global_position_2D / 2)
 
 	var ball_direction = global_position_2D.direction_to(ball_global_position_2D)
 	var force = velocity * (ball_direction)
@@ -140,6 +149,8 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		if direction > 0:
 			Animations.travel("turn")
 			%Turning.play("turn_right")
+		
+		create_fx.emit(DUST_SETTLE_FX, position - Vector3(0, .6, 0))
 	
 	# https://forum.godotengine.org/t/how-to-check-if-rigid-body-is-on-floor/65679/3
 	var i := 0

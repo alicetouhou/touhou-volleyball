@@ -1,3 +1,5 @@
+class_name Level
+
 extends Node3D
 
 
@@ -50,6 +52,7 @@ func start_game() -> void:
 		player.super_charge_updated.connect(
 			func(value): %ChargeBars.get_node(str(peer)).set_charge(value)
 		)
+		player.create_fx.connect(create_fx)
 		
 		players.add_child(player, true)
 		i += 1
@@ -105,4 +108,4 @@ func player_hit_ball() -> void:
 	%Camera.add_trauma(.1)
 
 func player_super_used(player: int) -> void:
-	Supers.run($TouhouVolleyball, players.get_node(str(player)))
+	Supers.run(self, players.get_node(str(player)))

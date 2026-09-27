@@ -23,18 +23,35 @@ var selected: CharacterResource
 
 func unpress_others(character: CharacterResource) -> void:
 	selected = character
+	var selected_id = (selected.resource_path.split("/") as Array).back()
 	if $"/root/Lobby".connected:
-		$"/root/Lobby".set_player_character.rpc((selected.resource_path.split("/") as Array).back())
+		$"/root/Lobby".set_player_character.rpc(selected_id)
+	else:
+		players_updated({1: {"character": selected_id, "number": 1, "color": Color.RED}})
 	for child in get_children():
 		child.radio_unpressed()
+
+func players_updated(player_dict: Dictionary) -> void:
+	var character_selections = {}
+	for player in player_dict.values():
+		var selections = character_selections.get(player["character"], {"colors": [], "numbers": []})
+		selections["numbers"].push_back(player["number"])
+		selections["colors"].push_back(player["color"])
+		character_selections[player["character"]] = selections
+
+	for child in get_children():
+		var pucks = character_selections.get(child.name + ".tres", {"colors": [], "numbers": []})
+		child.set_pucks(pucks["colors"], pucks["numbers"])
 
 func _ready() -> void:
 	var first = true
 	for file in DirAccess.open("res://resources/characters").get_files():
-		var character_card := preload("res://lobby/character.tscn").instantiate()
+		var character_card := preload("res://lobby/character_selection/character.tscn").instantiate()
+		character_card.name = file.split(".")[0]
 		character_card.character = load_asset("res://resources/characters/%s" % file)
 		if first:
 			selected = character_card.character
+			character_card.set_pucks([Color.RED], [1])
 			character_card.hovered()
 			character_card.button_pressed = true
 			first = false

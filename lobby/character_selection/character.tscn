@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c7uqh8scgemll"]
 
-[ext_resource type="Script" uid="uid://cvkinxhc4tqhu" path="res://lobby/character.gd" id="1_3u0gc"]
-[ext_resource type="Texture2D" uid="uid://dw1xae2suocg1" path="res://assets/sprites/characters/alice.png" id="3_cr6pa"]
+[ext_resource type="Script" uid="uid://cvkinxhc4tqhu" path="res://lobby/character_selection/character.gd" id="1_nvj3p"]
+[ext_resource type="Texture2D" uid="uid://dw1xae2suocg1" path="res://assets/sprites/characters/alice.png" id="2_u531y"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4veey"]
 font_size = 48
@@ -11,20 +11,22 @@ outline_color = Color(0, 0, 0, 1)
 [node name="MarginContainer" type="MarginContainer" unique_id=2056174520]
 offset_right = 459.0
 offset_bottom = 671.0
-script = ExtResource("1_3u0gc")
+script = ExtResource("1_nvj3p")
 
 [node name="Character" type="VBoxContainer" parent="." unique_id=2119697689]
 layout_mode = 2
 offset_transform_visual_only = false
-mouse_filter = 0
+mouse_filter = 2
 mouse_default_cursor_shape = 2
 
 [node name="Texture" type="TextureRect" parent="Character" unique_id=1577579131]
+unique_name_in_owner = true
 layout_mode = 2
 offset_transform_enabled = true
-texture = ExtResource("3_cr6pa")
+texture = ExtResource("2_u531y")
 
 [node name="Name" type="Label" parent="Character" unique_id=1860679543]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Alice"
 label_settings = SubResource("LabelSettings_4veey")
@@ -34,13 +36,16 @@ clip_text = true
 
 [node name="Control" type="Control" parent="." unique_id=1886632504]
 layout_mode = 2
+mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control" unique_id=1297281104]
+[node name="Pucks" type="HBoxContainer" parent="Control" unique_id=1297281104]
+unique_name_in_owner = true
+z_index = 1
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
-alignment = 2
+alignment = 1
 
 [connection signal="mouse_entered" from="." to="." method="hovered"]
 [connection signal="mouse_exited" from="." to="." method="unhovered"]

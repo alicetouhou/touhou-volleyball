@@ -11,6 +11,7 @@ const PORT = 7000
 const IP_ADDRESS = "127.0.0.1"
 const MAX_PLAYERS = 2
 const DEFAULT_PLAYER = {"character": "alice_margatroid.tres"}
+const COLORS = [Color.RED, Color.BLUE]
 
 var connected = false
 var players: Dictionary[int, Dictionary] = {}
@@ -62,6 +63,10 @@ func stop_connection() -> void:
 
 func peer_connected(id: int) -> void:
 	players[id] = DEFAULT_PLAYER.duplicate()
+	players[id]["number"] = len(players)
+	players[id]["color"] = COLORS[len(players) - 1]
+	if id == 1:
+		players[id]["character"] = (%Characters.selected.resource_path.split("/") as Array).back()
 	on_players_updated.rpc(players)
 
 func peer_disconnected(id: int) -> void:

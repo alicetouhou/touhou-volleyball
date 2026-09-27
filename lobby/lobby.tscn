@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://iy2hssrv4u5f" path="res://court.tscn" id="1_jtv5c"]
 [ext_resource type="Script" uid="uid://145sow77ik4" path="res://lobby/lobby.gd" id="1_qfux7"]
 [ext_resource type="Script" uid="uid://b4ewub2hwtw7" path="res://lobby/level.gd" id="1_uj4ub"]
-[ext_resource type="Script" uid="uid://b2hib1xb0kfid" path="res://lobby/character_display.gd" id="2_4veey"]
+[ext_resource type="Script" uid="uid://b2hib1xb0kfid" path="res://lobby/character_selection/character_display.gd" id="2_4veey"]
 [ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="2_mnguq"]
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="3_dk04u"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
@@ -67,6 +67,7 @@ layout_mode = 2
 text = "Start game"
 
 [node name="Characters" type="HBoxContainer" parent="LobbyOverlay" unique_id=1158666434]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -168,6 +169,7 @@ offset_bottom = 994.0
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/IP" method="show"]
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Disconnect" method="hide"]
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Start" method="hide"]
+[connection signal="players_updated" from="." to="LobbyOverlay/Characters" method="players_updated"]
 [connection signal="server_connected" from="." to="LobbyOverlay/Network/Host" method="hide"]
 [connection signal="server_connected" from="." to="LobbyOverlay/Network/Join" method="hide"]
 [connection signal="server_connected" from="." to="LobbyOverlay/Network/IP" method="hide"]

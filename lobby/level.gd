@@ -16,6 +16,7 @@ var round_running := false
 @onready var ball_positions = [%P1BallSpawnPoint.global_position, %P2BallSpawnPoint.global_position]
 @onready var player_positions = [%P1SpawnPoint.global_position, %P2SpawnPoint.global_position]
 @onready var players = $Players
+@onready var camera = %Camera
 
 ## Spawn the required nodes and initiate first play on all clients
 @rpc("call_local")

@@ -28,8 +28,10 @@ const SUPER_COOLDOWN = .2
 const DUST_SETTLE_FX = preload("res://resources/effects/dust-settle.tscn")
 const POMMEL_POP_FX = preload("res://resources/effects/pommel-pop.tscn")
 
-var movement_scale = 1.
-
+var velocity_multiplier: float = 1.0
+var new_velocity_multiplier: float = 1.0
+var time: float = 0.0
+var time_acceleration: float = 1.0
 
 @export var player_id: int :
 	set(value):
@@ -68,13 +70,13 @@ func find_ball():
 	var ball: RigidBody3D = bodies[ball_index]
 	return ball
 
-func kick(velocity = 7):
+func kick(velocity = 7, ball: Ball = null):
 	Animations.travel("kick_miss")
 	
-	var ball = find_ball()
-	if not ball:
-		return
-
+	if !ball:
+		ball = find_ball()
+		if not ball:
+			return
 
 	Animations.travel("kick_hit")
 	time_since_kick_pressed = 10000
@@ -138,6 +140,9 @@ func _physics_process(delta: float) -> void:
 	%ActionSync.supering = false
 	%ActionSync.jumping = false
 	%ActionSync.kicking = false
+	
+func _process(delta: float) -> void:
+	time += delta * time_acceleration
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	linear_velocity.x = %ActionSync.direction.x * MOVEMENT_SPEED
@@ -166,5 +171,10 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 			on_floor = true
 		i += 1
 		
-	linear_velocity *= movement_scale
-	angular_velocity *= movement_scale
+	linear_velocity *= lerp(velocity_multiplier,new_velocity_multiplier,clamp(time,0.0,1.0))
+	angular_velocity *= lerp(velocity_multiplier,new_velocity_multiplier,clamp(time,0.0,1.0))
+
+func set_velocity_multiplier(new_speed: float, acceleration: float):
+	time = 0
+	time_acceleration = acceleration
+	new_velocity_multiplier = new_speed

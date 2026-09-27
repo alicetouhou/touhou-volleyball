@@ -7,4 +7,5 @@
 script = ExtResource("1_a41tf")
 name = "Alice"
 texture = ExtResource("2_ujln7")
+super_name = "Doll Legion"
 metadata/_custom_type_script = "uid://0khalhvv6a3o"

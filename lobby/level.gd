@@ -36,19 +36,19 @@ func start_game() -> void:
 	ball_container.add_child(ball, true)
 	
 	# Players
-	var client_ids: Array = get_parent().players.keys()
-	if len(client_ids) == 1:
-		client_ids.push_back(-1)
+	var connected_players: Array = get_parent().players
+	if len(connected_players) == 1:
+		connected_players.push_back(PlayerPeer.new_cpu_player())
 	var i = 0
-	for peer in client_ids:
-		var player: Player = (player_scene if peer > 0 else cpu_scene).instantiate()
+	for peer: PlayerPeer in connected_players:
+		var player: Player = (player_scene if peer.peer_id > -1 else cpu_scene).instantiate()
 		
-		player.name = str(peer) if peer > 0 else "cpu"
-		player.player_id = peer
+		player.name = str(peer) if peer.peer_id > -1 else "cpu"
+		player.player_id = peer.peer_id
 		%ChargeBars.get_child(i).name = str(peer)
 		
 		player.on_hit_ball.connect(player_hit_ball)
-		player.super_used.connect(func(): player_super_used(peer))
+		player.super_used.connect(func(): player_super_used(peer.peer_id))
 		player.super_charge_updated.connect(
 			func(value): %ChargeBars.get_node(str(peer)).set_charge(value)
 		)

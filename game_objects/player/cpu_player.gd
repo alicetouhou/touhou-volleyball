@@ -40,8 +40,9 @@ func _physics_process(delta: float) -> void:
 			actpoints.pop_front()
 	if ball_target.size() > 0:
 		ball_target[0] -= 1
-		if ball_target[0] == 0:
+		if ball_target[0] <= 0:
 			ball_target = []
+			print("cancel")
 	
 	# Only run CPU on authority (server)
 	if not %ActionSync.is_multiplayer_authority():

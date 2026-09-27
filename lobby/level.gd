@@ -39,20 +39,28 @@ func start_game() -> void:
 	ball_container.add_child(ball, true)
 	
 	# Players
-	var client_ids: Array = get_parent().players.keys()
-	if len(client_ids) % 2 == 1:
-		client_ids.push_back(-1)
+	var connected_players: Array = get_parent().players
+	if len(connected_players) % 2 == 1:
+		connected_players.push_back(PlayerPeer.new_cpu_player())
+
 	var i = 0
-	for peer in client_ids:
-		var player: Player = (player_scene if peer > 0 else cpu_scene).instantiate()
+	for peer: PlayerPeer in connected_players:
+		var player: Player = (player_scene if peer.peer_id > -1 else cpu_scene).instantiate()
 		
-		player.name = str(peer) if peer > 0 else "cpu"
-		player.player_id = peer
+		player.name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
+
+		# Disable input for CPUs and players on other computers
+		player.player_id = peer.peer_id
+		if peer.peer_id < 0 or (player.player_id != multiplayer.get_unique_id() and not peer.local_co_op):
+			player.disable_input()
+
+		if peer.local_co_op:
+			player.set_multiplayer_authority(multiplayer.get_unique_id())
 		
 		var charge_bar = preload("res://game_objects/SuperCharge.tscn").instantiate()
 		charge_bar.name = str(peer)
 		var side = 0
-		if i >= floori(len(client_ids) / 2.):
+		if i >= floori(len(connected_players) / 2.):
 			side = 1
 		%ChargeBars.get_child(side).add_child(charge_bar)
 		
@@ -63,9 +71,11 @@ func start_game() -> void:
 		)
 		player.create_fx.connect(create_fx)
 		
+		player.input_device = peer.input_device
+		
 		players.add_child(player, true)
-		if peer > 0:
-			player.set_character.rpc.call_deferred($"/root/Lobby".players[peer]["character"])
+		if peer.peer_id > 0:
+			player.set_character.rpc.call_deferred($"/root/Lobby".get_player_by_id(peer.peer_id).character)
 		i += 1
 	
 	get_tree().call_group("cpu", "cpu_init", ball, players.get_children())
@@ -134,8 +144,8 @@ func player_hit_ball() -> void:
 	%FxManager.create_with_parent_3D(FXManager.pressure_ring, ball)
 	%Camera.add_trauma(.1)
 
-func player_super_used(player: int) -> void:
-	Supers.run(self, players.get_node(str(player)))
+func player_super_used(player: PlayerPeer) -> void:
+	Supers.run(self, players.get_node("%s-%s" % [player.peer_id, player.input_device]))
 	
 func get_fx_manager():
 	return %FxManager

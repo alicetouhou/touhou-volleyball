@@ -7,5 +7,4 @@
 script = ExtResource("1_rmhf4")
 name = "Marisa"
 texture = ExtResource("2_rmhf4")
-super_name = "Master Spark"
 metadata/_custom_type_script = "uid://0khalhvv6a3o"

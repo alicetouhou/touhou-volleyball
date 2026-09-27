@@ -1,5 +1,6 @@
 extends HBoxContainer
 
+var players: Array[PlayerPeer] = []
 
 ## https://www.reddit.com/r/godot/comments/13u9w0j/comment/ldb4q0w
 static func load_asset(path : String) -> Resource:
@@ -26,22 +27,32 @@ func unpress_others(character: CharacterResource) -> void:
 	var selected_id = (selected.resource_path.split("/") as Array).back()
 	if $"/root/Lobby".connected:
 		$"/root/Lobby".set_player_character.rpc(selected_id)
-	else:
-		players_updated({1: {"character": selected_id, "number": 1, "color": Color.RED}})
 	for child in get_children():
 		child.radio_unpressed()
 
-func players_updated(player_dict: Dictionary) -> void:
+func players_updated(players_: Array[PlayerPeer]) -> void:
+	players = players_
 	var character_selections = {}
-	for player in player_dict.values():
-		var selections = character_selections.get(player["character"], {"colors": [], "numbers": []})
-		selections["numbers"].push_back(player["number"])
-		selections["colors"].push_back(player["color"])
-		character_selections[player["character"]] = selections
+	for player in players:
+		var selections = character_selections.get(player.character, {"colors": [], "numbers": []})
+		selections["numbers"].push_back(player.number)
+		selections["colors"].push_back(player.color)
+		character_selections[player.character] = selections
 
 	for child in get_children():
 		var pucks = character_selections.get(child.name + ".tres", {"colors": [], "numbers": []})
 		child.set_pucks(pucks["colors"], pucks["numbers"])
+
+func handle_input(player: PlayerPeer, event: InputEvent):
+	if event.is_action_pressed("ui_right"):
+		pass
+	if event.is_action_pressed("ui_left"):
+		pass
+
+func _input(event: InputEvent) -> void:
+	for player in players:
+		if event.device == player.input_device:
+			handle_input(player, event)
 
 func _ready() -> void:
 	var first = true

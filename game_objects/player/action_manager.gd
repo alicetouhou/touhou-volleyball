@@ -9,18 +9,13 @@ extends MultiplayerSynchronizer
 @export var direction := Vector2.ZERO
 ## Local direction is purely local and is used by the player on our client to reduce percieved delay.
 var local_direction := Vector2.ZERO
+var action_strength := Vector4.ZERO
 
 ## Simulated on_action_just_pressed via rpc.
 ## Reset per-client in _physics_process of player.
 @export var kicking := false
 @export var jumping := false
 @export var supering := false
-
-## Input direction strength. Synced with RPC.
-var up_strength := 0.0
-var down_strength := 0.0
-var left_strength := 0.0
-var right_strength := 0.0
 
 @rpc("call_local")
 func kick() -> void:
@@ -34,17 +29,7 @@ func jump() -> void:
 func trigger_super() -> void:
 	supering = true
 
-@rpc("call_local")
-func sync_strength(d: String, power: float) -> void:
-	if d == "left":
-		left_strength = power
-	if d == "right":
-		right_strength = power
-	if d == "up":
-		up_strength = power
-	if d == "down":
-		down_strength = power
-
+# Only runs on client, disabled_input is set when player is created.
 # The `Input` class does not allow you to check if an input was performed by a specific
 # device so we need to use the _input method :(
 func _input(event: InputEvent) -> void:
@@ -55,15 +40,15 @@ func _input(event: InputEvent) -> void:
 
 	if input_device > -99 and event.device != input_device:
 		return
-
+	
 	if event.is_action_pressed("left") or event.is_action_released("left"):
-		sync_strength.rpc("left", event.get_action_strength("left"))
+		action_strength.x = event.get_action_strength("left")
 	if event.is_action_pressed("right") or event.is_action_released("right"):
-		sync_strength.rpc("right", event.get_action_strength("right"))
+		action_strength.y = event.get_action_strength("right")
 	if event.is_action_pressed("up") or event.is_action_released("up"):
-		sync_strength.rpc("up", event.get_action_strength("up"))
+		action_strength.z = event.get_action_strength("up")
 	if event.is_action_pressed("down") or event.is_action_released("down"):
-		sync_strength.rpc("down", event.get_action_strength("down"))
+		action_strength.w = event.get_action_strength("down")
 
 	if event.is_action_pressed("up"):
 		jump.rpc()
@@ -75,18 +60,12 @@ func _input(event: InputEvent) -> void:
 		trigger_super.rpc()
 		trigger_super()
 
-## Only runs on client, see disabled is set when player is created.
 func _process(_delta: float) -> void:
 	if not is_multiplayer_authority():
 		return
-	if disable_input:
-		return
-
-	direction = Vector2.ZERO
-
-	direction.x -= left_strength
-	direction.x += right_strength
-	direction.y += up_strength
-	direction.y -= down_strength
 	
-	local_direction = direction
+	local_direction = Vector2(
+		action_strength.y - action_strength.x,
+		action_strength.z - action_strength.w,
+	)
+	direction = local_direction

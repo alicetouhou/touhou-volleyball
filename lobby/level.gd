@@ -14,7 +14,7 @@ var serving := 0
 var round_running := false
 
 @onready var ball_positions = [%P1BallSpawnPoint.global_position, %P2BallSpawnPoint.global_position]
-@onready var player_positions = [%P1SpawnPoint.global_position, %P2SpawnPoint.global_position]
+@onready var player_positions = [%P1SpawnPoint.global_position, %P2SpawnPoint.global_position, %P3SpawnPoint.global_position, %P4SpawnPoint.global_position]
 @onready var players = $Players
 @onready var camera = %Camera
 

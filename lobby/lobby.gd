@@ -10,9 +10,9 @@ signal give_start_authority
 
 const PORT = 34357
 const IP_ADDRESS = "127.0.0.1"
-const MAX_PLAYERS = 2
+const MAX_PLAYERS = 4
 const DEFAULT_PLAYER = {"character": "alice_margatroid.tres"}
-const COLORS = [Color.RED, Color.BLUE]
+const COLORS = [Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE]
 
 var connected = false
 var players: Dictionary[int, Dictionary] = {}

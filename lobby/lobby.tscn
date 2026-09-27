@@ -108,6 +108,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.46894157, 0)
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.46894157, 0)
 
+[node name="P3SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1425394337]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6773343, 0.46894157, 0)
+
+[node name="P4SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1654558373]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.716914, 0.46894157, 0)
+
 [node name="Players" type="Node3D" parent="Level" unique_id=1411736408]
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="Level" unique_id=2073793907]

@@ -20,14 +20,15 @@ var lobby_id: int
 
 func host_game() -> void:
 	Steam.lobby_created.connect(lobby_created)
-	Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY)
+	Steam.createLobby(Steam.LOBBY_TYPE_PUBLIC)
 
 func lobby_created(status, new_id) -> void:
+	print(status, new_id)
 	if status != 1:
 		print("Lobby failed to create :(")
 		return
 	lobby_id = new_id
-	Steam.activateGameOverlay("friend")
+	Steam.activateGameOverlay("lobby")
 
 	var server = SteamMultiplayerPeer.new()
 	var err = server.create_host(0)

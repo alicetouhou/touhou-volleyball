@@ -21,6 +21,7 @@ func _ready() -> void:
 	print("Overlay enabled: ", Steam.isOverlayEnabled())
 
 func steam_shutdown() -> void:
+	set_process(false)
 	Steam.steamShutdown()
 	print("Steam shutting down!")
 	get_tree().quit()

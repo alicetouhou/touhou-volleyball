@@ -21,7 +21,7 @@ func reimu(game: Level, player: Player):
 		player.super_charge -= 1
 
 		var direction: Vector3
-		if player.direction * player.position.x < 0:
+		if (ball.position.x-player.position.x) * player.position.x < 0:
 			direction = ball.position.direction_to(Vector3(0.,max(player.position.y,5),0))
 		else:
 			direction = ball.position.direction_to(Vector3(sign(player.position.x)*5.,max(player.position.y,5),0))

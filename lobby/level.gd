@@ -36,7 +36,7 @@ func start_game() -> void:
 	ball_container.add_child(ball, true)
 	
 	# Players
-	var client_ids = PackedInt32Array([1]) + multiplayer.get_peers()
+	var client_ids: Array = get_parent().players.keys()
 	if len(client_ids) == 1:
 		client_ids.push_back(-1)
 	var i = 0

@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://145sow77ik4" path="res://lobby/lobby.gd" id="1_qfux7"]
 [ext_resource type="Script" uid="uid://b4ewub2hwtw7" path="res://lobby/level.gd" id="1_uj4ub"]
 [ext_resource type="Script" uid="uid://b2hib1xb0kfid" path="res://lobby/character_selection/character_display.gd" id="2_4veey"]
+[ext_resource type="Script" uid="uid://ct5g5rqqffh3e" path="res://lobby/dedicated_server.gd" id="2_l3xxi"]
 [ext_resource type="PackedScene" uid="uid://dmts882ab45pw" path="res://game_objects/SuperCharge.tscn" id="2_mnguq"]
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="3_dk04u"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
@@ -18,14 +19,20 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("Score:visible")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath("../DedicatedServerStart:authority")
+properties/3/spawn = true
+properties/3/replication_mode = 1
 
 [node name="Lobby" type="Node" unique_id=1193217656]
 script = ExtResource("1_qfux7")
 
-[node name="ViewSync" type="MultiplayerSynchronizer" parent="." unique_id=1833647378]
+[node name="TopLevelSync" type="MultiplayerSynchronizer" parent="." unique_id=1833647378]
 editor_description = "Syncronises UI elements being shown and hidden. For lobby, game UI and score screen."
 root_path = NodePath("../UI")
 replication_config = SubResource("SceneReplicationConfig_4veey")
+
+[node name="DedicatedServerStart" type="Node" parent="." unique_id=2101241253]
+script = ExtResource("2_l3xxi")
 
 [node name="LobbyOverlay" type="Control" parent="." unique_id=1015092632]
 unique_name_in_owner = true
@@ -168,6 +175,7 @@ offset_bottom = 994.0
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/IP" method="show"]
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Disconnect" method="hide"]
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Start" method="hide"]
+[connection signal="give_start_authority" from="." to="LobbyOverlay/Network/Start" method="show"]
 [connection signal="players_updated" from="." to="LobbyOverlay/Characters" method="players_updated"]
 [connection signal="server_connected" from="." to="LobbyOverlay/Network/Host" method="hide"]
 [connection signal="server_connected" from="." to="LobbyOverlay/Network/Join" method="hide"]
@@ -177,8 +185,9 @@ offset_bottom = 994.0
 [connection signal="server_started" from="." to="LobbyOverlay/Network/Join" method="hide"]
 [connection signal="server_started" from="." to="LobbyOverlay/Network/IP" method="hide"]
 [connection signal="server_started" from="." to="LobbyOverlay/Network/Disconnect" method="show"]
-[connection signal="server_started" from="." to="LobbyOverlay/Network/Start" method="show"]
+[connection signal="start_game" from="DedicatedServerStart" to="." method="start_game"]
 [connection signal="pressed" from="LobbyOverlay/Network/Host" to="." method="host_game"]
 [connection signal="pressed" from="LobbyOverlay/Network/Join" to="." method="join_game"]
 [connection signal="pressed" from="LobbyOverlay/Network/Disconnect" to="." method="stop_connection"]
 [connection signal="pressed" from="LobbyOverlay/Network/Start" to="." method="start_game"]
+[connection signal="pressed" from="LobbyOverlay/Network/Start" to="DedicatedServerStart" method="start_dedicated_game"]

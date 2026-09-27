@@ -28,10 +28,16 @@ func _ready():
 ## Only runs on client, see _ready.
 ## TODO: Add multiple inputs.
 func _process(_delta: float) -> void:
-	direction = Input.get_vector("left", "right", "down", "up")
-	if direction.y > 0: # Jumping is handled by 
-		direction.y = 0
+	direction = Vector2.ZERO
 	
+	if Input.is_action_pressed("left"):
+		direction.x -= 1
+	if Input.is_action_pressed("right"):
+		direction.x += 1
+	if Input.is_action_pressed("up"):
+		direction.y += 1
+	if Input.is_action_pressed("down"):
+		direction.y -= 1
 	if Input.is_action_just_pressed("up"):
 		jump.rpc()
 	if Input.is_action_just_pressed("kick"):

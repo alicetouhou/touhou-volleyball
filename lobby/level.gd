@@ -61,8 +61,20 @@ func start_game() -> void:
 	get_tree().call_group("cpu", "update_game_state", false)
 	
 	start_round()
-	
+
+func reset() -> void:
+	var ball_container = $Ball
+	for child in ball_container.get_children():
+		child.queue_free()
+	ball = null
+
+	for child in players.get_children():
+		child.queue_free()
+
 func start_round() -> void:
+	if not ball:
+		return
+	
 	for i in players.get_child_count():
 		var player: Node3D = players.get_child(i)
 		player.linear_velocity = Vector3.ZERO
@@ -73,6 +85,8 @@ func start_round() -> void:
 	ball.global_position = ball_positions[serving]
 	
 	await get_tree().create_timer(1).timeout
+	if not ball:
+		return
 	
 	round_running = true
 	ball.freeze = false

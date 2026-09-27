@@ -76,6 +76,11 @@ func peer_connected(id: int) -> void:
 func peer_disconnected(id: int) -> void:
 	players.erase(id)
 	on_players_updated.rpc(players)
+	
+	if len(players) == 0:
+		%UI.hide()
+		%LobbyOverlay.show()
+		$Level.reset()
 
 @rpc("any_peer", "call_local")
 func set_player_character(resource_path: String) -> void:
@@ -100,6 +105,7 @@ func start_game() -> void:
 
 func _ready() -> void:
 	if OS.has_feature("dedicated_server"):
+		print("Starting dedicated server.")
 		var server = ENetMultiplayerPeer.new()
 		var err = server.create_server(PORT, MAX_PLAYERS)
 		if not err:
@@ -107,4 +113,5 @@ func _ready() -> void:
 			multiplayer.peer_connected.connect(peer_connected)
 			multiplayer.peer_disconnected.connect(peer_disconnected)
 			connected = true
+			print("Accepting connections.")
 			multiplayer.multiplayer_peer = server

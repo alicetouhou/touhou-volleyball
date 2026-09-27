@@ -8,6 +8,7 @@ var patrol_point: Vector3
 func cpu_init(world_ball: Node3D, _world_players: Array[Node]) -> void:
 	ball = world_ball
 	patrol_point = position
+	time += randf() * 100.
 	
 func _ready() -> void:
 	gravity_scale = 0.0
@@ -19,12 +20,19 @@ func _physics_process(delta: float) -> void:
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if len(predictions) == 0:
 		return
+		
+	var destination = Vector3(predictions[-1].x,min(predictions[-1].y,3.5),predictions[-1].z) + Vector3(sin(time*0.3)*0.25,sin(time*0.3)*0.25,0)
+	var distance = (global_position-destination).length()
+	var patrol_point_distance = position.distance_to(patrol_point)
+		
 	
-	if position.distance_to(patrol_point) > 5.0:
-		linear_velocity = Vector3(0.0,0.0,0.0)
-		return
-	
-	linear_velocity = global_position.direction_to(Vector3(predictions[-1].x,min(predictions[-1].y,3.5),predictions[-1].z)) * 5.
+	if distance>0.5:
+		linear_velocity = global_position.direction_to(destination)
+		linear_velocity.x *= clamp((distance)*10.,0.0,8.0)
+		linear_velocity.y *= 2
+		angular_velocity = Vector3.ZERO
+	if linear_velocity.dot(patrol_point) < 0:
+		linear_velocity *= clamp(6.0-patrol_point_distance,0.0,1.0)
 	
 	var bodies = $KickArea.get_overlapping_bodies()
 	var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
@@ -33,7 +41,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var ball: RigidBody3D = bodies[ball_index]	
 	
 	ball.linear_velocity = Vector3.ZERO
-	ball.apply_impulse(Vector3(0.0,2.0,0.0))
+	ball.apply_impulse(Vector3(0.0,6.0,0.0))
 	
 func predict_ball_locations(delta: float) -> Array[Vector3]:
 	var g = ball.gravity_scale * get_gravity()

@@ -47,18 +47,20 @@ func reimu(game: Level, player: Player):
 	player.set_velocity_multiplier(1.0,1.0)
 
 func alice(game: Level, player: Player):
+	if player.super_charge < 1:
+		return
+	player.super_charge -= 1
 	var shanghai_instance = shanghai.instantiate()
 	game.players.add_child(shanghai_instance)
 	shanghai_instance.global_position = player.global_position + Vector3(-0.5,0.5,0.0)
 	shanghai_instance.cpu_init(game.ball, game.players.get_children())
 	
-	await get_tree().create_timer(5.0).timeout
+	await get_tree().create_timer(6.0).timeout
 	shanghai_instance.queue_free()
 
 func yuyuko(game: Level, player: Player):
 	if player.super_charge < 1:
 		return
-
 	player.super_charge -= 1
 	player.scale = Vector3(3, 3, 3)
 

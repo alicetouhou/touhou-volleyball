@@ -78,14 +78,14 @@ background_color = Color(0.46610004, 0.78460175, 0.79, 1)
 sky = SubResource("Sky_utqu1")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_km8ha"]
-size = Vector3(1, 0.5303345, 1.0037842)
+size = Vector3(0.125, 1.5, 8.51)
 
 [node name="TouhouVolleyball" type="Node3D" unique_id=1885262703]
 
 [node name="Ground" type="StaticBody3D" parent="." unique_id=763583146 groups=["ground"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=2013359004]
-transform = Transform3D(2.7227015, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.046759725, 0)
+transform = Transform3D(2.7227015, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
 [node name="Walls" type="StaticBody3D" parent="." unique_id=1172494766]
@@ -103,7 +103,7 @@ transform = Transform3D(1.3113416e-07, -1, 0, 1, 1.3113416e-07, 0, 0, 0, 1, 11.5
 shape = SubResource("WorldBoundaryShape3D_hb3xx")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1354710620]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.43214703, -0.5331788, -11.634509)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 cast_shadow = 0
 mesh = SubResource("BoxMesh_0xfd7")
 
@@ -121,8 +121,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.106257, 2.9032006, 6.93665
 [node name="Wall" type="StaticBody3D" parent="." unique_id=1444280582]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Wall" unique_id=506340396]
-transform = Transform3D(0.29194513, 0, 0, 0, 2.5518417, 0, 0, 0, 8.514712, 0.0048217773, 1.5007489, 0.2635166)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("BoxShape3D_km8ha")
 
 [node name="net" parent="Wall" unique_id=2125422396 instance=ExtResource("7_pujm6")]
-transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, 0, 0, 0)
+transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.517, 0, -0.5, 0, -2.1855694e-08, 0, 0, 0)

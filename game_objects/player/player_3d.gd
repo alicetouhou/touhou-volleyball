@@ -72,6 +72,7 @@ func kick(velocity = 7):
 	time_since_kick = 0
 	
 	on_hit_ball.emit()
+	super_charge += ball.linear_velocity.length() / 75.
 	
 	var global_position_2D = Vector2(global_position.x, global_position.y)
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
@@ -88,7 +89,7 @@ func kick(velocity = 7):
 	if %ActionSync.direction.y < 0:
 		ball.linear_velocity *= 2
 	
-	super_charge += ball.linear_velocity.length() / 50.
+	super_charge += ball.linear_velocity.length() / 75.
 
 	return ball
 

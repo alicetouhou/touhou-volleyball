@@ -61,7 +61,7 @@ func _input(event: InputEvent) -> void:
 		trigger_super()
 
 func _process(_delta: float) -> void:
-	if not is_multiplayer_authority():
+	if not is_multiplayer_authority() or disable_input:
 		return
 	
 	local_direction = Vector2(

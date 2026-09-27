@@ -13,6 +13,7 @@ signal create_fx(fx: PackedScene, pos: Vector3)
 ## Config values
 const MOVEMENT_SPEED := 9.0
 const JUMP_POWER := 10.0
+const JUMP_COOLDOWN := 0.1
 
 const SET_ANGLE := PI/4 # radians
 
@@ -61,6 +62,8 @@ var can_jump := true
 
 var time_since_kick_pressed := 100.
 var time_since_kick := 100.
+
+var time_since_jump := 100.
 
 var super_charge: float = 0:
 	set(v):
@@ -132,10 +135,9 @@ func _physics_process(delta: float) -> void:
 		time_since_super = 0
 		super_used.emit()
 
-	time_since_super += delta
-
 	# Jumping
-	if %ActionSync.jumping and on_floor:
+	if %ActionSync.jumping and on_floor and time_since_jump >= JUMP_COOLDOWN:
+		time_since_jump = 0
 		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
 	
 	# Fast falling
@@ -154,6 +156,8 @@ func _physics_process(delta: float) -> void:
 
 	time_since_kick_pressed += delta
 	time_since_kick += delta
+	time_since_super += delta
+	time_since_jump += delta
 	
 	# State reset
 	%ActionSync.supering = false

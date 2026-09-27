@@ -35,15 +35,7 @@ var input_device: int = -99:
 	get():
 		return input_device
 
-@export var player_id: int :
-	set(value):
-		player_id = value
-		# Only update authority if actual player. CPUs retain server authority.
-		if value > 0:
-			%ActionSync.set_multiplayer_authority(value)
-		else:
-			%ActionSync.disabled = true
-
+@export var player_id: int
 # Horizontal movement sign
 var direction := 1
 
@@ -107,6 +99,10 @@ func kick(velocity = 7):
 	super_charge += ball.linear_velocity.length() / 75.
 
 	return ball
+
+# Used to disable input for CPUs and players on a different computer
+func disable_input():
+	%ActionSync.disable_input = true
 
 ## All clients simulate process, but server will sync later with authority.
 func _physics_process(delta: float) -> void:

@@ -37,7 +37,6 @@ func start_game() -> void:
 	
 	# Players
 	var connected_players: Array = get_parent().players
-	print(connected_players)
 	if len(connected_players) == 1:
 		connected_players.push_back(PlayerPeer.new_cpu_player())
 	var i = 0
@@ -45,6 +44,11 @@ func start_game() -> void:
 		var player: Player = (player_scene if peer.peer_id > -1 else cpu_scene).instantiate()
 		
 		player.name = str(peer) if peer.peer_id > -1 else "cpu"
+
+		# Disable input for CPUs and players on other computers
+		if peer.peer_id < 0 or not peer.is_local:
+			player.disable_input()
+		
 		player.player_id = peer.peer_id
 		%ChargeBars.get_child(i).name = str(peer)
 		

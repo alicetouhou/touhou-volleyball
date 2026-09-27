@@ -77,11 +77,17 @@ func stop_connection() -> void:
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	players = []
 
-func peer_connected(id: int, input_device: int = -99) -> void:
+func peer_connected(id: int, input_device: int = -99) -> PlayerPeer:
 	if OS.has_feature("dedicated_server") and len(players) == 0:
 		$DedicatedServerStart.set_multiplayer_authority(id)
 		give_start_permission.rpc_id(id)
-	var p = PlayerPeer.new_player(id)
+		
+	var p
+	if is_multiplayer_authority():
+		p = PlayerPeer.new_local_player(id)
+	else:
+		p = PlayerPeer.new_player(id)
+
 	p.number = len(players) + 1
 	p.color = COLORS[len(players)]
 	p.input_device = input_device
@@ -89,6 +95,7 @@ func peer_connected(id: int, input_device: int = -99) -> void:
 		p.character = (%Characters.selected.resource_path.split("/") as Array).back()
 	players.push_back(p)
 	on_players_updated.rpc(players)
+	return p
 
 func peer_disconnected(id: int) -> void:
 	players.erase(get_player_by_id(id))

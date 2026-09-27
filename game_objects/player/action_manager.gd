@@ -2,7 +2,7 @@ extends MultiplayerSynchronizer
 
 
 ## If true, blocks client input.
-@export var disabled := false
+@export var disable_input := false
 @export var input_device := -99
 
 ## Client's target for movement (except jumping).
@@ -14,7 +14,7 @@ extends MultiplayerSynchronizer
 @export var jumping := false
 @export var supering := false
 
-# Input...
+## Input direction strength. Synced with RPC.
 var up_strength := 0.0
 var down_strength := 0.0
 var left_strength := 0.0
@@ -43,6 +43,8 @@ func sync_strength(d, power) -> void:
 	if d == "down":
 		down_strength = power
 
+# The `Input` class does not allow you to check if an input was performed by a specific
+# device so we need to use the _input method :(
 func _input(event: InputEvent) -> void:
 	if input_device > -99 and event.device != input_device:
 		return
@@ -63,13 +65,9 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("super"):
 		trigger_super.rpc()
 
-
-func _ready():
-	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
-
-## Only runs on client, see _ready.
+## Only runs on client, see disabled is set when player is created.
 func _process(_delta: float) -> void:
-	if disabled:
+	if disable_input:
 		return
 
 	direction = Vector2.ZERO

@@ -1,6 +1,9 @@
 extends Node3D
 
 
+const player_scene = preload("res://game_objects/player/Player3D.tscn")
+const cpu_scene = preload("res://game_objects/player/CPUPlayer.tscn")
+
 ## The ball node.
 var ball: RigidBody3D
 ## Which side's turn is currently playing (ie who served).
@@ -31,11 +34,14 @@ func start_game() -> void:
 	ball_container.add_child(ball, true)
 	
 	# Players
+	var client_ids = PackedInt32Array([1]) + multiplayer.get_peers()
+	if len(client_ids) == 1:
+		client_ids.push_back(-1)
 	var i = 0
-	for peer in PackedInt32Array([1]) + multiplayer.get_peers():
-		var player: Player = preload("res://game_objects/player/Player3D.tscn").instantiate()
+	for peer in client_ids:
+		var player: Player = (player_scene if peer > 0 else cpu_scene).instantiate()
 		
-		player.name = str(peer)
+		player.name = str(peer) if peer > 0 else "cpu"
 		player.player_id = peer
 		%ChargeBars.get_child(i).name = str(peer)
 		
@@ -47,6 +53,9 @@ func start_game() -> void:
 		
 		players.add_child(player, true)
 		i += 1
+	
+	get_tree().call_group("cpu", "cpu_init", ball, players.get_children())
+	get_tree().call_group("cpu", "update_game_state", false)
 	
 	start_round()
 	
@@ -64,6 +73,7 @@ func start_round() -> void:
 	
 	round_running = true
 	ball.freeze = false
+	get_tree().call_group("cpu", "update_game_state", true)
 
 func end_round() -> void:
 	if ball.position.x >= 0:
@@ -75,6 +85,7 @@ func end_round() -> void:
 		return
 	
 	round_running = false
+	get_tree().call_group("cpu", "update_game_state", false)
 	
 	%Score.show()
 	await get_tree().create_timer(.75).timeout

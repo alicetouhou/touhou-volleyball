@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://xq2fjwwy8qix"]
+
+[ext_resource type="PackedScene" uid="uid://cbyawmu8vbekl" path="res://game_objects/player/Player3D.tscn" id="1_qebkp"]
+[ext_resource type="Script" uid="uid://dxq4duj3wma41" path="res://game_objects/player/cpu_player.gd" id="2_prqa1"]
+
+[node name="CPUPlayer" unique_id=733247983 groups=["cpu"] instance=ExtResource("1_qebkp")]
+script = ExtResource("2_prqa1")
+
+[node name="Sprite3D" parent="Texture" parent_id_path=PackedInt32Array(1883257529) index="0" unique_id=705725850]
+transform = Transform3D(1, 0, 0, 0, 1.0443591, 0, 0, 0, 1, 0, 0.13307723, 0)

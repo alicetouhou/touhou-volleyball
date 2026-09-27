@@ -25,9 +25,13 @@ const SUPER_COOLDOWN = .2
 @export var player_id: int :
 	set(value):
 		player_id = value
-		%ActionSync.set_multiplayer_authority(value)
+		# Only update authority if actual player. CPUs retain server authority.
+		if value > 0:
+			%ActionSync.set_multiplayer_authority(value)
+		else:
+			%ActionSync.disabled = true
 
-## Horizontal movement sign
+# Horizontal movement sign
 var direction := 1
 
 var on_floor := false

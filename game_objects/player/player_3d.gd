@@ -7,6 +7,8 @@ signal on_hit_ball
 signal super_used
 ## Triggered when the super ability's charge changes
 signal super_charge_updated(value: float)
+## Ask the game area to have a FX
+signal create_fx(fx: PackedScene, pos: Vector3)
 
 ## Config values
 const MOVEMENT_SPEED := 9
@@ -21,6 +23,13 @@ const SUPER_COOLDOWN = .2
 
 ## Player's character
 @export var character: CharacterResource
+
+## VFX Scenes
+const DUST_SETTLE_FX = preload("res://resources/effects/dust-settle.tscn")
+const POMMEL_POP_FX = preload("res://resources/effects/pommel-pop.tscn")
+
+var movement_scale = 1.
+
 
 @export var player_id: int :
 	set(value):
@@ -72,9 +81,12 @@ func kick(velocity = 7):
 	time_since_kick = 0
 	
 	on_hit_ball.emit()
-	
+	super_charge += ball.linear_velocity.length() / 75.
+
 	var global_position_2D = Vector2(global_position.x, global_position.y)
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
+
+	create_fx.emit(FXManager.pummel_pop, ball.position)
 
 	var ball_direction = global_position_2D.direction_to(ball_global_position_2D)
 	var force = velocity * (ball_direction)
@@ -88,7 +100,7 @@ func kick(velocity = 7):
 	if %ActionSync.direction.y < 0:
 		ball.linear_velocity *= 2
 	
-	super_charge += ball.linear_velocity.length() / 50.
+	super_charge += ball.linear_velocity.length() / 75.
 
 	return ball
 
@@ -104,7 +116,7 @@ func _physics_process(delta: float) -> void:
 	# Jumping
 	if %ActionSync.jumping and on_floor:
 		apply_central_impulse(Vector3(0, JUMP_POWER, 0))
-
+	
 	# Fast falling
 	if %ActionSync.direction.y < 0 and not on_floor:
 		if linear_velocity.y > 0:
@@ -139,6 +151,8 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		if direction > 0:
 			Animations.travel("turn")
 			%Turning.play("turn_right")
+		
+		create_fx.emit(FXManager.dust_settle, position - Vector3(0, .6, 0))
 	
 	# https://forum.godotengine.org/t/how-to-check-if-rigid-body-is-on-floor/65679/3
 	var i := 0
@@ -151,3 +165,6 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		if normal.dot(Vector3.UP) > 0.3: # this can be dialed in
 			on_floor = true
 		i += 1
+		
+	linear_velocity *= movement_scale
+	angular_velocity *= movement_scale

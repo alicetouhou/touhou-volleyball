@@ -130,7 +130,6 @@ script = ExtResource("3_dk04u")
 
 [node name="FxManager" parent="Level/Camera" unique_id=1008124586 instance=ExtResource("4_qfux7")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.511648)
 
 [node name="UI" type="Control" parent="." unique_id=2110848446]
 unique_name_in_owner = true

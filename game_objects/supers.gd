@@ -45,7 +45,7 @@ func yuyuko(game: Level, player: Player):
 
 	player.super_charge -= 1
 	player.scale = Vector3(3, 3, 3)
-	
+
 	await get_tree().create_timer(3).timeout
 	
 	player.scale = Vector3(1, 1, 1)

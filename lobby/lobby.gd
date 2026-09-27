@@ -81,9 +81,8 @@ func peer_connected(id: int, input_device: int = -99) -> PlayerPeer:
 	if OS.has_feature("dedicated_server") and len(players) == 0:
 		$DedicatedServerStart.set_multiplayer_authority(id)
 		give_start_permission.rpc_id(id)
-		
-	var p = PlayerPeer.new_player(id)
 
+	var p = PlayerPeer.new_player(id)
 	p.number = len(players) + 1
 	p.color = COLORS[len(players)]
 	p.input_device = input_device

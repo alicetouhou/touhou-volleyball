@@ -35,14 +35,22 @@ var input_device: int = -99:
 	get():
 		return input_device
 
-@export var player_id: int
+var player_id: int:
+	set(value):
+		player_id = value
+		if value > 0:
+			%ActionSync.set_multiplayer_authority(value)
+		else:
+			%ActionSync.disable_input = true
+	get():
+		return player_id
 var velocity_multiplier: float = 1.0
 var new_velocity_multiplier: float = 1.0
 var time: float = 0.0
 var time_acceleration: float = 1.0
 
 # Horizontal movement sign
-var direction := 1
+var direction := 1.0
 
 var on_floor := false
 var can_jump := true
@@ -156,10 +164,10 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if sign(linear_velocity).x != direction and not linear_velocity.is_zero_approx():
 		direction = sign(linear_velocity).x
 
-		if direction < 0:
+		if direction < 0.0:
 			Animations.travel("turn")
 			%Turning.play("turn_left")
-		if direction > 0:
+		if direction > 0.0:
 			Animations.travel("turn")
 			%Turning.play("turn_right")
 		

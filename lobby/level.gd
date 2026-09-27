@@ -49,6 +49,7 @@ func start_game() -> void:
 		player.name = str(peer) if peer.peer_id > -1 else "cpu"
 
 		# Disable input for CPUs and players on other computers
+		player.player_id = peer.peer_id
 		if peer.peer_id < 0:
 			player.disable_input()
 		

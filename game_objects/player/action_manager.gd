@@ -81,3 +81,5 @@ func _process(_delta: float) -> void:
 	direction.x += right_strength
 	direction.y += up_strength
 	direction.y -= down_strength
+	
+	local_direction = direction

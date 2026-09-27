@@ -16,12 +16,6 @@ static func new_player(id) -> PlayerPeer:
 	p.peer_id = id
 	return p
 
-static func new_local_player(id) -> PlayerPeer:
-	var p = PlayerPeer.new()
-	p.peer_id = id
-	p.is_local = true
-	return p
-
 static func new_cpu_player():
 	var p = PlayerPeer.new()
 	p.peer_id = -1

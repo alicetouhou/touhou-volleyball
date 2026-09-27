@@ -7,4 +7,4 @@
 script = ExtResource("2_prqa1")
 
 [node name="Sprite3D" parent="Texture" parent_id_path=PackedInt32Array(1883257529) index="0" unique_id=705725850]
-transform = Transform3D(1, 0, 0, 0, 1.0443591, 0, 0, 0, 1, 0, 0.13307723, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0118263, 0, 0, 0, 1, 0, 0.0354789, 0)

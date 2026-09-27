@@ -24,11 +24,6 @@ const SUPER_COOLDOWN = .2
 ## Player's character
 @export var character: CharacterResource
 
-## VFX Scenes
-const DUST_SETTLE_FX = preload("res://resources/effects/dust-settle.tscn")
-const POMMEL_POP_FX = preload("res://resources/effects/pommel-pop.tscn")
-
-
 @export var player_id: int :
 	set(value):
 		player_id = value
@@ -84,7 +79,7 @@ func kick(velocity = 7):
 	var global_position_2D = Vector2(global_position.x, global_position.y)
 	var ball_global_position_2D = Vector2(ball.global_position.x, ball.global_position.y)
 
-	create_fx.emit(POMMEL_POP_FX, global_position_2D + ball_global_position_2D / 2)
+	create_fx.emit(FXManager.pummel_pop, ball.global_position + global_position / 2)
 
 	var ball_direction = global_position_2D.direction_to(ball_global_position_2D)
 	var force = velocity * (ball_direction)
@@ -150,7 +145,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 			Animations.travel("turn")
 			%Turning.play("turn_right")
 		
-		create_fx.emit(DUST_SETTLE_FX, position - Vector3(0, .6, 0))
+		create_fx.emit(FXManager.dust_settle, position - Vector3(0, .6, 0))
 	
 	# https://forum.godotengine.org/t/how-to-check-if-rigid-body-is-on-floor/65679/3
 	var i := 0

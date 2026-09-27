@@ -9,7 +9,8 @@ signal start_game
 		set_multiplayer_authority(value)
 
 func start_dedicated_game() -> void:
-	server_start_game.rpc_id(1)
+	if not multiplayer.is_server():
+		server_start_game.rpc_id(1)
 
 @rpc
 func server_start_game() -> void:

@@ -72,7 +72,7 @@ func handle_input(player: PlayerPeer, event: InputEvent):
 
 func _input(event: InputEvent) -> void:
 	for player in players:
-		if event.device == player.input_device or player.input_device == -99:
+		if player.created_input_event(multiplayer, event):
 			handle_input(player, event)
 
 func _ready() -> void:

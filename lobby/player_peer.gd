@@ -1,7 +1,5 @@
 class_name PlayerPeer
 
-extends Node
-
 var peer_id: int = 0
 
 # -99 is any controller
@@ -51,4 +49,7 @@ static func parse(players: Array) -> Array[PlayerPeer]:
 		out.push_back(p)
 	
 	return out
-		
+
+## Return true if a player created an input event 
+func created_input_event(multiplayer: MultiplayerAPI, event: InputEvent):
+	return peer_id == multiplayer.get_unique_id() and (event.device == input_device or input_device == -99)

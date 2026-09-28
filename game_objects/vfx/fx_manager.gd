@@ -13,6 +13,7 @@ const crush_slam = preload("res://resources/effects/crush-slam.tscn")
 const crit_burst = preload("res://resources/effects/crit-burst.tscn")
 const holy_pillar = preload("res://resources/effects/holy-pillar.tscn")
 const perfect_burst = preload("res://resources/effects/perfect-burst.tscn")
+const evolve_flash = preload("res://resources/effects/evolve-flash.tscn")
 
 func _process(delta: float) -> void:
 	for u in update_positions:

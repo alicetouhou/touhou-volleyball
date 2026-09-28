@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gd6c4ssober7"
-path="res://.godot/imported/marisa.png-0bb9d31ab21c5ff7c667dc913abfd02e.ctex"
+uid="uid://beua4lxv5xrl8"
+path="res://.godot/imported/evolve-flash.png-3761a6760fcc848f3a56616932e14099.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/characters/marisa.png"
-dest_files=["res://.godot/imported/marisa.png-0bb9d31ab21c5ff7c667dc913abfd02e.ctex"]
+source_file="res://resources/effects/evolve-flash.png"
+dest_files=["res://.godot/imported/evolve-flash.png-3761a6760fcc848f3a56616932e14099.ctex"]
 
 [params]
 

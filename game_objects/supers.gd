@@ -13,6 +13,8 @@ func run(game: Level, player: Player):
 		yuyuko(game, player)
 	if character_name == "Marisa":
 		marisa(game, player)
+	if character_name == "Sakuya":
+		sakuya(game, player)
 
 func reimu(game: Level, player: Player):
 	if player.super_charge < 1:
@@ -105,3 +107,14 @@ func marisa(level: Level, player: Player):
 	
 	await get_tree().create_timer(1.0).timeout
 	level.ball.set_collision_mask_value(4, true)
+
+func sakuya(level: Level, player: Player):
+	if player.super_charge < 2:
+		return
+	player.super_charge -= 2
+	var fx = level.get_fx_manager()
+
+	level.ball.set_velocity_multiplier(0.2, 0.5)
+	fx.create_with_parent_3D(fx.evolve_flash, level.ball)
+	await get_tree().create_timer(3.0).timeout
+	level.ball.set_velocity_multiplier(1.0, -1)

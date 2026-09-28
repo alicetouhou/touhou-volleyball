@@ -34,9 +34,12 @@ func start_game() -> void:
 	# Ball
 	ball = preload("res://game_objects/ball/Ball3D.tscn").instantiate()
 	ball.freeze = true
-	ball.create_fx.connect(create_fx)
 	ball.body_entered.connect(ball_collided)
 	ball_container.add_child(ball, true)
+
+	# FX signals are replicated on all peers
+	ball.create_fx.connect(create_fx)
+
 	
 	# Players
 	var connected_players: Array = get_parent().players
@@ -64,14 +67,15 @@ func start_game() -> void:
 			side = 1
 		%ChargeBars.get_child(side).add_child(charge_bar)
 		
-		player.on_hit_ball.connect(player_hit_ball)
 		player.super_used.connect(func(): player_super_used(peer))
 		player.super_charge_updated.connect(
 			func(value): charge_bar.set_charge.rpc(value)
 		)
-		player.create_fx.connect(create_fx)
-		
 		player.input_device = peer.input_device
+
+		## FX signals are replicated on all peers
+		player.create_fx.connect(create_fx)
+		player.on_hit_ball.connect(player_hit_ball)
 		
 		players.add_child(player, true)
 		if peer.peer_id > 0:
@@ -150,3 +154,12 @@ func player_super_used(player: PlayerPeer) -> void:
 	
 func get_fx_manager():
 	return %FxManager
+
+
+func _on_player_spawner_spawned(player: Player) -> void:
+	player.create_fx.connect(create_fx)
+	player.on_hit_ball.connect(player_hit_ball)
+
+func _on_ball_spawner_spawned(ball_: Ball) -> void:
+	ball = ball_
+	ball.create_fx.connect(create_fx)

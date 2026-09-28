@@ -95,7 +95,7 @@ func kick(velocity = 7, ball: Ball = null):
 	Animations.travel("kick_hit")
 	time_since_kick_pressed = 10000
 	time_since_kick = 0
-	
+
 	on_hit_ball.emit()
 	super_charge += ball.linear_velocity.length() / 75.
 

@@ -144,6 +144,23 @@ _data = {
 &"turn_right": SubResource("Animation_nc42t")
 }
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kxtgu"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:linear_velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:angular_velocity")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:player_id")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g5q24"]
 properties/0/path = NodePath("ActionSync:direction")
 properties/0/spawn = true
@@ -151,9 +168,6 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath("ActionSync:disable_input")
 properties/1/spawn = true
 properties/1/replication_mode = 2
-properties/2/path = NodePath("..:position")
-properties/2/spawn = true
-properties/2/replication_mode = 1
 
 [node name="Player3d" type="RigidBody3D" unique_id=733247983]
 collision_layer = 2
@@ -178,7 +192,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0028701, 0, 0, 0, 1, 0, 0.008610196, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0496085, 0, 0, 0, 1, 0, 0.14882575, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 
@@ -210,6 +224,12 @@ parameters/turn/TimeScale/scale = 1.0
 parameters/turn/Direction/blend_amount = 0.0
 
 [node name="Networking" type="Node" parent="." unique_id=320817667]
+
+[node name="ServerSync" type="MultiplayerSynchronizer" parent="Networking" unique_id=1005482676]
+editor_description = "This sync node handles anything the server has authority over.
+"
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_kxtgu")
 
 [node name="ActionSync" type="MultiplayerSynchronizer" parent="Networking" unique_id=580136649]
 unique_name_in_owner = true

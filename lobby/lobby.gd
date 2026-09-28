@@ -8,7 +8,7 @@ signal server_connected
 signal connection_stopped
 signal give_start_authority
 
-const PORT = 34356
+const PORT = 34357
 const IP_ADDRESS = "127.0.0.1"
 const MAX_PLAYERS = 32
 const DEFAULT_PLAYER = {"character": "alice_margatroid.tres"}

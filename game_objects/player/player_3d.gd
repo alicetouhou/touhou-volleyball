@@ -40,6 +40,15 @@ var input_device: int = -99:
 	get():
 		return input_device
 
+var player_id: int:
+	set(value):
+		player_id = value
+		if value > 0:
+			%ActionSync.set_multiplayer_authority(value)
+		else:
+			%ActionSync.disable_input = true
+	get():
+		return player_id
 var velocity_multiplier: float = 1.0
 var new_velocity_multiplier: float = 1.0
 var time: float = 0.0
@@ -115,16 +124,8 @@ func kick(velocity = 7, ball: Ball = null):
 func disable_input():
 	%ActionSync.disable_input = true
 
-@rpc("any_peer", "call_local")
-func goto(to: Vector3) -> void:
-	if multiplayer.get_remote_sender_id() != 1:
-		return
-	position = to
-
-@rpc("any_peer", "call_local")
+@rpc("call_local")
 func set_character(character_id: String) -> void:
-	if multiplayer.get_remote_sender_id() != 1:
-		return
 	character = load("res://resources/characters/%s" % character_id)
 
 ## All clients simulate process, but server will sync later with authority.
@@ -167,7 +168,7 @@ func _process(delta: float) -> void:
 	time += delta * time_acceleration
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
-	if get_multiplayer_authority() == multiplayer.get_unique_id():
+	if player_id == multiplayer.get_unique_id():
 		linear_velocity.x = %ActionSync.local_direction.x * MOVEMENT_SPEED
 	else:
 		linear_velocity.x = %ActionSync.direction.x * MOVEMENT_SPEED

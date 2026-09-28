@@ -32,11 +32,7 @@ func start_game() -> void:
 		child.queue_free()
 	
 	# Ball
-	ball = preload("res://game_objects/ball/Ball3D.tscn").instantiate()
-	ball.freeze = true
-	ball.create_fx.connect(create_fx)
-	ball.body_entered.connect(ball_collided)
-	ball_container.add_child(ball, true)
+	$BallSpawner.spawn()
 	
 	# Players
 	var connected_players: Array = get_parent().players
@@ -45,35 +41,18 @@ func start_game() -> void:
 
 	var i = 0
 	for peer: PlayerPeer in connected_players:
-		var player: Player = (player_scene if peer.peer_id > -1 else cpu_scene).instantiate()
-		
-		player.name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
-
-		# Disable input for CPUs and players on other computers
-		player.player_id = peer.peer_id
-		if peer.peer_id < 0 or (player.player_id != multiplayer.get_unique_id() and not peer.local_co_op):
-			player.disable_input()
-
-		if peer.local_co_op:
-			player.set_multiplayer_authority(multiplayer.get_unique_id())
+		var player = $PlayerSpawner.spawn(PlayerPeer.serialize([peer])[0])
 		
 		var charge_bar = preload("res://game_objects/SuperCharge.tscn").instantiate()
-		charge_bar.name = str(peer)
+		charge_bar.name = str(peer.peer_id)
 		var side = 0
 		if i >= floori(len(connected_players) / 2.):
 			side = 1
 		%ChargeBars.get_child(side).add_child(charge_bar)
-		
-		player.on_hit_ball.connect(player_hit_ball)
-		player.super_used.connect(func(): player_super_used(peer))
 		player.super_charge_updated.connect(
 			func(value): charge_bar.set_charge.rpc(value)
 		)
-		player.create_fx.connect(create_fx)
 		
-		player.input_device = peer.input_device
-		
-		players.add_child(player, true)
 		if peer.peer_id > 0:
 			player.set_character.rpc.call_deferred($"/root/Lobby".get_player_by_id(peer.peer_id).character)
 		i += 1
@@ -99,7 +78,7 @@ func start_round() -> void:
 	for i in players.get_child_count():
 		var player: Node3D = players.get_child(i)
 		player.linear_velocity = Vector3.ZERO
-		player.global_position = player_positions[wrap(i, 0, len(player_positions))]
+		player.goto.rpc(player_positions[wrap(i, 0, len(player_positions))])
 		
 	ball.linear_velocity = Vector3.ZERO
 	ball.speed_percent = 1.0
@@ -149,3 +128,38 @@ func player_super_used(player: PlayerPeer) -> void:
 	
 func get_fx_manager():
 	return %FxManager
+
+func setup_player(data, peer: PlayerPeer = null) -> Node:
+	if not peer:
+		peer = PlayerPeer.parse([data])[0]
+
+	var player: Player = (player_scene if peer.peer_id > -1 else cpu_scene).instantiate()
+	player.name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
+
+	# Disable input for CPUs and players on other computers
+	player.set_multiplayer_authority(peer.peer_id)
+	if peer.peer_id < 0 or (player.get_multiplayer_authority() != multiplayer.get_unique_id() and not peer.local_co_op):
+		player.disable_input()
+	
+	if peer.local_co_op:
+		player.set_multiplayer_authority(multiplayer.get_unique_id())
+	
+	player.on_hit_ball.connect(player_hit_ball)
+	player.super_used.connect(func(): player_super_used(peer))
+	player.create_fx.connect(create_fx)
+
+	player.input_device = peer.input_device
+
+	return player
+
+func setup_ball(_data) -> Node:
+	ball = preload("res://game_objects/ball/Ball3D.tscn").instantiate()
+	ball.freeze = true
+	ball.create_fx.connect(create_fx)
+	ball.body_entered.connect(ball_collided)
+	
+	return ball
+
+func _ready() -> void:
+	$PlayerSpawner.spawn_function = setup_player
+	$BallSpawner.spawn_function = setup_ball

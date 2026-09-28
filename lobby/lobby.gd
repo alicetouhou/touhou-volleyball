@@ -85,7 +85,7 @@ func peer_connected(id: int, input_device: int = -99) -> PlayerPeer:
 
 	var p = PlayerPeer.new_player(id)
 	p.number = len(players) + 1
-	p.color = COLORS[len(players)]
+	p.color = COLORS[wrap(len(players), 0, len(COLORS))]
 	p.input_device = input_device
 	if input_device != -99:
 		p.local_co_op = true

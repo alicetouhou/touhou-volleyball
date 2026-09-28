@@ -16,8 +16,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	predictions = predict_ball_locations(delta)
 	time += delta
-		
-func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
+	
 	if len(predictions) == 0:
 		return
 		
@@ -26,14 +25,9 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var patrol_point_distance = position.distance_to(patrol_point)
 		
 	
-	if distance>0.5:
-		linear_velocity = global_position.direction_to(destination)
-		linear_velocity.x *= clamp((distance)*10.,0.0,8.0)
-		linear_velocity.y *= 2
-		angular_velocity = Vector3.ZERO
-	if linear_velocity.dot(patrol_point) < 0:
-		linear_velocity *= clamp(6.0-patrol_point_distance,0.0,1.0)
-	
+	apply_central_force(global_position.direction_to(destination) * 10.)
+		
+func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var bodies = $KickArea.get_overlapping_bodies()
 	var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
 	if ball_index < 0:

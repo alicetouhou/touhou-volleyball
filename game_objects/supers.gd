@@ -19,9 +19,10 @@ func run(game: Level, player: Player):
 func reimu(game: Level, player: Player):
 	if player.super_charge < 1:
 		return
+
 	var fx = game.get_fx_manager()
-	var ball = game.ball
-	if abs(ball.position.x-player.position.x) > 2.0:
+	var ball = player.find_ball_in_area(player.reimu_super_collider)
+	if (!ball):
 		return
 		
 	player.super_charge -= 1
@@ -30,10 +31,11 @@ func reimu(game: Level, player: Player):
 	ball.set_velocity_multiplier(0.1, 10.0)
 	await get_tree().create_timer(0.25).timeout
 
-
 	ball.linear_velocity = Vector3.ZERO
 	ball.set_velocity_multiplier(1.0,-1.)
-	player.kick(25, ball)
+	
+	var v = 20
+	ball.apply_central_impulse(Vector3(1 if player.direction >= 0 else -1,sin(PI / 6),0).normalized() * v)
 
 	ball.create_fx.emit(fx.crit_burst, (ball.global_position + player.global_position) / 2)
 	fx.create_at_pos(fx.crit_burst, player.global_position)
@@ -72,7 +74,8 @@ func yuyuko(game: Level, player: Player):
 	player.scale = Vector3(1, 1, 1)
 		
 func marisa(level: Level, player: Player):
-	if (abs(level.ball.position.y - player.position.y) > 5. or abs(player.position.x - level.ball.position.x) > 10):
+	var ball = player.find_ball_in_area(player.marisa_super_collider)
+	if (!ball):
 		return
 	if player.super_charge < 3:
 		return

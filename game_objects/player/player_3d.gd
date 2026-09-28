@@ -22,6 +22,10 @@ const KICK_COOLDOWN := .3
 
 const SUPER_COOLDOWN = .2
 
+## Super hitboxes
+@onready var reimu_super_collider = $SuperColliders/ReimuSuper
+@onready var marisa_super_collider = $SuperColliders/MarisaSuper
+
 ## Player's character
 @export var character: CharacterResource :
 	set(value):
@@ -76,6 +80,14 @@ var time_since_super = 0.
 
 @onready var Animations = %AnimationTree.get("parameters/playback")
 
+func find_ball_in_area(area: Area3D) -> Ball:
+	var bodies = area.get_overlapping_bodies()
+	var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
+	if ball_index < 0:
+		return
+	var ball: Ball = bodies[ball_index]
+	return ball
+	
 func find_ball():
 	var bodies = %KickCollider.get_overlapping_bodies()
 	var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
@@ -115,8 +127,10 @@ func kick(velocity = 7, ball: Ball = null):
 	
 	if %ActionSync.direction.y < 0.0:
 		ball.linear_velocity *= 2
+
+	ball.play_kick_sfx()
 	
-	super_charge += ball.linear_velocity.length() / 75.
+	super_charge += pow(ball.linear_velocity.x,2.) / 5625.
 
 	return ball
 

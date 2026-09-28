@@ -168,6 +168,15 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath("ActionSync:disable_input")
 properties/1/spawn = true
 properties/1/replication_mode = 2
+properties/2/path = NodePath("..:position")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bp3gs"]
+size = Vector3(2.813446, 3.0109863, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ncc1o"]
+size = Vector3(5.008789, 4.0843506, 1)
 
 [node name="Player3d" type="RigidBody3D" unique_id=733247983]
 collision_layer = 2
@@ -178,7 +187,7 @@ axis_lock_angular_y = true
 axis_lock_angular_z = true
 physics_material_override = SubResource("PhysicsMaterial_l3xxi")
 contact_monitor = true
-max_contacts_reported = 4
+max_contacts_reported = 12
 script = ExtResource("1_bn5eq")
 character = ExtResource("2_bp3gs")
 
@@ -192,7 +201,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0496085, 0, 0, 0, 1, 0, 0.14882575, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0251034, 0, 0, 0, 1, 0, 0.07531038, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 
@@ -235,3 +244,19 @@ replication_config = SubResource("SceneReplicationConfig_kxtgu")
 unique_name_in_owner = true
 replication_config = SubResource("SceneReplicationConfig_g5q24")
 script = ExtResource("4_bn5eq")
+
+[node name="SuperColliders" type="Node3D" parent="." unique_id=1059528743]
+
+[node name="ReimuSuper" type="Area3D" parent="SuperColliders" unique_id=122724238]
+collision_mask = 4
+priority = 1
+
+[node name="Collider" type="CollisionShape3D" parent="SuperColliders/ReimuSuper" unique_id=811448977 groups=["player"]]
+shape = SubResource("BoxShape3D_bp3gs")
+
+[node name="MarisaSuper" type="Area3D" parent="SuperColliders" unique_id=2066219413]
+collision_mask = 4
+priority = 1
+
+[node name="Collider" type="CollisionShape3D" parent="SuperColliders/MarisaSuper" unique_id=1962209544 groups=["player"]]
+shape = SubResource("BoxShape3D_ncc1o")

@@ -33,8 +33,17 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if on_floor and state.linear_velocity.y > 15.:
 		create_fx.emit(FXManager.crush_slam, global_position + Vector3(0, -.6, 0))
 		
+	if on_floor and state.linear_velocity.y > 2.:
+		$LandStream.play(0.02)
+		
 	linear_velocity *= lerp(velocity_multiplier,new_velocity_multiplier,clamp(time,0.0,1.0))
 	angular_velocity *= lerp(velocity_multiplier,new_velocity_multiplier,clamp(time,0.0,1.0))
+	
+func play_kick_sfx():
+	if linear_velocity.length() < 20.0:
+		$KickStream.play(0.02)
+	else:
+		$BigKickStream.play(0.02)
 
 func _process(delta: float) -> void:
 	time += delta * time_acceleration

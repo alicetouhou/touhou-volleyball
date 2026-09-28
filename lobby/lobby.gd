@@ -113,7 +113,9 @@ func get_player_by_id(id: int) -> PlayerPeer:
 
 @rpc("any_peer", "call_local")
 func set_player_character(id: int, resource_path: String) -> void:
-	get_player_by_id(id).character = resource_path
+	var p = get_player_by_id(id)
+	if p:
+		p.character = resource_path
 	players_updated.emit(players)
 
 @rpc("call_local")

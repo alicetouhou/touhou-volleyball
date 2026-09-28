@@ -131,7 +131,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.716914, 0.46894157, 0)
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="Level" unique_id=2073793907]
 _spawnable_scenes = PackedStringArray("uid://cbyawmu8vbekl", "uid://xq2fjwwy8qix")
 spawn_path = NodePath("../Players")
-spawn_limit = 2
 
 [node name="Ball" type="Node3D" parent="Level" unique_id=979437667]
 

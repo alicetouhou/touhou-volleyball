@@ -3,8 +3,53 @@
 [ext_resource type="PackedScene" uid="uid://cbyawmu8vbekl" path="res://game_objects/player/Player3D.tscn" id="1_qebkp"]
 [ext_resource type="Script" uid="uid://dxq4duj3wma41" path="res://game_objects/player/cpu_player.gd" id="2_prqa1"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kxtgu"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:linear_velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:angular_velocity")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:player_id")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_l3xxi"]
+font_size = 75
+
 [node name="CPUPlayer" unique_id=733247983 groups=["cpu"] instance=ExtResource("1_qebkp")]
+collision_mask = 17
 script = ExtResource("2_prqa1")
 
 [node name="Sprite3D" parent="Texture" parent_id_path=PackedInt32Array(1883257529) index="0" unique_id=705725850]
-transform = Transform3D(1, 0, 0, 0, 1.0118263, 0, 0, 0, 1, 0, 0.0354789, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0175757, 0, 0, 0, 1, 0, 0.052727383, 0)
+
+[node name="ServerSync" type="MultiplayerSynchronizer" parent="Networking" parent_id_path=PackedInt32Array(320817667) index="0" unique_id=1005482676]
+editor_description = "This sync node handles anything the server has authority over.
+"
+root_path = NodePath("../..")
+replication_config = SubResource("SceneReplicationConfig_kxtgu")
+
+[node name="Debug1" type="Label" parent="." index="5" unique_id=1022440010]
+unique_name_in_owner = true
+offset_left = 973.0
+offset_top = 511.0
+offset_right = 1021.0
+offset_bottom = 553.0
+text = "-----"
+label_settings = SubResource("LabelSettings_l3xxi")
+
+[node name="Debug2" type="Label" parent="." index="6" unique_id=753434679]
+unique_name_in_owner = true
+offset_left = 924.0
+offset_top = 337.0
+offset_right = 1045.0
+offset_bottom = 440.0
+text = "-----"
+label_settings = SubResource("LabelSettings_l3xxi")

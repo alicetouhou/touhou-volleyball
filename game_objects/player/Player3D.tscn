@@ -5,6 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://bluw2veqruu0j" path="res://assets/sprites/characters/yuyuko.png" id="2_kxtgu"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://c14uejte347bk" path="res://player/animations.tres" id="3_kxtgu"]
 [ext_resource type="Script" uid="uid://bgiixcdk64eli" path="res://game_objects/player/action_manager.gd" id="4_bn5eq"]
+[ext_resource type="AudioStream" uid="uid://0qaqj83itpca" path="res://assets/sound/reimu_super.mp3" id="6_wr5jk"]
+[ext_resource type="AudioStream" uid="uid://cjy2dwyxhlu0j" path="res://assets/sound/super_activate.mp3" id="7_hbxj4"]
+[ext_resource type="AudioStream" uid="uid://e3fyua4obxd6" path="res://assets/sound/sakuya_super.mp3" id="7_r06qs"]
+[ext_resource type="AudioStream" uid="uid://dofvy8yb1qf74" path="res://assets/sound/marisa_super.mp3" id="8_r06qs"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l3xxi"]
 friction = 0.0
@@ -201,7 +205,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0251034, 0, 0, 0, 1, 0, 0.07531038, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0139413, 0, 0, 0, 1, 0, 0.041823883, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 
@@ -260,3 +264,18 @@ priority = 1
 
 [node name="Collider" type="CollisionShape3D" parent="SuperColliders/MarisaSuper" unique_id=1962209544 groups=["player"]]
 shape = SubResource("BoxShape3D_ncc1o")
+
+[node name="SuperSFX" type="Node" parent="." unique_id=875881836]
+
+[node name="ReimuSuper" type="AudioStreamPlayer" parent="SuperSFX" unique_id=1613469511]
+stream = ExtResource("6_wr5jk")
+
+[node name="SakuyaSuper" type="AudioStreamPlayer" parent="SuperSFX" unique_id=1306313648]
+stream = ExtResource("7_r06qs")
+
+[node name="MarisaSuper" type="AudioStreamPlayer" parent="SuperSFX" unique_id=1740803455]
+stream = ExtResource("8_r06qs")
+volume_db = -5.0
+
+[node name="ActivateSuper" type="AudioStreamPlayer" parent="SuperSFX" unique_id=2033509441]
+stream = ExtResource("7_hbxj4")

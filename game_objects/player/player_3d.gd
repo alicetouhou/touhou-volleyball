@@ -26,6 +26,12 @@ const SUPER_COOLDOWN = .2
 @onready var reimu_super_collider = $SuperColliders/ReimuSuper
 @onready var marisa_super_collider = $SuperColliders/MarisaSuper
 
+## Sound Effects
+@onready var activate_super_sfx: AudioStreamPlayer = $SuperSFX/ActivateSuper
+@onready var reimu_super_sfx: AudioStreamPlayer = $SuperSFX/ReimuSuper
+@onready var sakuya_super_sfx: AudioStreamPlayer = $SuperSFX/SakuyaSuper
+@onready var marisa_super_sfx: AudioStreamPlayer = $SuperSFX/MarisaSuper
+
 ## Player's character
 @export var character: CharacterResource :
 	set(value):

@@ -26,6 +26,7 @@ func reimu(game: Level, player: Player):
 		return
 		
 	player.super_charge -= 1
+	player.reimu_super_sfx.play()
 
 	player.set_velocity_multiplier(0.1,10.0)
 	ball.set_velocity_multiplier(0.1, 10.0)
@@ -87,9 +88,10 @@ func marisa(level: Level, player: Player):
 	
 	player.set_velocity_multiplier(0.0,0.5)
 	level.ball.set_velocity_multiplier(0.0, 0.5)
+	player.marisa_super_sfx.play()
 	var fx = level.get_fx_manager()
 	
-	await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(0.75).timeout
 	fx.create_at_pos(fx.perfect_burst, player.global_position + Vector3(0.0,0.0,0.0))
 	fx.create_at_pos(fx.holy_pillar, player.global_position + Vector3(-1.0 if reflect else 1.0,0.0,0.0), reflect)
 	level.camera.add_trauma(0.1)
@@ -116,6 +118,8 @@ func sakuya(level: Level, player: Player):
 	if player.super_charge < 2:
 		return
 	player.super_charge -= 2
+	player.sakuya_super_sfx.play()
+	
 	var fx = level.get_fx_manager()
 
 	level.ball.set_velocity_multiplier(0.2, 0.5)

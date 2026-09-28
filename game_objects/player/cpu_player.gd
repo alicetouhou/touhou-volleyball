@@ -12,6 +12,11 @@ var intention: Intention = Intention.WAIT
 var actpoints: Array[Array] = [] # [t, L, R, U, D, J, Z, X, C]
 var ball_target: Array = [] # [t, x, y, z]
 
+# These are basically cached calculations.
+var MAX_JUMP: float
+var MAX_JUMP_TIME: float
+var intention_cache
+
 const BLOCK_THRESHOLD_V = 5
 const BLOCK_THRESHOLD_Y = 6
 var x = 0
@@ -27,6 +32,10 @@ var ball: Node3D
 
 func cpu_init(world_ball: Node3D, _world_players: Array[Node]) -> void:
 	ball = world_ball
+	
+	var u = JUMP_POWER / mass
+	MAX_JUMP_TIME = u / -get_gravity().y
+	MAX_JUMP = (u * MAX_JUMP_TIME) + (0.5 * pow(MAX_JUMP_TIME, 2) * get_gravity().y)
 
 func update_game_state(game_running: bool) -> void:
 	started = game_running
@@ -40,8 +49,9 @@ func _physics_process(delta: float) -> void:
 			actpoints.pop_front()
 	if ball_target.size() > 0:
 		ball_target[0] -= 1
-		if ball_target[0] <= 0:
+		if ball_target[0] < 0:
 			ball_target = []
+			reset_intentions()
 			print("cancel")
 	
 	# Only run CPU on authority (server)
@@ -65,14 +75,13 @@ func _physics_process(delta: float) -> void:
 	player_predictions = []
 	for i in len(ball_predictions):
 		var p = ball_predictions[i]
-		if abs(p.x) <= 1 and p.y < BLOCK_THRESHOLD_Y:
+		if abs(p.x) <= 0.5 and p.y < BLOCK_THRESHOLD_Y:
 			if abs(global_position.x - p.x) - 0.75 * MOVEMENT_SPEED <= i / 60:
 				var dropf20 = ceil(BLOCK_THRESHOLD_V / abs(14 * gravity.y) / delta)
 				var u_y = 10 if linear_velocity.y <= 0 else linear_velocity.y
 				if i / 60 > dropf20 + ceil((sqrt(pow(u_y, 2) + (2 * gravity.y * (p.y - global_position.y + (0.5*14 * gravity.y * pow(dropf20,2))))) - u_y) / gravity.y) + (ceil(sqrt(pow(u_y, 2) + (2*14*gravity.y*global_position.y) - u_y) if linear_velocity.y < 0 else 0)):
 					if not (linear_velocity.y > 0 and i / 60 < (u_y + sqrt(pow(u_y, 2) + 2 * gravity.y * (p.y - global_position.y))) / 2 * gravity.y):
-						intention = Intention.BLOCK
-						ball_target = [i, p.x, p.y, p.z]
+						block(i, p)
 	
 		player_predictions.push_back(
 			global_position +
@@ -91,9 +100,19 @@ func _physics_process(delta: float) -> void:
 			%ActionSync.jump.rpc()
 			can_jump = false
 	
+	var direction = Vector2.ZERO
 	if intention == Intention.BLOCK:
-		pass
+		print("block")
+		if ball_target[0] < 2 or ball_target[1] + 1.5 < global_position.x:
+			direction.x = -1
+		elif ball_target[1] + 0.5 < global_position.x:
+			direction.x = 1
+		if on_floor and ball_target[0] <= MAX_JUMP_TIME + intention_cache:
+			direction.y = 1
+		if ball_target[0] <= ceil(sqrt(2 * (ball_target[2] - global_position.y) / gravity.y)):
+			spike()
 	if intention == Intention.WAIT:
+		direction = Vector2(get_direction(), 0)
 		if global_position.distance_squared_to(ball.global_position) >= 1.75:
 			can_kick = true
 		if (
@@ -103,7 +122,7 @@ func _physics_process(delta: float) -> void:
 		):
 			%ActionSync.kick.rpc()
 		
-		%ActionSync.direction = Vector2(get_direction(), 0)
+		%ActionSync.direction = direction
 
 func get_direction() -> int:
 	# If we have no predictions, do nothing
@@ -148,3 +167,13 @@ func reset_intentions():
 	intention = Intention.WAIT
 	actpoints = []
 	ball_target = []
+
+func block(t: int, p: Vector3):
+	intention = Intention.BLOCK
+	ball_target = [t, p.x, p.y, p.z]
+	# Max spike time
+	intention_cache = sqrt(2 * (p.y - MAX_JUMP) / get_gravity().y)
+
+func spike():
+	intention = Intention.SPIKE
+	intention_cache = null

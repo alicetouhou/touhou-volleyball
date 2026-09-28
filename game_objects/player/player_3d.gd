@@ -100,7 +100,7 @@ func kick(velocity = 7, ball: Ball = null):
 	
 	if %ActionSync.direction.y > 0.0 and acos(ball_direction.dot(Vector2.DOWN) <= SET_ANGLE):
 		ball.linear_velocity = Vector3.ZERO
-		ball.linear_velocity.y = velocity + linear_velocity.y
+		ball.linear_velocity.y = velocity
 	else:
 		ball.linear_velocity = Vector3(force.x, force.y, 0.0) + linear_velocity
 	

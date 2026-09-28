@@ -21,14 +21,16 @@ properties/4/spawn = true
 properties/4/replication_mode = 2
 
 [sub_resource type="LabelSettings" id="LabelSettings_l3xxi"]
-font_size = 75
+font_size = 40
 
 [node name="CPUPlayer" unique_id=733247983 groups=["cpu"] instance=ExtResource("1_qebkp")]
-collision_mask = 17
 script = ExtResource("2_prqa1")
 
 [node name="Sprite3D" parent="Texture" parent_id_path=PackedInt32Array(1883257529) index="0" unique_id=705725850]
-transform = Transform3D(1, 0, 0, 0, 1.0175757, 0, 0, 0, 1, 0, 0.052727383, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0382365, 0, 0, 0, 1, 0, 0.114709586, 0)
+
+[node name="Collider" parent="KickCollider" parent_id_path=PackedInt32Array(1627492970) index="0" unique_id=996229372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
 
 [node name="ServerSync" type="MultiplayerSynchronizer" parent="Networking" parent_id_path=PackedInt32Array(320817667) index="0" unique_id=1005482676]
 editor_description = "This sync node handles anything the server has authority over.
@@ -51,5 +53,14 @@ offset_left = 924.0
 offset_top = 337.0
 offset_right = 1045.0
 offset_bottom = 440.0
+text = "-----"
+label_settings = SubResource("LabelSettings_l3xxi")
+
+[node name="Debug3" type="Label" parent="." index="7" unique_id=724538866]
+unique_name_in_owner = true
+offset_left = 1360.0
+offset_top = 130.0
+offset_right = 1481.0
+offset_bottom = 233.0
 text = "-----"
 label_settings = SubResource("LabelSettings_l3xxi")

@@ -250,3 +250,5 @@ script = ExtResource("9_8367x")
 [connection signal="pressed" from="LobbyOverlay/Network/Disconnect" to="." method="stop_connection"]
 [connection signal="pressed" from="LobbyOverlay/Network/Start" to="." method="start_game"]
 [connection signal="pressed" from="LobbyOverlay/Network/Start" to="DedicatedServerStart" method="start_dedicated_game"]
+[connection signal="spawned" from="Level/PlayerSpawner" to="Level" method="_on_player_spawner_spawned"]
+[connection signal="spawned" from="Level/BallSpawner" to="Level" method="_on_ball_spawner_spawned"]

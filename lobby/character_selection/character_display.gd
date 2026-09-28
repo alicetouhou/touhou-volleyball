@@ -1,6 +1,7 @@
 extends HBoxContainer
 
 var players: Array[PlayerPeer] = []
+var character_order: Array[String] = []
 
 ## https://www.reddit.com/r/godot/comments/13u9w0j/comment/ldb4q0w
 static func load_asset(path : String) -> Resource:
@@ -26,7 +27,7 @@ func unpress_others(character: CharacterResource) -> void:
 	selected = character
 	var selected_id = (selected.resource_path.split("/") as Array).back()
 	if $"/root/Lobby".connected:
-		$"/root/Lobby".set_player_character.rpc(selected_id)
+		$"/root/Lobby".set_player_character.rpc(multiplayer.get_unique_id(), selected_id)
 	for child in get_children():
 		child.radio_unpressed()
 
@@ -43,15 +44,35 @@ func players_updated(players_: Array[PlayerPeer]) -> void:
 		var pucks = character_selections.get(child.name + ".tres", {"colors": [], "numbers": []})
 		child.set_pucks(pucks["colors"], pucks["numbers"])
 
+func next_character(c: String):
+	var i = character_order.find(c)
+	i += 1
+	if i >= len(character_order):
+		i = 0
+	return character_order[i]
+
+func prev_character(c: String):
+	var i = character_order.find(c)
+	i -= 1
+	if i < 0:
+		i = len(character_order) - 1
+	return character_order[i]
+
 func handle_input(player: PlayerPeer, event: InputEvent):
 	if event.is_action_pressed("ui_right"):
-		pass
+		if $"/root/Lobby".connected:
+			$"/root/Lobby".set_player_character.rpc(player.peer_id, next_character(player.character))
+		for child in get_children():
+			child.radio_unpressed()
 	if event.is_action_pressed("ui_left"):
-		pass
+		if $"/root/Lobby".connected:
+			$"/root/Lobby".set_player_character.rpc(player.peer_id, prev_character(player.character))
+		for child in get_children():
+			child.radio_unpressed()
 
 func _input(event: InputEvent) -> void:
 	for player in players:
-		if event.device == player.input_device:
+		if event.device == player.input_device or player.input_device == -99:
 			handle_input(player, event)
 
 func _ready() -> void:
@@ -68,4 +89,6 @@ func _ready() -> void:
 			first = false
 		character_card.pressed.connect(unpress_others)
 		add_child(character_card)
+
+		character_order.push_back(file)
 		

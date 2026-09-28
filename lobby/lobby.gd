@@ -112,8 +112,8 @@ func get_player_by_id(id: int) -> PlayerPeer:
 	return null
 
 @rpc("any_peer", "call_local")
-func set_player_character(resource_path: String) -> void:
-	get_player_by_id(multiplayer.get_remote_sender_id()).character = resource_path
+func set_player_character(id: int, resource_path: String) -> void:
+	get_player_by_id(id).character = resource_path
 	players_updated.emit(players)
 
 @rpc("call_local")

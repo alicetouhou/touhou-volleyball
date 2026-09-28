@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CharacterResource" format=3 uid="uid://wfqvhovmrsej"]
+
+[ext_resource type="Script" uid="uid://0khalhvv6a3o" path="res://resources/character_resource.gd" id="1_7t54k"]
+[ext_resource type="Texture2D" uid="uid://8dar6sdamdmy" path="res://assets/sprites/characters/sakuya.dds" id="2_7t54k"]
+
+[resource]
+script = ExtResource("1_7t54k")
+name = "Sakuya"
+texture = ExtResource("2_7t54k")
+super_name = "Lunar Clock"
+metadata/_custom_type_script = "uid://0khalhvv6a3o"

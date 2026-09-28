@@ -80,6 +80,8 @@ func start_round() -> void:
 		player.linear_velocity = Vector3.ZERO
 		player.goto.rpc(player_positions[wrap(i, 0, len(player_positions))])
 		
+
+	ball.freeze = true
 	ball.linear_velocity = Vector3.ZERO
 	ball.speed_percent = 1.0
 	ball.global_position = ball_positions[serving]
@@ -87,7 +89,7 @@ func start_round() -> void:
 	await get_tree().create_timer(1).timeout
 	if not ball:
 		return
-	
+
 	round_running = true
 	ball.freeze = false
 	get_tree().call_group("cpu", "update_game_state", true)

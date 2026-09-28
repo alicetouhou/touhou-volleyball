@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cdojsw5bpwq6r"
-path="res://.godot/imported/reimu.png-5a3566e6885d476ecec274bf4e913744.ctex"
+uid="uid://ci1wbuejhn7b8"
+path="res://.godot/imported/evolve-flash-blue.png-b0c9299e3e8a3c95121c4a6f74685331.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/characters/reimu.png"
-dest_files=["res://.godot/imported/reimu.png-5a3566e6885d476ecec274bf4e913744.ctex"]
+source_file="res://resources/effects/evolve-flash-blue.png"
+dest_files=["res://.godot/imported/evolve-flash-blue.png-b0c9299e3e8a3c95121c4a6f74685331.ctex"]
 
 [params]
 

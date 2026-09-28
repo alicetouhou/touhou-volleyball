@@ -31,6 +31,8 @@ func start_game() -> void:
 	for child in players.get_children():
 		child.queue_free()
 	
+	score = [0, 0]
+	
 	# Ball
 	$BallSpawner.spawn()
 	
@@ -78,6 +80,9 @@ func start_round() -> void:
 	for i in players.get_child_count():
 		var player: Node3D = players.get_child(i)
 		player.linear_velocity = Vector3.ZERO
+		if player is not Player:
+			player.queue_free()
+			continue
 		player.goto.rpc(player_positions[wrap(i, 0, len(player_positions))])
 		
 

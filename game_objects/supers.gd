@@ -58,7 +58,8 @@ func alice(game: Level, player: Player):
 	shanghai_instance.cpu_init(game.ball, game.players.get_children())
 	
 	await get_tree().create_timer(6.0).timeout
-	shanghai_instance.queue_free()
+	if not shanghai_instance.is_queued_for_deletion():
+		shanghai_instance.queue_free()
 
 func yuyuko(game: Level, player: Player):
 	if player.super_charge < 1:

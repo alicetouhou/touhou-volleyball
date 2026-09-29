@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bif886npheprj"]
+
+[ext_resource type="Script" uid="uid://bfbf4aitm4tam" path="res://game_objects/quartic_solver.gd" id="1_3ipcr"]
+
+[node name="QuarticSolver" type="Node2D" unique_id=911731467]
+script = ExtResource("1_3ipcr")

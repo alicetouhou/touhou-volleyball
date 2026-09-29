@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bluw2veqruu0j" path="res://assets/sprites/characters/yuyuko.png" id="2_kxtgu"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://c14uejte347bk" path="res://player/animations.tres" id="3_kxtgu"]
 [ext_resource type="Script" uid="uid://bgiixcdk64eli" path="res://game_objects/player/action_manager.gd" id="4_bn5eq"]
+[ext_resource type="Script" uid="uid://brl5sqlrori3i" path="res://addons/godot-rapier3d/custom_nodes/rapier_area_3d.gd" id="4_sj5j6"]
 [ext_resource type="AudioStream" uid="uid://0qaqj83itpca" path="res://assets/sound/reimu_super.mp3" id="6_wr5jk"]
 [ext_resource type="AudioStream" uid="uid://cjy2dwyxhlu0j" path="res://assets/sound/super_activate.mp3" id="7_hbxj4"]
 [ext_resource type="AudioStream" uid="uid://e3fyua4obxd6" path="res://assets/sound/sakuya_super.mp3" id="7_r06qs"]
@@ -182,7 +183,7 @@ size = Vector3(2.813446, 3.0109863, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ncc1o"]
 size = Vector3(5.008789, 4.0843506, 1)
 
-[node name="Player3d" type="RigidBody3D" unique_id=733247983]
+[node name="Player3d" type="RigidBody3D" unique_id=1830727730]
 collision_layer = 2
 collision_mask = 17
 axis_lock_linear_z = true
@@ -194,6 +195,7 @@ contact_monitor = true
 max_contacts_reported = 12
 script = ExtResource("1_bn5eq")
 character = ExtResource("2_bp3gs")
+metadata/_custom_type_script = "uid://biv5gpq46pxiq"
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1588437195]
 transform = Transform3D(0.8672086, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
@@ -205,13 +207,15 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0139413, 0, 0, 0, 1, 0, 0.041823883, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0024375, 0, 0, 0, 1, 0, 0.007312594, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 
-[node name="KickCollider" type="Area3D" parent="." unique_id=1627492970]
+[node name="KickCollider" type="Area3D" parent="." unique_id=1674284730]
 unique_name_in_owner = true
 collision_mask = 4
+script = ExtResource("4_sj5j6")
+metadata/_custom_type_script = "uid://brl5sqlrori3i"
 
 [node name="Collider" type="CollisionShape3D" parent="KickCollider" unique_id=996229372 groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
@@ -251,16 +255,20 @@ script = ExtResource("4_bn5eq")
 
 [node name="SuperColliders" type="Node3D" parent="." unique_id=1059528743]
 
-[node name="ReimuSuper" type="Area3D" parent="SuperColliders" unique_id=122724238]
+[node name="ReimuSuper" type="Area3D" parent="SuperColliders" unique_id=744825476]
 collision_mask = 4
 priority = 1
+script = ExtResource("4_sj5j6")
+metadata/_custom_type_script = "uid://brl5sqlrori3i"
 
 [node name="Collider" type="CollisionShape3D" parent="SuperColliders/ReimuSuper" unique_id=811448977 groups=["player"]]
 shape = SubResource("BoxShape3D_bp3gs")
 
-[node name="MarisaSuper" type="Area3D" parent="SuperColliders" unique_id=2066219413]
+[node name="MarisaSuper" type="Area3D" parent="SuperColliders" unique_id=2029106668]
 collision_mask = 4
 priority = 1
+script = ExtResource("4_sj5j6")
+metadata/_custom_type_script = "uid://brl5sqlrori3i"
 
 [node name="Collider" type="CollisionShape3D" parent="SuperColliders/MarisaSuper" unique_id=1962209544 groups=["player"]]
 shape = SubResource("BoxShape3D_ncc1o")

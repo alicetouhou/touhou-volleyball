@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://6qduejdh4m4q"]
+
+[ext_resource type="Script" uid="uid://bvgb6tvhaiogw" path="res://rapier/tes.gd" id="1_sxdb3"]
+[ext_resource type="Script" uid="uid://biv5gpq46pxiq" path="res://addons/godot-rapier3d/custom_nodes/rapier_rigid_body_3d.gd" id="2_oqha4"]
+[ext_resource type="Script" uid="uid://x2j7auxsdyfc" path="res://addons/godot-rapier3d/custom_nodes/rapier_static_body_3d.gd" id="3_jq7bq"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_h3fx5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gm6uc"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_h3fx5"]
+
+[node name="Node3D" type="Node3D" unique_id=1218033940]
+script = ExtResource("1_sxdb3")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=1960910518]
+script = ExtResource("2_oqha4")
+metadata/_custom_type_script = "uid://biv5gpq46pxiq"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D" unique_id=1377367057]
+mesh = SubResource("BoxMesh_h3fx5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=1265137290]
+shape = SubResource("BoxShape3D_gm6uc")
+
+[node name="RigidBody3D2" type="RigidBody3D" parent="." unique_id=1720000831]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.53450996, 0.54971033, 0)
+script = ExtResource("2_oqha4")
+metadata/_custom_type_script = "uid://biv5gpq46pxiq"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D2" unique_id=951662670]
+mesh = SubResource("BoxMesh_h3fx5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D2" unique_id=895818979]
+shape = SubResource("BoxShape3D_gm6uc")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=373242391]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1127748, 0)
+script = ExtResource("3_jq7bq")
+metadata/_custom_type_script = "uid://x2j7auxsdyfc"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1927293733]
+shape = SubResource("WorldBoundaryShape3D_h3fx5")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1988457234]
+transform = Transform3D(1, 0, 0, 0, 0.9759956, 0.21779016, 0, -0.21779016, 0.9759956, 0, 0, 2.864606)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=303472825]
+transform = Transform3D(0.59851176, 0, -0.801114, 0.21602675, 0.9629562, 0.16139345, 0.7714377, -0.26965794, 0.5763406, 0, 0.49214387, 1.1716651)
+
+[node name="StateManager3D" type="StateManager3D" parent="." unique_id=1553768428 node_paths=PackedStringArray("root_node")]
+root_node = NodePath("..")

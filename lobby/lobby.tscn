@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://ct5g5rqqffh3e" path="res://lobby/dedicated_server.gd" id="2_l3xxi"]
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="3_dk04u"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
+[ext_resource type="PackedScene" uid="uid://butv44ydur5tf" path="res://game_objects/Player2D.tscn" id="9_8v3m6"]
 [ext_resource type="Script" uid="uid://bvamk6gb8rnnl" path="res://lobby/pinger.gd" id="9_8367x"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_4veey"]
@@ -107,6 +108,11 @@ script = ExtResource("2_4veey")
 unique_name_in_owner = true
 script = ExtResource("1_uj4ub")
 
+[node name="Player2d" parent="Level" unique_id=802664772 instance=ExtResource("9_8v3m6")]
+fixed_position_x = 10000000
+fixed_position_y = 7800000
+position = Vector2(152.58789, 119.018555)
+
 [node name="TouhouVolleyball" parent="Level" unique_id=1885262703 instance=ExtResource("1_jtv5c")]
 
 [node name="Markers" type="Node3D" parent="Level" unique_id=1428041500]
@@ -137,15 +143,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.716914, 0.46894157, 0)
 
 [node name="Players" type="Node3D" parent="Level" unique_id=1411736408]
 
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="Level" unique_id=2073793907]
-_spawnable_scenes = PackedStringArray("uid://cbyawmu8vbekl", "uid://xq2fjwwy8qix")
-spawn_path = NodePath("../Players")
-
 [node name="Ball" type="Node3D" parent="Level" unique_id=979437667]
-
-[node name="BallSpawner" type="MultiplayerSpawner" parent="Level" unique_id=1104166831]
-_spawnable_scenes = PackedStringArray("uid://reki74cx25co")
-spawn_path = NodePath("../Ball")
 
 [node name="Camera" type="Camera3D" parent="Level" unique_id=757775853]
 unique_name_in_owner = true

@@ -231,7 +231,7 @@ func predict_ball_locations(delta: float, v: Vector3, n: int) -> Array[Vector3]:
 	var predictions: Array[Vector3] = []
 	for i in range(0,n):
 		var T = t * delta
-		var new_pos = p + v * T + 1.5 * g * pow(T, 2)
+		var new_pos = p + v * T + .5 * g * pow(T, 2) + (i+1) * 0.5 * g * pow(delta, 2)
 		
 		if new_pos.x < -11.:
 			new_pos.x = -(new_pos.x + 11.) - 11.

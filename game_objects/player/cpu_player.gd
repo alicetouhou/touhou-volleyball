@@ -12,6 +12,7 @@ enum Intention {
 var intention: Intention = Intention.STANDBY
 var actpoints: Array[Array] = [] # [t, x, J, D, Z, X, C]
 var ball_target # [t, x, y, z]
+var tolerance: int = 0
 
 # These are basically cached calculations.
 var MAX_JUMP: float
@@ -64,7 +65,7 @@ func _physics_process(delta: float) -> void:
 	if !started:
 		return
 	
-	ball_predictions = predict_ball_locations(delta)
+	ball_predictions = predict_ball_locations(delta, ball.linear_velocity, 250)
 	
 	# Cancel intention if something changed.
 	if ball_target:
@@ -125,7 +126,8 @@ func _physics_process(delta: float) -> void:
 			direction.y = -1
 		if (
 			global_position.distance_squared_to(ball.global_position) <= 1.75 and
-			ball.global_position < global_position + Vector3(1.5,0.,0.)
+			ball.global_position < global_position + Vector3(1.5,0.,0.) and
+			(on_floor or ball.global_position.x < global_position.x)
 		):
 			%ActionSync.kick.rpc()
 	if intention == Intention.COUNTERSPIKE:
@@ -143,13 +145,21 @@ func _physics_process(delta: float) -> void:
 		var target = ball_predictions[ball_target[0]]
 		direction.y = -1
 		
-		if ball_target[0] < 2 or target.x + 1.5*I < global_position.x:
+		if ball_target[0] < 1 or target.x + 1.5*I < global_position.x:
 			direction.x = -1
 		elif target.x + 1.*I > global_position.x:
 			direction.x = 1
 		
-		if ball_target[0] == 0:
-			%ActionSync.kick.rpc()
+		if global_position.x*I > ball.global_position.x*I and abs(global_position.x - ball.global_position.x) <= 1.56 and abs(global_position.y - ball.global_position.y) <= 1:
+			var kick_preds = predict_ball_locations(delta, KICK_VELOCITY * global_position.direction_to(ball.global_position), 40)
+			var can_kick = true
+			for pred in kick_preds:
+				if can_kick and pred.x*I > 0 and pred.x*I <= 0.46 and pred.y < 2.75:
+					can_kick = false
+			if can_kick:
+				if kick_preds[0].y > global_position.y:
+					direction.y = 0
+				%ActionSync.kick.rpc()
 	
 	%ActionSync.direction = direction
 	%Debug3.text = str(ball_target)
@@ -173,13 +183,12 @@ func get_direction() -> int:
 	else:
 		return 1
 	
-func predict_ball_locations(delta: float) -> Array[Vector3]:
+func predict_ball_locations(delta: float, v: Vector3, n: int) -> Array[Vector3]:
 	var g = ball.gravity_scale * get_gravity()
 	var p = ball.position
-	var v = ball.linear_velocity
 	var t = 1
 	var predictions: Array[Vector3] = []
-	for i in range(0,250):
+	for i in range(0,n):
 		var T = t * delta
 		var new_pos = p + v * T + 0.5 * g * T * T
 		

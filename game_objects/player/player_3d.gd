@@ -17,6 +17,7 @@ const JUMP_COOLDOWN := 0.1
 
 const SET_ANGLE := PI/4 # radians
 
+const KICK_VELOCITY = 7.
 const KICK_TIME_GRACE := .15
 const KICK_COOLDOWN := .3
 
@@ -102,7 +103,7 @@ func find_ball():
 	var ball: RigidBody3D = bodies[ball_index]
 	return ball
 
-func kick(velocity = 7, ball: Ball = null):
+func kick(velocity = KICK_VELOCITY, ball: Ball = null):
 	Animations.travel("kick_miss")
 	
 	if !ball:
@@ -130,6 +131,8 @@ func kick(velocity = 7, ball: Ball = null):
 		ball.linear_velocity.y = velocity
 	else:
 		ball.linear_velocity = Vector3(force.x, force.y, 0.0) + linear_velocity
+		if %ActionSync.direction.x != 0 and linear_velocity.x == 0:
+			ball.linear_velocity.x += MOVEMENT_SPEED * %ActionSync.direction.x
 	
 	if %ActionSync.direction.y < 0.0:
 		ball.linear_velocity *= 2

@@ -36,7 +36,7 @@ var ball: Node3D
 
 func cpu_init(world_ball: Node3D, _world_players: Array[Node]) -> void:
 	ball = world_ball
-	print(time, " init")
+	print(ticks, " init")
 	
 	var u = JUMP_POWER / mass
 	MAX_JUMP_TIME = u / -get_gravity().y
@@ -58,7 +58,7 @@ func _physics_process(delta: float) -> void:
 		ball_target[0] -= 1
 		if ball_target[0] < 0:
 			ball_target = []
-			print(time, " cancel")
+			print(ticks, " cancel")
 			reset_intentions()
 	
 	if !started:
@@ -127,7 +127,7 @@ func _physics_process(delta: float) -> void:
 			global_position.distance_squared_to(ball.global_position) <= 1.75 and
 			ball.global_position < global_position + Vector3(1.5,0.,0.)
 		):
-			%ActionSync.kick.rpc()
+			kicking = true
 	if intention == Intention.COUNTERSPIKE:
 		var target = ball_predictions[ball_target[0]]
 		if ball_target[0] <= ceil(sqrt(2 * (target.y - global_position.y) / (14 * gravity.y))) / delta:
@@ -138,7 +138,7 @@ func _physics_process(delta: float) -> void:
 			elif target.x + 1.*I > global_position.x:
 				direction.x = 1
 			if on_floor and ball_target[0] <= (MAX_JUMP_TIME + intention_cache) / delta:
-				%ActionSync.jump.rpc()
+				jumping = true
 	if intention == Intention.SPIKE:
 		var target = ball_predictions[ball_target[0]]
 		direction.y = -1
@@ -149,11 +149,9 @@ func _physics_process(delta: float) -> void:
 			direction.x = 1
 		
 		if ball_target[0] == 0:
-			%ActionSync.kick.rpc()
+			kicking = true
 	
-	%ActionSync.direction = direction
 	%Debug3.text = str(ball_target)
-	super(delta)
 
 func get_direction() -> int:
 	# If we have no predictions, do nothing
@@ -197,13 +195,13 @@ func predict_ball_locations(delta: float) -> Array[Vector3]:
 	return predictions
 
 func reset_intentions():
-	print(time, " standby")
+	print(ticks, " standby")
 	intention = Intention.STANDBY
 	actpoints = []
 	ball_target = null
 
 func counterspike(t: int, p: Vector3):
-	print(time, " counterspike")
+	print(ticks, " counterspike")
 	intention = Intention.COUNTERSPIKE
 	ball_target = [t, p.x, p.y, p.z]
 	print(ball_target)
@@ -211,6 +209,6 @@ func counterspike(t: int, p: Vector3):
 	intention_cache = sqrt(2 * (p.y - MAX_JUMP) / get_gravity().y)
 
 func spike():
-	print(time, " spike")
+	print(ticks, " spike")
 	intention = Intention.SPIKE
 	intention_cache = null

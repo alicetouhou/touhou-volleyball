@@ -4,7 +4,6 @@
 [ext_resource type="Resource" uid="uid://c3pe4h02ji3xr" path="res://resources/characters/marisa.tres" id="2_bp3gs"]
 [ext_resource type="Texture2D" uid="uid://bluw2veqruu0j" path="res://assets/sprites/characters/yuyuko.png" id="2_kxtgu"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://c14uejte347bk" path="res://player/animations.tres" id="3_kxtgu"]
-[ext_resource type="Script" uid="uid://bgiixcdk64eli" path="res://game_objects/player/action_manager.gd" id="4_bn5eq"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l3xxi"]
 friction = 0.0
@@ -145,32 +144,9 @@ _data = {
 }
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kxtgu"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath(".:linear_velocity")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath(".:angular_velocity")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-properties/4/path = NodePath(".:player_id")
-properties/4/spawn = true
-properties/4/replication_mode = 2
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g5q24"]
-properties/0/path = NodePath("ActionSync:direction")
+properties/0/path = NodePath(".:player_id")
 properties/0/spawn = true
 properties/0/replication_mode = 2
-properties/1/path = NodePath("ActionSync:disable_input")
-properties/1/spawn = true
-properties/1/replication_mode = 2
-properties/2/path = NodePath("..:position")
-properties/2/spawn = true
-properties/2/replication_mode = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bp3gs"]
 size = Vector3(2.813446, 3.0109863, 1)
@@ -178,7 +154,7 @@ size = Vector3(2.813446, 3.0109863, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ncc1o"]
 size = Vector3(5.008789, 4.0843506, 1)
 
-[node name="Player3d" type="RigidBody3D" unique_id=733247983]
+[node name="Player3d" type="RigidBody3D" unique_id=733247983 groups=["network_sync"]]
 collision_layer = 2
 collision_mask = 17
 axis_lock_linear_z = true
@@ -201,7 +177,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0251034, 0, 0, 0, 1, 0, 0.07531038, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0052794, 0, 0, 0, 1, 0, 0.015838495, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 
@@ -239,11 +215,6 @@ editor_description = "This sync node handles anything the server has authority o
 "
 root_path = NodePath("../..")
 replication_config = SubResource("SceneReplicationConfig_kxtgu")
-
-[node name="ActionSync" type="MultiplayerSynchronizer" parent="Networking" unique_id=580136649]
-unique_name_in_owner = true
-replication_config = SubResource("SceneReplicationConfig_g5q24")
-script = ExtResource("4_bn5eq")
 
 [node name="SuperColliders" type="Node3D" parent="." unique_id=1059528743]
 

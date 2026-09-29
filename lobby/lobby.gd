@@ -39,7 +39,9 @@ func join_game() -> Error:
 	multiplayer.connected_to_server.connect(server_connected.emit)
 	multiplayer.connection_failed.connect(server_failed.emit)
 	multiplayer.server_disconnected.connect(stop_connection)
-	
+	multiplayer.peer_connected.connect(peer_connected)
+	multiplayer.peer_disconnected.connect(peer_disconnected)
+
 	var err = client.create_client(target_ip, PORT)
 	if not err:
 		connected = true
@@ -78,32 +80,39 @@ func stop_connection() -> void:
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	players = []
 
-func peer_connected(id: int, input_device: int = -99) -> PlayerPeer:
+func peer_connected(id: int, input_device: int = -99):
 	if OS.has_feature("dedicated_server") and len(players) == 0:
 		$DedicatedServerStart.set_multiplayer_authority(id)
 		give_start_permission.rpc_id(id)
 
-	var p = PlayerPeer.new_player(id)
-	p.number = len(players) + 1
-	p.color = COLORS[wrap(len(players), 0, len(COLORS))]
-	p.input_device = input_device
-	if input_device != -99:
-		p.local_co_op = true
+	if id != multiplayer.get_unique_id():
+		SyncManager.add_peer(id)
 
-	if id == 1:
+	if multiplayer.get_unique_id() == 1:
+		var p = PlayerPeer.new_player(id)
+		p.number = len(players) + 1
+		p.color = COLORS[wrap(len(players), 0, len(COLORS))]
+		p.input_device = input_device
+		if input_device != -99:
+			p.local_co_op = true
+
 		p.character = (%Characters.selected.resource_path.split("/") as Array).back()
-	players.push_back(p)
-	on_players_updated.rpc(PlayerPeer.serialize(players))
-	return p
+		players.push_back(p)
+		on_players_updated.rpc(PlayerPeer.serialize(players))
 
 func peer_disconnected(id: int) -> void:
 	players.erase(get_player_by_id(id))
-	on_players_updated.rpc(PlayerPeer.serialize(players))
 	
+	if multiplayer.get_unique_id() == 1:
+		on_players_updated.rpc(PlayerPeer.serialize(players))
+
+	SyncManager.remove_peer(id)
+
 	if len(players) == 0:
 		%UI.hide()
 		%LobbyOverlay.show()
 		$Level.reset()
+
 
 func get_player_by_id(id: int) -> PlayerPeer:
 	for p in players:
@@ -132,9 +141,34 @@ func start_game() -> void:
 		return
 	%UI.show()
 	%LobbyOverlay.hide()
-	$Level.start_game.rpc_id(1)
+	SyncManager.start()
+
+func on_sync_manager_started():
+	%SyncStatus.text = "Started"
+	
+	# Only the main server should run start game
+	if multiplayer.is_server():
+		%Level.start_game.rpc_id(1)
+
+func on_sync_manager_stopped():
+	%SyncStatus.text = "Stopped"
+
+func on_sync_manager_sync_lost():
+	%SyncStatus.text = "Regaining sync..."
+
+func on_sync_manager_sync_regained():
+	%SyncStatus.text = "Regained"
+
+func on_sync_manager_sync_error(err: String):
+	%SyncStatus.text = "Fatal sync error: " + err
 
 func _ready() -> void:
+	SyncManager.sync_started.connect(on_sync_manager_started)
+	SyncManager.sync_stopped.connect(on_sync_manager_stopped)
+	SyncManager.sync_lost.connect(on_sync_manager_sync_lost)
+	SyncManager.sync_regained.connect(on_sync_manager_sync_regained)
+	SyncManager.sync_error.connect(on_sync_manager_sync_error)
+
 	if OS.has_feature("dedicated_server"):
 		print("Starting dedicated server.")
 		var server = ENetMultiplayerPeer.new()
@@ -146,3 +180,4 @@ func _ready() -> void:
 			connected = true
 			print("Accepting connections.")
 			multiplayer.multiplayer_peer = server
+	

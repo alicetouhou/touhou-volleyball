@@ -29,7 +29,7 @@ font_size = 40
 script = ExtResource("2_prqa1")
 
 [node name="Sprite3D" parent="Texture" parent_id_path=PackedInt32Array(1883257529) index="0" unique_id=705725850]
-transform = Transform3D(1, 0, 0, 0, 1.0087976, 0, 0, 0, 1, 0, 0.0263929, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0078166, 0, 0, 0, 1, 0, 0.023449782, 0)
 
 [node name="Collider" parent="KickCollider" parent_id_path=PackedInt32Array(1627492970) index="0" unique_id=996229372]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)

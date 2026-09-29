@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://ct5g5rqqffh3e" path="res://lobby/dedicated_server.gd" id="2_l3xxi"]
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="3_dk04u"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
-[ext_resource type="PackedScene" uid="uid://butv44ydur5tf" path="res://game_objects/Player2D.tscn" id="9_8v3m6"]
 [ext_resource type="Script" uid="uid://bvamk6gb8rnnl" path="res://lobby/pinger.gd" id="9_8367x"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_4veey"]
@@ -108,38 +107,33 @@ script = ExtResource("2_4veey")
 unique_name_in_owner = true
 script = ExtResource("1_uj4ub")
 
-[node name="Player2d" parent="Level" unique_id=802664772 instance=ExtResource("9_8v3m6")]
-fixed_position_x = 10000000
-fixed_position_y = 7800000
-position = Vector2(152.58789, 119.018555)
-
 [node name="TouhouVolleyball" parent="Level" unique_id=1885262703 instance=ExtResource("1_jtv5c")]
 
 [node name="Markers" type="Node3D" parent="Level" unique_id=1428041500]
 
-[node name="P1BallSpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1785701356]
+[node name="P1BallSpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=450378299]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4, 0)
+position = Vector2(560, 400)
 
-[node name="P2BallSpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1561185774]
+[node name="P2BallSpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=2047380491]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4, 0)
+position = Vector2(1360, 400)
 
-[node name="P1SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=158125368]
+[node name="P1SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=1452683293]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.46894157, 0)
+position = Vector2(228, 755)
 
-[node name="P2SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=759686758]
+[node name="P2SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=1672842030]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.46894157, 0)
+position = Vector2(1547, 757)
 
-[node name="P3SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1425394337]
+[node name="P3SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=1318271061]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6773343, 0.46894157, 0)
+position = Vector2(380, 739)
 
-[node name="P4SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1654558373]
+[node name="P4SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=613854870]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.716914, 0.46894157, 0)
+position = Vector2(1768, 769)
 
 [node name="Players" type="Node3D" parent="Level" unique_id=1411736408]
 

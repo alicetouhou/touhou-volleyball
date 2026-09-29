@@ -102,6 +102,10 @@ sync_debug={
 ]
 }
 
+[network]
+
+rollback/interpolation=true
+
 [physics]
 
 2d/physics_engine="Dummy"

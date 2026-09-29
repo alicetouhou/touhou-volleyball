@@ -1,4 +1,3 @@
-class_name Player
 extends RigidBody3D
 
 ## Triggered when a ball is successfull hit.
@@ -133,7 +132,6 @@ func kick(velocity = 7, ball: Ball = null):
 func disable_input():
 	pass
 
-@rpc("call_local")
 func set_character(character_id: String) -> void:
 	character = load("res://resources/characters/%s" % character_id)
 

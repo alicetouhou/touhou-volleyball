@@ -13,6 +13,9 @@ const IP_ADDRESS = "127.0.0.1"
 const MAX_PLAYERS = 32
 const DEFAULT_PLAYER = {"character": "alice_margatroid.tres"}
 const COLORS = [Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE]
+const LOG_FILE_DIRECTORY = 'res://logs'
+
+var logging_enabled = false
 
 var connected = false
 var players: Array[PlayerPeer]
@@ -145,10 +148,26 @@ func start_game() -> void:
 
 func on_sync_manager_started():
 	%SyncStatus.text = "Started"
-	
+
+	if logging_enabled:
+		if not DirAccess.dir_exists_absolute(LOG_FILE_DIRECTORY):
+			DirAccess.make_dir_absolute(LOG_FILE_DIRECTORY)
+
+			var datetime := Time.get_datetime_dict_from_system(true)
+			var log_file_name = "%04d%02d%02d-%02d%02d%02d-peer-%d.log" % [
+				datetime['year'],
+				datetime['month'],
+				datetime['day'],
+				datetime['hour'],
+				datetime['minute'],
+				datetime['second'],
+				multiplayer.get_unique_id(),
+			]
+
+			SyncManager.start_logging(LOG_FILE_DIRECTORY + '/' + log_file_name)
+
 	# Only the main server should run start game
-	if multiplayer.is_server():
-		%Level.start_game.rpc_id(1)
+	%Level.start_game()
 
 func on_sync_manager_stopped():
 	%SyncStatus.text = "Stopped"

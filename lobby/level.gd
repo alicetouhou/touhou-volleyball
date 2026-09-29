@@ -3,8 +3,8 @@ class_name Level
 extends Node3D
 
 
-const player_scene = preload("res://game_objects/player/Player3D.tscn")
-const cpu_scene = preload("res://game_objects/player/CPUPlayer.tscn")
+const player_scene = preload("res://game_objects/Player2D.tscn")
+# const cpu_scene = preload("res://game_objects/player/CPUPlayer.tscn")
 
 ## The ball node.
 var ball: RigidBody3D
@@ -21,7 +21,6 @@ var score = [0, 0]
 @onready var camera = %Camera
 
 ## Spawn the required nodes and initiate first play on all clients
-@rpc("call_local")
 func start_game() -> void:
 	# Container resets and definitions
 	var ball_container = $Ball
@@ -47,16 +46,18 @@ func start_game() -> void:
 
 	var i = 0
 	for peer: PlayerPeer in connected_players:
-		continue
-		var use_player_scene: PackedScene = (player_scene if peer.peer_id > -1 else cpu_scene)
+		var use_player_scene: PackedScene = player_scene
 
 		var player_name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
 		var player: Player = SyncManager.spawn(player_name, players, use_player_scene)
 
 		# Disable input for CPUs and players on other computers
 		player.player_id = peer.peer_id
-		if peer.peer_id < 0 or (player.player_id != multiplayer.get_unique_id() and not peer.local_co_op):
-			player.disable_input()
+		#if peer.peer_id < 0 or (player.player_id != multiplayer.get_unique_id() and not peer.local_co_op):
+		#	player.disable_input()
+		player.input_device = peer.input_device
+		
+		player.fixed_position = SGFixed.from_float_vector2(player_positions[i])
 
 		player.set_multiplayer_authority(player.player_id)
 		
@@ -67,17 +68,16 @@ func start_game() -> void:
 			side = 1
 		%ChargeBars.get_child(side).add_child(charge_bar)
 		
-		player.on_hit_ball.connect(player_hit_ball)
-		player.super_used.connect(func(): player_super_used(peer))
-		player.super_charge_updated.connect(
-			func(value): charge_bar.set_charge.rpc(value)
-		)
-		player.create_fx.connect(create_fx)
-		
-		player.input_device = peer.input_device
+		#player.on_hit_ball.connect(player_hit_ball)
+		#player.super_used.connect(func(): player_super_used(peer))
+		#player.super_charge_updated.connect(
+			#func(value): charge_bar.set_charge.rpc(value)
+		#)
+		#player.create_fx.connect(create_fx)
+		#
 
 		if peer.peer_id > 0:
-			player.set_character.rpc.call_deferred($"/root/Lobby".get_player_by_id(peer.peer_id).character)
+			player.set_character(peer.character)
 
 		i += 1
 	

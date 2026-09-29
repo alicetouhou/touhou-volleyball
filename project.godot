@@ -104,10 +104,12 @@ sync_debug={
 
 [network]
 
+rollback/max_buffer_size=10
 rollback/interpolation=true
 
 [physics]
 
+common/physics_ticks_per_second=30
 2d/physics_engine="Dummy"
 3d/physics_engine="Dummy"
 3d/default_linear_damp=0.0

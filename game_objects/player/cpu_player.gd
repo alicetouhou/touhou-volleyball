@@ -15,11 +15,7 @@ var ball_target # [t, x, y, z]
 var tolerance: int = 0
 var previews = []
 var prev: Vector3
-var prrv
-var peev
-var pvvv
-var ppvv
-var pppv
+var tracker: Array[Array] = []
 
 # These are basically cached calculations.
 var MAX_JUMP: float
@@ -183,29 +179,31 @@ func _physics_process(delta: float) -> void:
 				%ActionSync.kick.rpc()
 	
 	%ActionSync.direction = direction
-	if prev and peev and pppv:
-		var curr = ball.global_position
-		var vel = ball.linear_velocity
-		%Debug3.text = str([(curr.x-prev.x), (curr.y-prev.y)]) + "\n" + str([(curr.x-peev.x), (curr.y-peev.y)]) + "\n" + str([(curr.x-pppv.x), (curr.y-pppv.y)])
+	var FRAMES = 10
+	var txt = ""
+	var curr = ball.global_position
+	var vel = ball.linear_velocity
+	var k = 0.5 * gravity.y * pow(delta,2)
 	prev = ball_predictions[0]
-	if ppvv:
-		pppv = ppvv
-	else:
-		pppv = null
-	if pvvv:
-		ppvv = pvvv
-	else:
-		ppvv = null
-	if ball_predictions.size() > 2:
-		pvvv = ball_predictions[2]
-	if prrv:
-		peev = prrv
-	else:
-		peev = null
-	if ball_predictions.size() > 1:
-		prrv = ball_predictions[1]
-	else:
-		prrv = null
+	while tracker.size() <= FRAMES:
+		tracker.push_back([])
+	for i in range(FRAMES):
+		while tracker[i].size() <= i:
+			tracker[i].push_back(null)
+	for i in range(FRAMES):
+		if tracker[i][0]:
+			txt += str(round((curr.y-tracker[i][0].y) / k))
+		else:
+			txt += "--"
+		if not i == FRAMES - 1:
+			txt += " | "
+			
+	%Debug3.text = txt
+	
+	for i in range(FRAMES):
+		for j in range(i):
+			tracker[i][j] = tracker[i][j+1]
+		tracker[i][i] = (ball_predictions[i] if ball_predictions.size() > i else null)
 	super(delta)
 
 func get_direction() -> int:
@@ -233,7 +231,7 @@ func predict_ball_locations(delta: float, v: Vector3, n: int) -> Array[Vector3]:
 	var predictions: Array[Vector3] = []
 	for i in range(0,n):
 		var T = t * delta
-		var new_pos = p + v * T + g * pow(T, 2)
+		var new_pos = p + v * T + 1.5 * g * pow(T, 2)
 		
 		if new_pos.x < -11.:
 			new_pos.x = -(new_pos.x + 11.) - 11.

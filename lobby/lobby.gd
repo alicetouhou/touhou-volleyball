@@ -15,7 +15,7 @@ const DEFAULT_PLAYER = {"character": "alice_margatroid.tres"}
 const COLORS = [Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE]
 const LOG_FILE_DIRECTORY = 'res://logs'
 
-var logging_enabled = false
+var logging_enabled = true
 
 var connected = false
 var players: Array[PlayerPeer]

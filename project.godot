@@ -105,6 +105,7 @@ sync_debug={
 [network]
 
 rollback/max_buffer_size=10
+rollback/input_delay=1
 rollback/interpolation=true
 
 [physics]

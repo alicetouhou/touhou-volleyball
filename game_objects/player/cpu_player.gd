@@ -191,12 +191,17 @@ func _physics_process(delta: float) -> void:
 		while tracker[i].size() <= i:
 			tracker[i].push_back(null)
 	for i in range(FRAMES):
+		var str = ""
 		if tracker[i][0]:
-			txt += str(round((curr.y-tracker[i][0].y) / k))
+			#str = str((curr.y-tracker[i][0].y) / k)
+			str = str(curr.y-tracker[i][0].y)
+			if str[0] != "-":
+				str = "+" + str
 		else:
-			txt += "--"
+			str += "--"
+		txt += str
 		if not i == FRAMES - 1:
-			txt += " | "
+			txt += "\n"
 			
 	%Debug3.text = txt
 	

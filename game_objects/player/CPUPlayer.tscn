@@ -29,7 +29,7 @@ font_size = 40
 script = ExtResource("2_prqa1")
 
 [node name="Sprite3D" parent="Texture" parent_id_path=PackedInt32Array(1883257529) index="0" unique_id=705725850]
-transform = Transform3D(1, 0, 0, 0, 1.0131557, 0, 0, 0, 1, 0, 0.039467175, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0408193, 0, 0, 0, 1, 0, 0.122457944, 0)
 
 [node name="Collider" parent="KickCollider" parent_id_path=PackedInt32Array(1627492970) index="0" unique_id=996229372]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
@@ -66,7 +66,6 @@ offset_right = 451.0
 offset_bottom = 249.0
 text = "-----"
 label_settings = SubResource("LabelSettings_l3xxi")
-horizontal_alignment = 1
 
 [node name="Pred" type="Sprite3D" parent="." index="9" unique_id=501569054]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)

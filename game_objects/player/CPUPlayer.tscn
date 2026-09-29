@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cbyawmu8vbekl" path="res://game_objects/player/Player3D.tscn" id="1_qebkp"]
 [ext_resource type="Script" uid="uid://dxq4duj3wma41" path="res://game_objects/player/cpu_player.gd" id="2_prqa1"]
 [ext_resource type="Texture2D" uid="uid://buew1b0346o07" path="res://assets/sprites/tokens/player.svg" id="3_wi8dt"]
+[ext_resource type="Texture2D" uid="uid://cb70ljle7mf4h" path="res://volleyball.png" id="4_8nejk"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kxtgu"]
 properties/0/path = NodePath(".:position")
@@ -28,7 +29,7 @@ font_size = 40
 script = ExtResource("2_prqa1")
 
 [node name="Sprite3D" parent="Texture" parent_id_path=PackedInt32Array(1883257529) index="0" unique_id=705725850]
-transform = Transform3D(1, 0, 0, 0, 1.0249245, 0, 0, 0, 1, 0, 0.074773885, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0087976, 0, 0, 0, 1, 0, 0.0263929, 0)
 
 [node name="Collider" parent="KickCollider" parent_id_path=PackedInt32Array(1627492970) index="0" unique_id=996229372]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
@@ -66,6 +67,11 @@ offset_bottom = 233.0
 text = "-----"
 label_settings = SubResource("LabelSettings_l3xxi")
 
-[node name="Sprite3D" type="Sprite3D" parent="." index="9" unique_id=501569054]
+[node name="Pred" type="Sprite3D" parent="." index="9" unique_id=501569054]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 texture = ExtResource("3_wi8dt")
+
+[node name="Target" type="Sprite3D" parent="." index="11" unique_id=619233258]
+unique_name_in_owner = true
+transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0, 0, 0)
+texture = ExtResource("4_8nejk")

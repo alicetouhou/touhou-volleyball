@@ -13,6 +13,8 @@ var intention: Intention = Intention.STANDBY
 var actpoints: Array[Array] = [] # [t, x, J, D, Z, X, C]
 var ball_target # [t, x, y, z]
 var tolerance: int = 0
+var previews = []
+var prev: Vector3
 
 # These are basically cached calculations.
 var MAX_JUMP: float
@@ -37,7 +39,7 @@ var ball: Node3D
 
 func cpu_init(world_ball: Node3D, _world_players: Array[Node]) -> void:
 	ball = world_ball
-	print(time, " init")
+	#print(time, " init")
 	
 	var u = JUMP_POWER / mass
 	MAX_JUMP_TIME = u / -get_gravity().y
@@ -46,6 +48,20 @@ func cpu_init(world_ball: Node3D, _world_players: Array[Node]) -> void:
 func update_game_state(game_running: bool) -> void:
 	started = game_running
 	I = sign(global_position.x)
+
+func _process(delta: float) -> void:
+	for p in previews:
+		p.queue_free()
+		previews.erase(p)
+	for i in ball_predictions + player_predictions:
+		var p = $"Pred".duplicate()
+		$"..".add_child(p)
+		p.position = i
+		previews.push_back(p)
+	if ball_target:
+		%Target.global_position = Vector3(ball_target[1], ball_target[2], ball_target[3])
+	else:
+		%Target.global_position = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:
 	%Debug1.text = ["Counterspike", "Counterset", "Reposition", "Return", "Set", "Spike", "Wait"][intention] + (str(ball_target[0]) if ball_target else "")
@@ -59,7 +75,7 @@ func _physics_process(delta: float) -> void:
 		ball_target[0] -= 1
 		if ball_target[0] < 0:
 			ball_target = []
-			print(time, " cancel")
+			#print(time, " cancel")
 			reset_intentions()
 	
 	if !started:
@@ -162,7 +178,11 @@ func _physics_process(delta: float) -> void:
 				%ActionSync.kick.rpc()
 	
 	%ActionSync.direction = direction
-	%Debug3.text = str(ball_target)
+	if prev:
+		var curr = ball.global_position
+		var vel = ball.linear_velocity
+		%Debug3.text = str([(curr.x-prev.x), (curr.y-prev.y)])
+	prev = ball_predictions[0]
 	super(delta)
 
 func get_direction() -> int:
@@ -190,7 +210,7 @@ func predict_ball_locations(delta: float, v: Vector3, n: int) -> Array[Vector3]:
 	var predictions: Array[Vector3] = []
 	for i in range(0,n):
 		var T = t * delta
-		var new_pos = p + v * T + 0.5 * g * T * T
+		var new_pos = p + v * T + g * T * T
 		
 		if new_pos.x < -11.54:
 			new_pos.x = -(new_pos.x + 11.54) - 11.54
@@ -206,20 +226,20 @@ func predict_ball_locations(delta: float, v: Vector3, n: int) -> Array[Vector3]:
 	return predictions
 
 func reset_intentions():
-	print(time, " standby")
+	#print(time, " standby")
 	intention = Intention.STANDBY
 	actpoints = []
 	ball_target = null
 
 func counterspike(t: int, p: Vector3):
-	print(time, " counterspike")
+	#print(time, " counterspike")
 	intention = Intention.COUNTERSPIKE
 	ball_target = [t, p.x, p.y, p.z]
-	print(ball_target)
+	#print(ball_target)
 	# Max spike time
 	intention_cache = sqrt(2 * (p.y - MAX_JUMP) / get_gravity().y)
 
 func spike():
-	print(time, " spike")
+	#print(time, " spike")
 	intention = Intention.SPIKE
 	intention_cache = null

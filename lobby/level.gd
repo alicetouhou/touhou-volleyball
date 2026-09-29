@@ -100,7 +100,8 @@ func start_round() -> void:
 	
 	for i in players.get_child_count():
 		var player: Node3D = players.get_child(i)
-		player.linear_velocity = Vector3.ZERO
+		if not player is Sprite3D:
+			player.linear_velocity = Vector3.ZERO
 		player.global_position = player_positions[wrap(i, 0, len(player_positions))]
 		
 

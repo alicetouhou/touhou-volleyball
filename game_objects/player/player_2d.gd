@@ -102,8 +102,12 @@ func _network_process(input: Dictionary) -> void:
 	var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
 	if ball_index > 0 and kicking:
 		var ball: Ball2D = bodies[ball_index]
-		ball.apply_central_impulse(SGFixed.vector2(SGFixed.ONE * 10, -SGFixed.ONE * 50))
-
+		var hit_direction = ball.fixed_position.direction_to(fixed_position)
+		var hit_force_vector = SGFixed.vector2(15 * -hit_direction.x + velocity.x,15 * -hit_direction.y + velocity.y)
+		var ball_rad = 99091
+		var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))
+		ball.apply_impulse(hit_force_vector,hit_distance_vector)
+		
 	_last_jumping = false
 	_last_kicking = false
 	_last_supering = false

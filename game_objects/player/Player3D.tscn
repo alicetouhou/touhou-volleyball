@@ -144,6 +144,7 @@ script = ExtResource("1_bn5eq")
 [node name="Player2d" parent="." unique_id=802664772 instance=ExtResource("3_bp3gs")]
 unique_name_in_owner = true
 BOUNCINESS = 0
+LINEAR_DAMPING = 0
 BOUNCE_THRESHOLD = 0
 
 [node name="Texture" type="Node3D" parent="." unique_id=1883257529]

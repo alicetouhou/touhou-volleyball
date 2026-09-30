@@ -102,8 +102,8 @@ sync_debug={
 }
 
 [network]
-
-rollback/input_delay=1
+rollback/input_delay=0
+rollback/interpolation=true
 
 [physics]
 

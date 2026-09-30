@@ -11,3 +11,4 @@ func _network_spawn(data):
 
 func _process(_delta: float) -> void:
 	position = Globals.map_pos2D_to_pos3D(get_viewport().get_camera_3d(), %Ball2D.display_position)
+	rotation.z = %Ball2D.display_rotation

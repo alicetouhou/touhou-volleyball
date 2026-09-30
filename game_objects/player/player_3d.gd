@@ -1,6 +1,6 @@
 class_name Player3D
 
-extends RigidBody3D
+extends Node3D
 
 ## Triggered when a ball is successfull hit.
 signal on_hit_ball

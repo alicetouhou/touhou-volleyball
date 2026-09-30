@@ -26,9 +26,11 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	global_position = next_pos(global_position, velocity, gravity, delta)
+	var next = next_pos(global_position, velocity, gravity, delta)
+	global_position = next[0]
+	velocity = next[1]
 
-func next_pos(p: Vector2, v: Vector2, g: Vector2, delta: float) -> Vector2:
+func next_pos(p: Vector2, v: Vector2, g: Vector2, delta: float) -> Array[Vector2]:
 	var collision: Collision =  Collision.NONE
 	var t_net = null
 	var t_floor = null
@@ -80,7 +82,7 @@ func next_pos(p: Vector2, v: Vector2, g: Vector2, delta: float) -> Vector2:
 	v += g * t_min
 	delta -= t_min
 	if collision == Collision.NONE:
-		return p
+		return [p, v]
 	if collision == Collision.NET_SIDE or collision == WALL:
 		v.x *= -1
 	elif collision == Collision.NET_TOP:

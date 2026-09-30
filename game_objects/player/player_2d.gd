@@ -2,7 +2,7 @@ class_name Player2D
 
 extends SyncedRigidBody
 
-const SPEED = 1
+const SPEED = 20
 const JUMP = 65536*30
 
 var input_device = -99
@@ -13,6 +13,8 @@ var _last_joy_direction: Vector4i
 var _last_jumping = false
 var _last_kicking = false
 var _last_supering = false
+
+var _direction = Vector4i(0,0,0,0)
 
 var ticks = 0
 
@@ -65,6 +67,10 @@ func _get_local_input() -> Dictionary:
 
 func _predict_remote_input(previous_input: Dictionary, ticks_since_real_input: int) -> Dictionary:
 	return previous_input
+	
+func _integrate_forces():
+	super._integrate_forces()
+	velocity.x += SPEED * (_direction.y - _direction.x)
 
 func _network_process(input: Dictionary) -> void:
 	ticks += 1.
@@ -73,8 +79,10 @@ func _network_process(input: Dictionary) -> void:
 	var jumping = input.get("jumping", false)
 	var kicking = input.get("kicking", false)
 	var supering = input.get("supering", false)
+	
+	_direction = joy_direction
 
-	apply_central_force(SGFixed.vector2(SPEED * (joy_direction.y - joy_direction.x),0))
+
 	if input.get("jumping", false) and is_on_floor():
 		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 

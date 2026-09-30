@@ -82,7 +82,7 @@ friction = 0.0
 size = Vector3(0.05, 12, 1)
 
 [sub_resource type="SGRectangleShape2D" id="SGRectangleShape2D_0xfd7"]
-extents_x = 67045440
+extents_x = 67239744
 
 [node name="TouhouVolleyball" type="Node3D" unique_id=1885262703]
 
@@ -123,3 +123,24 @@ shape = SubResource("SGRectangleShape2D_0xfd7")
 fixed_position_x = 62140000
 fixed_position_y = 59000000
 position = Vector2(948.18115, 900.26855)
+
+[node name="Roof" type="SGCollisionShape2D" parent="SGStaticBody2D" unique_id=792584086]
+shape = SubResource("SGRectangleShape2D_0xfd7")
+fixed_position_x = 62139626
+position = Vector2(948.1754, 0)
+
+[node name="Wall1" type="SGCollisionShape2D" parent="SGStaticBody2D" unique_id=1619321034]
+shape = SubResource("SGRectangleShape2D_0xfd7")
+fixed_scale_x = 65357
+fixed_rotation = 102954
+rotation = 1.5709534
+scale = Vector2(0.9972687, 1)
+
+[node name="Wall2" type="SGCollisionShape2D" parent="SGStaticBody2D" unique_id=1906966857]
+shape = SubResource("SGRectangleShape2D_0xfd7")
+fixed_position_x = 124399252
+fixed_scale_x = 65357
+fixed_rotation = 102954
+position = Vector2(1898.1819, 0)
+rotation = 1.5709534
+scale = Vector2(0.9972687, 1)

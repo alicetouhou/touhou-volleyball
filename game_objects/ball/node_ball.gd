@@ -50,7 +50,7 @@ func next_pos(p: Vector2, v: Vector2, g: Vector2, delta: float) -> Array[Vector2
 		var dy = NET_HEIGHT - p.y
 		
 		if abs(p.x) < RADIUS or (y < NET_HEIGHT and y > NET_HEIGHT - RADIUS):
-			var results = %QuarticSolver.radical_real(0.25*(pow(g.x,2)+pow(g.y,2)), v.x*g.x+v.y*g.y, g.x*dx, g.y*dy, 2*(v.x*dx+v.y*dy), pow(dx,2)+pow(dy,2)+pow(RADIUS,2))
+			var results = %QuarticSolver.radical_real(0.25*(pow(g.x,2)+pow(g.y,2)), v.x*g.x+v.y*g.y, g.x*dx+g.y*dy, 2*(v.x*dx+v.y*dy), pow(dx,2)+pow(dy,2)-pow(RADIUS,2))
 			if results.size() > 0:
 				var min = 1.
 				for r in results:

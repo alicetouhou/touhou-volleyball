@@ -67,12 +67,8 @@ func _predict_remote_input(previous_input: Dictionary, ticks_since_real_input: i
 	return previous_input
 
 func _network_process(input: Dictionary) -> void:
-<<<<<<< HEAD
 	ticks += 1.
-=======
-	ticks += 1
 	super._network_process(input)
->>>>>>> more physics
 	var joy_direction = input.get("joy_direction", Vector4i.ZERO)
 	var jumping = input.get("jumping", false)
 	var kicking = input.get("kicking", false)
@@ -80,17 +76,13 @@ func _network_process(input: Dictionary) -> void:
 
 	apply_central_force(SGFixed.vector2(SPEED * (joy_direction.y - joy_direction.x),0))
 	if input.get("jumping", false) and is_on_floor():
-		velocity.y = -JUMP
+		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
 	# Make sure the kick area is aware of collisions
 	%KickArea.sync_to_physics_engine()
 	var ball = %KickArea.get_overlapping_bodies().filter(func(x): return x.is_in_group("ball"))
 	if ball and kicking:
 		print("kick the ball here")
-
-	super._network_process(input)
-		print(-JUMP)
-		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()

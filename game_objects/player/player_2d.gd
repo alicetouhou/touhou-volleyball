@@ -80,8 +80,8 @@ func _predict_remote_input(previous_input: Dictionary, ticks_since_real_input: i
 	return previous_input
 	
 func _integrate_forces():
-	super._integrate_forces()
 	velocity.x += SPEED * (_direction.y - _direction.x)
+	super._integrate_forces()
 
 func _network_process(input: Dictionary) -> void:
 	ticks += 1.

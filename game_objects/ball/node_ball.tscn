@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d0i5xxojidh6l" path="res://game_objects/ball/node_ball.gd" id="1_3w642"]
 [ext_resource type="Texture2D" uid="uid://cb70ljle7mf4h" path="res://volleyball.png" id="2_dcikb"]
+[ext_resource type="PackedScene" uid="uid://bif886npheprj" path="res://game_objects/quartic_solver.tscn" id="3_dcikb"]
 
 [node name="NodeBall" type="Node2D" unique_id=839769202]
 script = ExtResource("1_3w642")
@@ -10,3 +11,5 @@ script = ExtResource("1_3w642")
 position = Vector2(0, 0.375)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_dcikb")
+
+[node name="QuarticSolver" parent="." unique_id=911731467 instance=ExtResource("3_dcikb")]

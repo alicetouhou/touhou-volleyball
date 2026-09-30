@@ -9,7 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://cbi71iqnvterj" path="res://assets/sound/ball_big_kick.mp3" id="5_hovsl"]
 
 [sub_resource type="SGCircleShape2D" id="SGCircleShape2D_cy21b"]
-radius = 2589713
+radius = 3907299
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1awvx"]
 radius = 0.46

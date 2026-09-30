@@ -66,6 +66,9 @@ func _get_local_input() -> Dictionary:
 	}
 
 func _predict_remote_input(previous_input: Dictionary, ticks_since_real_input: int) -> Dictionary:
+	previous_input.erase("jumping")
+	previous_input.erase("kicking")
+	previous_input.erase("supering")
 	return previous_input
 	
 func _integrate_forces():
@@ -86,10 +89,16 @@ func _network_process(input: Dictionary) -> void:
 		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
 	# Make sure the kick area is aware of collisions
-	# %KickArea.sync_to_physics_engine()
-	var ball = %KickArea.get_overlapping_bodies().filter(func(x): return x.is_in_group("ball"))
-	if ball and kicking:
-		print("kick the ball here")
+	%KickArea.sync_to_physics_engine()
+	var bodies = %KickArea.get_overlapping_bodies()
+	var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
+	if ball_index > 0 and kicking:
+		var ball: Ball2D = bodies[ball_index]
+		ball.apply_central_impulse(SGFixed.vector2(SGFixed.ONE * 10, -SGFixed.ONE * 50))
+		
+	_last_jumping = false
+	_last_kicking = false
+	_last_supering = false
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()

@@ -88,6 +88,7 @@ func _integrate_forces():
 		return v
 	var f_yv = func(t: int, x: int, v: int):
 		return integrated_forces.y
+
 	var x_approximation = rk4(f_x,f_xv,0,0,linear_velocity.x,DELTA,5)
 	var y_approximation = rk4(f_y,f_yv,0,0,linear_velocity.y,DELTA,5)
 		

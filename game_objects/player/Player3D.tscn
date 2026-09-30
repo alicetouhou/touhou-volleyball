@@ -155,7 +155,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0129746, 0, 0, 0, 1, 0, 0.03892389, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0192845, 0, 0, 0, 1, 0, 0.057853334, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 
@@ -191,4 +191,5 @@ anim_player = NodePath("../PlayerAnimations")
 parameters/turn/TimeScale/scale = 1.0
 parameters/turn/Direction/blend_amount = 0.0
 
-[connection signal="play_kick_animation" from="Player2d" to="." method="_on_player_2d_play_kick_animation"]
+[connection signal="kick" from="Player2d" to="." method="_on_player_2d_kick"]
+[connection signal="turn" from="Player2d" to="." method="_on_player_2d_turn"]

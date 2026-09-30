@@ -25,7 +25,8 @@ var kicking_for_ticks = 0
 var supering_for_ticks = 0
 var last_kicked_on_ticked = -10
 
-signal play_kick_animation(hit: bool)
+signal kick(successful: bool)
+signal turn(direction: int)
 
 func set_character(character_id: String) -> void:
 	_character = load("res://resources/characters/%s" % character_id)
@@ -89,7 +90,10 @@ func _predict_remote_input(previous_input: Dictionary, ticks_since_real_input: i
 	return previous_input
 	
 func _integrate_forces():
+	var prev_velocity = velocity.x
 	velocity.x += SPEED * (_direction.y - _direction.x)
+	if sign(velocity.x) != sign(prev_velocity) and sign(velocity.x) != 0:
+		turn.emit(sign(velocity.x))
 	super._integrate_forces()
 
 func _network_process(input: Dictionary) -> void:
@@ -120,14 +124,14 @@ func _network_process(input: Dictionary) -> void:
 
 	if kicking_for_ticks > 1 and kicking_for_ticks <= 5 and (ticks - last_kicked_on_ticked) > KICK_COOLDOWN_TICKS:
 		last_kicked_on_ticked = ticks
-		play_kick_animation.emit(false)
+		kick.emit(false)
 		# Make sure the kick area is aware of collisions
 		%KickArea.sync_to_physics_engine()
 		var bodies = %KickArea.get_overlapping_bodies()
 		var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
 
 		if ball_index > 0:
-			play_kick_animation.emit(true)
+			kick.emit(true)
 			var ball: Ball2D = bodies[ball_index]
 			var hit_direction = ball.fixed_position.direction_to(fixed_position)
 			var hit_force_vector = SGFixed.vector2(KICK_POWER * -hit_direction.x + velocity.x,KICK_POWER * -hit_direction.y + velocity.y)

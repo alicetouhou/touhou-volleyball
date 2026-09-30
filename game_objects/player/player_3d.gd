@@ -24,9 +24,14 @@ func _network_spawn(data):
 func _process(_delta: float) -> void:
 	position = Globals.map_pos2D_to_pos3D(get_viewport().get_camera_3d(), %Player2d.display_position)
 
-
-func _on_player_2d_play_kick_animation(hit) -> void:
-	if hit:
+func _on_player_2d_kick(successful: bool) -> void:
+	if successful:
 		Animations.travel("kick_hit")
 	else:
 		Animations.travel("kick_miss")
+
+func _on_player_2d_turn(direction: int) -> void:
+	if direction == -1 and %Turning.current_animation != "turn_left":
+		%Turning.play("turn_left")
+	if direction == 1 and %Turning.current_animation != "turn_right":
+		%Turning.play("turn_right")

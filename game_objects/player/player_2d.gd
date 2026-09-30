@@ -93,7 +93,7 @@ func _network_process(input: Dictionary) -> void:
 	
 	_direction = joy_direction
 
-	if input.get("jumping", false) and is_on_floor():
+	if input.get("jumping", false):
 		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
 	# Make sure the kick area is aware of collisions

@@ -33,10 +33,10 @@ func start_game() -> void:
 	score = [0, 0]
 	
 	# Ball
-	ball = preload("res://game_objects/ball/Ball3D.tscn").instantiate()
+	ball = SyncManager.spawn("ball", $Ball, preload("res://game_objects/ball/Ball3D.tscn"), {
+		"fixed_position": SGFixed.from_float_vector2(ball_positions[0]),
+	})
 	ball.create_fx.connect(create_fx)
-
-	ball_container.add_child(ball, true)
 
 	# Players
 	var connected_players: Array = get_parent().players

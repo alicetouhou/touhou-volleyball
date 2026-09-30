@@ -16,7 +16,7 @@ var _last_supering = false
 
 var ticks = 0
 
-signal position_changed(pos: Vector2)
+var display_position: Vector2 = Vector2.ZERO
 
 func set_character(character_id: String) -> void:
 	_character = load("res://resources/characters/%s" % character_id)
@@ -87,12 +87,12 @@ func _network_process(input: Dictionary) -> void:
 
 	super._network_process(input)
 
-	position_changed.emit(Vector2(SGFixed.to_float(fixed_position_x), SGFixed.to_float(fixed_position_y)))
+	display_position = Vector2(SGFixed.to_float(fixed_position_x), SGFixed.to_float(fixed_position_y))
 
 func _interpolate_state(old_state: Dictionary, new_state: Dictionary, weight: float) -> void:
 	var sprite_pos_x = lerp(SGFixed.to_float(old_state["fixed_position"].x), SGFixed.to_float(new_state["fixed_position"].x), weight)
 	var sprite_pos_y = lerp(SGFixed.to_float(old_state["fixed_position"].y), SGFixed.to_float(new_state["fixed_position"].y), weight)
-	position_changed.emit(Vector2(sprite_pos_x, sprite_pos_y))
+	display_position = Vector2(sprite_pos_x, sprite_pos_y)
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()

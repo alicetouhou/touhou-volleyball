@@ -118,15 +118,17 @@ func _integrate_forces():
 	
 	_integrated_forces = SGFixed.vector2(0,0)
 
-func _bounce(prev_velocity: SGFixedVector2):
+func _collide(prev_velocity: SGFixedVector2):
 	var force = SGFixed.vector2(0,0)
 	for c_id in get_slide_count():
 		var c = get_slide_collision(c_id)
-		var d = SGFixed.mul(SGFixed.TWO,prev_velocity.dot(c.normal))
+		var d = SGFixed.mul(SGFixed.ONE + BOUNCINESS,prev_velocity.dot(c.normal))
 		var x_force = SGFixed.mul(d,c.normal.x)
 		var y_force = SGFixed.mul(d,c.normal.y)
-		force.x += SGFixed.mul(x_force,BOUNCINESS)
-		force.y += SGFixed.mul(y_force,BOUNCINESS)
+		force.x += x_force
+		force.y += y_force
+				
+							
 	return SGFixed.vector2(prev_velocity.x - force.x,prev_velocity.y - force.y)
 
 func _network_process(_input):
@@ -150,7 +152,7 @@ func _network_process(_input):
 	var prev_velocity_x = velocity.x
 	var prev_velocity_y = velocity.y
 	move_and_slide()
-	linear_velocity = _bounce(SGFixed.vector2(prev_velocity_x, prev_velocity_y))
+	linear_velocity = _collide(SGFixed.vector2(prev_velocity_x, prev_velocity_y))
 	
 	sync_to_physics_engine()
 	

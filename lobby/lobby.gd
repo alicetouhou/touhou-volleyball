@@ -78,7 +78,7 @@ func stop_connection() -> void:
 		multiplayer.server_disconnected.disconnect(stop_connection)
 	
 	connected = false
-	
+
 	connection_stopped.emit()
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	players = []

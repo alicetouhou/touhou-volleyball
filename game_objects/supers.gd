@@ -2,7 +2,7 @@ extends Node
 
 const shanghai = preload("res://game_objects/cpu/shanghai.tscn")
 
-func run(game: Level, player: Player):
+func run(game: Level, player: Player3D):
 	var character_name = player.character.name
 	
 	if character_name == "Reimu":
@@ -16,7 +16,7 @@ func run(game: Level, player: Player):
 	if character_name == "Sakuya":
 		sakuya(game, player)
 
-func reimu(game: Level, player: Player):
+func reimu(game: Level, player: Player3D):
 	if player.super_charge < 1:
 		return
 
@@ -50,7 +50,7 @@ func reimu(game: Level, player: Player):
 	
 	player.set_velocity_multiplier(1.0,1.0)
 
-func alice(game: Level, player: Player):
+func alice(game: Level, player: Player3D):
 	if player.super_charge < 1:
 		return
 	player.super_charge -= 1
@@ -63,7 +63,7 @@ func alice(game: Level, player: Player):
 	if shanghai_instance and not shanghai_instance.is_queued_for_deletion():
 		shanghai_instance.queue_free()
 
-func yuyuko(game: Level, player: Player):
+func yuyuko(game: Level, player: Player3D):
 	if player.super_charge < 1:
 		return
 	player.super_charge -= 1
@@ -73,7 +73,7 @@ func yuyuko(game: Level, player: Player):
 	
 	#player.scale = Vector3(1, 1, 1)
 		
-func marisa(level: Level, player: Player):
+func marisa(level: Level, player: Player3D):
 	var ball = player.find_ball_in_area(player.marisa_super_collider)
 	if (!ball):
 		return
@@ -112,7 +112,7 @@ func marisa(level: Level, player: Player):
 	await get_tree().create_timer(1.0).timeout
 	level.ball.set_collision_mask_value(4, true)
 
-func sakuya(level: Level, player: Player):
+func sakuya(level: Level, player: Player3D):
 	if player.super_charge < 2:
 		return
 	player.super_charge -= 2

@@ -119,5 +119,5 @@ shape = SubResource("BoxShape3D_g4v7s")
 [node name="SGCollisionShape2D" type="SGCollisionShape2D" parent="SGStaticBody2D" unique_id=2071310487]
 shape = SubResource("SGRectangleShape2D_0xfd7")
 fixed_position_x = 62140000
-fixed_position_y = 62140000
-position = Vector2(948.18115, 948.18115)
+fixed_position_y = 59000000
+position = Vector2(948.18115, 900.26855)

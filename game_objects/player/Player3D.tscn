@@ -1,19 +1,17 @@
 [gd_scene format=3 uid="uid://cbyawmu8vbekl"]
 
 [ext_resource type="Script" uid="uid://blxb51ypbdrqg" path="res://game_objects/player/player_3d.gd" id="1_bn5eq"]
-[ext_resource type="Resource" uid="uid://c3pe4h02ji3xr" path="res://resources/characters/marisa.tres" id="2_bp3gs"]
 [ext_resource type="Texture2D" uid="uid://bluw2veqruu0j" path="res://assets/sprites/characters/yuyuko.png" id="2_kxtgu"]
+[ext_resource type="PackedScene" uid="uid://butv44ydur5tf" path="res://game_objects/player/Player2D.tscn" id="3_bp3gs"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://c14uejte347bk" path="res://player/animations.tres" id="3_kxtgu"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l3xxi"]
 friction = 0.0
 rough = true
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_wa84s"]
-size = Vector3(0.64, 1, 0.3)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_kxtgu"]
-size = Vector3(2, 2, 1)
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0xfd7"]
+radius = 0.93847656
+height = 5.8289795
 
 [sub_resource type="Animation" id="Animation_kxtgu"]
 length = 0.001
@@ -143,17 +141,6 @@ _data = {
 &"turn_right": SubResource("Animation_nc42t")
 }
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kxtgu"]
-properties/0/path = NodePath(".:player_id")
-properties/0/spawn = true
-properties/0/replication_mode = 2
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_bp3gs"]
-size = Vector3(2.813446, 3.0109863, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ncc1o"]
-size = Vector3(5.008789, 4.0843506, 1)
-
 [node name="Player3d" type="RigidBody3D" unique_id=733247983 groups=["network_sync"]]
 collision_layer = 2
 collision_mask = 17
@@ -165,11 +152,9 @@ physics_material_override = SubResource("PhysicsMaterial_l3xxi")
 contact_monitor = true
 max_contacts_reported = 12
 script = ExtResource("1_bn5eq")
-character = ExtResource("2_bp3gs")
 
-[node name="Collider" type="CollisionShape3D" parent="." unique_id=1588437195]
-transform = Transform3D(0.8672086, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("BoxShape3D_wa84s")
+[node name="Player2d" parent="." unique_id=802664772 instance=ExtResource("3_bp3gs")]
+unique_name_in_owner = true
 
 [node name="Texture" type="Node3D" parent="." unique_id=1883257529]
 unique_name_in_owner = true
@@ -177,17 +162,14 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0135889, 0, 0, 0, 1, 0, 0.04076675, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0109233, 0, 0, 0, 1, 0, 0.03276979, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 
-[node name="KickCollider" type="Area3D" parent="." unique_id=1627492970]
-unique_name_in_owner = true
-collision_mask = 4
-
-[node name="Collider" type="CollisionShape3D" parent="KickCollider" unique_id=996229372 groups=["player"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
-shape = SubResource("BoxShape3D_kxtgu")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Texture" unique_id=1157334092]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09686279, 0)
+cast_shadow = 3
+mesh = SubResource("CapsuleMesh_0xfd7")
 
 [node name="Animations" type="Node" parent="." unique_id=815204776]
 
@@ -208,26 +190,4 @@ anim_player = NodePath("../PlayerAnimations")
 parameters/turn/TimeScale/scale = 1.0
 parameters/turn/Direction/blend_amount = 0.0
 
-[node name="Networking" type="Node" parent="." unique_id=320817667]
-
-[node name="ServerSync" type="MultiplayerSynchronizer" parent="Networking" unique_id=1005482676]
-editor_description = "This sync node handles anything the server has authority over.
-"
-root_path = NodePath("../..")
-replication_config = SubResource("SceneReplicationConfig_kxtgu")
-
-[node name="SuperColliders" type="Node3D" parent="." unique_id=1059528743]
-
-[node name="ReimuSuper" type="Area3D" parent="SuperColliders" unique_id=122724238]
-collision_mask = 4
-priority = 1
-
-[node name="Collider" type="CollisionShape3D" parent="SuperColliders/ReimuSuper" unique_id=811448977 groups=["player"]]
-shape = SubResource("BoxShape3D_bp3gs")
-
-[node name="MarisaSuper" type="Area3D" parent="SuperColliders" unique_id=2066219413]
-collision_mask = 4
-priority = 1
-
-[node name="Collider" type="CollisionShape3D" parent="SuperColliders/MarisaSuper" unique_id=1962209544 groups=["player"]]
-shape = SubResource("BoxShape3D_ncc1o")
+[connection signal="position_changed" from="Player2d" to="." method="_on_player_2d_position_changed"]

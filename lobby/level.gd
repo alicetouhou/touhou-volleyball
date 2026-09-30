@@ -3,7 +3,7 @@ class_name Level
 extends Node3D
 
 
-const player_scene = preload("res://game_objects/Player2D.tscn")
+const player_scene = preload("res://game_objects/player/Player3D.tscn")
 # const cpu_scene = preload("res://game_objects/player/CPUPlayer.tscn")
 
 ## The ball node.
@@ -49,17 +49,12 @@ func start_game() -> void:
 		var use_player_scene: PackedScene = player_scene
 
 		var player_name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
-		var player: Player = SyncManager.spawn(player_name, players, use_player_scene)
+		var player: Player3D = SyncManager.spawn(player_name, players, use_player_scene)
 
 		# Disable input for CPUs and players on other computers
-		player.player_id = peer.peer_id
-		#if peer.peer_id < 0 or (player.player_id != multiplayer.get_unique_id() and not peer.local_co_op):
-		#	player.disable_input()
-		player.input_device = peer.input_device
-		
-		player.fixed_position = SGFixed.from_float_vector2(player_positions[i])
-
-		player.set_multiplayer_authority(player.player_id)
+		player.set_player_id(peer.peer_id)
+		player.set_input_device(peer.input_device)
+		player.set_physics_position(SGFixed.from_float_vector2(player_positions[i]))
 		
 		var charge_bar = preload("res://game_objects/SuperCharge.tscn").instantiate()
 		charge_bar.name = str(peer)
@@ -132,7 +127,8 @@ func player_hit_ball() -> void:
 	%Camera.add_trauma(.1)
 
 func player_super_used(player: PlayerPeer) -> void:
-	Supers.run(self, players.get_node("%s-%s" % [player.peer_id, player.input_device]))
+	# Supers.run(self, players.get_node("%s-%s" % [player.peer_id, player.input_device]))
+	pass
 	
 func get_fx_manager():
 	return %FxManager

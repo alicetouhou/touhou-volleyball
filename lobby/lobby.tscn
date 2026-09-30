@@ -238,7 +238,7 @@ offset_top = 30.0
 offset_right = -8.0
 offset_bottom = 53.0
 grow_horizontal = 0
-text = "60 FPS"
+text = "60FPS"
 script = ExtResource("9_8v3m6")
 
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Host" method="show"]

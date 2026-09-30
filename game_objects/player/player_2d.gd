@@ -26,8 +26,6 @@ func _ready() -> void:
 # The `Input` class does not allow you to check if an input was performed by a specific
 # device so we need to use the _input method :(
 func _input(event: InputEvent) -> void:
-	if not is_multiplayer_authority():
-		return
 	if input_device > -99 and event.device != input_device:
 		return
 
@@ -40,18 +38,18 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("down") or event.is_action_released("down"):
 		_last_joy_direction.w = SGFixed.from_float(event.get_action_strength("down"))
 
-	if event.is_action_pressed("up"):
-		_last_jumping = true
-	if event.is_action_pressed("kick"):
-		_last_kicking = true
-	if event.is_action_pressed("super"):
-		_last_supering = true
 	if event.is_action_released("up"):
 		_last_jumping = false
 	if event.is_action_released("kick"):
 		_last_kicking = false
 	if event.is_action_released("super"):
 		_last_supering = false
+	if event.is_action_pressed("up"):
+		_last_jumping = true
+	if event.is_action_pressed("kick"):
+		_last_kicking = true
+	if event.is_action_pressed("super"):
+		_last_supering = true
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
@@ -65,14 +63,11 @@ func _get_local_input() -> Dictionary:
 		supering=_last_supering,
 	}
 
-func _predict_remote_input(previous_input: Dictionary, _ticks_since_real_input: int) -> Dictionary:
-	previous_input["jumping"] = false
-	previous_input["supering"] = false
-	previous_input["kicking"] = false
+func _predict_remote_input(previous_input: Dictionary, ticks_since_real_input: int) -> Dictionary:
 	return previous_input
 
 func _network_process(input: Dictionary) -> void:
-	ticks += 1
+	ticks += 1.
 	var joy_direction = input.get("joy_direction", Vector4i.ZERO)
 	var jumping = input.get("jumping", false)
 	var kicking = input.get("kicking", false)
@@ -82,6 +77,12 @@ func _network_process(input: Dictionary) -> void:
 
 	if input.get("jumping", false) and is_on_floor():
 		velocity.y = -JUMP
+
+	# Make sure the kick area is aware of collisions
+	%KickArea.sync_to_physics_engine()
+	var ball = %KickArea.get_overlapping_bodies().filter(func(x): return x.is_in_group("ball"))
+	if ball and kicking:
+		print("kick the ball here")
 
 	super._network_process(input)
 

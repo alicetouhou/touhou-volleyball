@@ -243,8 +243,8 @@ grow_horizontal = 0
 text = "60FPS"
 script = ExtResource("9_8v3m6")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=193897415]
-position = Vector2(484, 273)
+[node name="Sprite2D" type="Sprite3D" parent="." unique_id=680230030]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.903471, 2.112091, 0)
 texture = ExtResource("10_oi18d")
 script = ExtResource("10_8v3m6")
 

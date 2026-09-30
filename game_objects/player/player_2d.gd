@@ -2,7 +2,7 @@ class_name Player2D
 
 extends SyncedRigidBody
 
-const SPEED = 15
+const SPEED = 20
 const JUMP = 65536*30
 
 var input_device = -99
@@ -84,6 +84,9 @@ func _network_process(input: Dictionary) -> void:
 
 	if input.get("jumping", false) and is_on_floor():
 		velocity.y = -JUMP
+	
+	display_position.x = SGFixed.to_float(fixed_position_x)
+	display_position.y = SGFixed.to_float(fixed_position_y)
 
 	super._network_process(input)
 

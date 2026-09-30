@@ -23,3 +23,5 @@ func _network_spawn(data):
 
 func _process(_delta: float) -> void:
 	position = Globals.map_pos2D_to_pos3D(get_viewport().get_camera_3d(), %Player2d.display_position)
+	
+	print(position.x)

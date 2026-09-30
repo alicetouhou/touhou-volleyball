@@ -49,6 +49,7 @@ func ferrari_real(A: float, B: float, C: float, D: float, E: float) -> Array[flo
 		m = sqrt(m)
 		for j in [-1,1]:
 			result.push_back(k + (0.5 * (i*W + j*m)))
+			print([a,b,c,P,Q,R,W,y])
 	
 	return result
 

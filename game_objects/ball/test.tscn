@@ -10,7 +10,12 @@
 [node name="Camera2D" type="Camera2D" parent="." unique_id=543572778]
 position = Vector2(0, -480)
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2003857871]
+[node name="Net" type="Sprite2D" parent="." unique_id=2003857871]
 position = Vector2(0, -112.5)
-scale = Vector2(1, 1.758)
+scale = Vector2(0.1, 1.758)
+texture = ExtResource("2_ljs0r")
+
+[node name="Floor" type="Sprite2D" parent="." unique_id=1564620960]
+position = Vector2(0, 64)
+scale = Vector2(40, 1)
 texture = ExtResource("2_ljs0r")

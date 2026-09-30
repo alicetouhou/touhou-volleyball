@@ -58,6 +58,9 @@ metadata/_custom_type_script = "uid://r8e80j04btgn"
 
 [node name="SGCollisionShape2D" type="SGCollisionShape2D" parent="Ball2D" unique_id=357563604]
 shape = SubResource("SGCircleShape2D_cy21b")
+fixed_scale_x = 99091
+fixed_scale_y = 99091
+scale = Vector2(1.5120087, 1.5120087)
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1464322554]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, -0.003, 0)

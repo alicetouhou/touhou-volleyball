@@ -16,8 +16,6 @@ var _last_supering = false
 
 var ticks = 0
 
-var display_position: Vector2 = Vector2.ZERO
-
 func set_character(character_id: String) -> void:
 	_character = load("res://resources/characters/%s" % character_id)
 
@@ -84,18 +82,8 @@ func _network_process(input: Dictionary) -> void:
 
 	if input.get("jumping", false) and is_on_floor():
 		velocity.y = -JUMP
-	
-	display_position.x = SGFixed.to_float(fixed_position_x)
-	display_position.y = SGFixed.to_float(fixed_position_y)
 
 	super._network_process(input)
-
-func _interpolate_state(old_state: Dictionary, new_state: Dictionary, weight: float) -> void:
-	var sprite_pos_x: int = lerp(old_state["fixed_position_x"], new_state["fixed_position_x"], weight)
-	var sprite_pos_y: int = lerp(old_state["fixed_position_y"], new_state["fixed_position_y"], weight)
-	
-	display_position.x = SGFixed.to_float(sprite_pos_x)
-	display_position.y = SGFixed.to_float(sprite_pos_y)
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()

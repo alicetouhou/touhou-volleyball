@@ -7,7 +7,7 @@ const player_scene = preload("res://game_objects/player/Player3D.tscn")
 # const cpu_scene = preload("res://game_objects/player/CPUPlayer.tscn")
 
 ## The ball node.
-var ball: RigidBody3D
+var ball: Ball3D
 ## Which side's turn is currently playing (ie who served).
 var serving := 0
 ## If true, the round is currently running.
@@ -34,9 +34,8 @@ func start_game() -> void:
 	
 	# Ball
 	ball = preload("res://game_objects/ball/Ball3D.tscn").instantiate()
-	ball.freeze = true
 	ball.create_fx.connect(create_fx)
-	ball.body_entered.connect(ball_collided)
+
 	ball_container.add_child(ball, true)
 
 	# Players

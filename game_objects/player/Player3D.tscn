@@ -5,10 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://butv44ydur5tf" path="res://game_objects/player/Player2D.tscn" id="3_bp3gs"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://c14uejte347bk" path="res://player/animations.tres" id="3_kxtgu"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_l3xxi"]
-friction = 0.0
-rough = true
-
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_0xfd7"]
 radius = 0.93847656
 height = 5.8289795
@@ -141,16 +137,7 @@ _data = {
 &"turn_right": SubResource("Animation_nc42t")
 }
 
-[node name="Player3d" type="RigidBody3D" unique_id=733247983 groups=["network_sync"]]
-collision_layer = 2
-collision_mask = 17
-axis_lock_linear_z = true
-axis_lock_angular_x = true
-axis_lock_angular_y = true
-axis_lock_angular_z = true
-physics_material_override = SubResource("PhysicsMaterial_l3xxi")
-contact_monitor = true
-max_contacts_reported = 12
+[node name="Player3d" type="Node3D" unique_id=1887892659 groups=["network_sync"]]
 script = ExtResource("1_bn5eq")
 
 [node name="Player2d" parent="." unique_id=802664772 instance=ExtResource("3_bp3gs")]
@@ -162,7 +149,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0403879, 0, 0, 0, 1, 0, 0.121163964, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0098565, 0, 0, 0, 1, 0, 0.029569227, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 

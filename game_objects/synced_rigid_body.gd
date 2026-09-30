@@ -35,7 +35,7 @@ func apply_force(force: SGFixedVector2, position: SGFixedVector2):
 	_forces.push_back(force)
 	
 func apply_angular_impulse(force: SGFixedVector2, position: SGFixedVector2):
-	var torque = SGFixed.mul(position.y,force.y) - SGFixed.mul(position.x,force.x)
+	var torque = SGFixed.mul(position.y,force.x) - SGFixed.mul(position.x,force.y)
 	var moi = SGFixed.mul(MASS,SGFixed.pow(position.length(),2))
 	var angular_acceleration = SGFixed.div(torque,moi)
 	_angular_impulses.push_back(angular_acceleration)
@@ -121,13 +121,13 @@ func _integrate_forces():
 func _collide(prev_velocity: SGFixedVector2):
 	var force = SGFixed.vector2(0,0)
 	for c_id in get_slide_count():
-		var c = get_slide_collision(c_id)
-		var d = SGFixed.mul(SGFixed.ONE + BOUNCINESS,prev_velocity.dot(c.normal))
+		var c: SGKinematicCollision2D = get_slide_collision(c_id)
+		var c_angle = prev_velocity.dot(c.normal)
+		var d = SGFixed.mul(SGFixed.ONE + BOUNCINESS,c_angle)
 		var x_force = SGFixed.mul(d,c.normal.x)
 		var y_force = SGFixed.mul(d,c.normal.y)
 		force.x += x_force
 		force.y += y_force
-				
 							
 	return SGFixed.vector2(prev_velocity.x - force.x,prev_velocity.y - force.y)
 

@@ -148,11 +148,9 @@ func _network_process(_input):
 	
 	angle += SGFixed.mul(angular_velocity,DELTA)
 	fixed_rotation = angle
-	
-	var prev_velocity_x = velocity.x
-	var prev_velocity_y = velocity.y
+
 	move_and_slide()
-	linear_velocity = _collide(SGFixed.vector2(prev_velocity_x, prev_velocity_y))
+	linear_velocity = _collide(SGFixed.vector2(linear_velocity.x, linear_velocity.y))
 	
 	sync_to_physics_engine()
 	

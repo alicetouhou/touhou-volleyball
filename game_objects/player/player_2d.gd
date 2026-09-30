@@ -4,6 +4,7 @@ extends SyncedRigidBody
 
 const SPEED = 10
 const JUMP = int(65536*21.5)
+const KICK_POWER = SGFixed.ONE * 20
 
 var input_device = -99
 var player_id: int
@@ -16,7 +17,15 @@ var _last_supering = false
 
 var _direction = Vector4i(0,0,0,0)
 
+const KICK_COOLDOWN_TICKS = 5
+
 var ticks = 0
+var jumping_for_ticks = 0
+var kicking_for_ticks = 0
+var supering_for_ticks = 0
+var last_kicked_on_ticked = -10
+
+signal play_kick_animation(hit: bool)
 
 func set_character(character_id: String) -> void:
 	_character = load("res://resources/characters/%s" % character_id)
@@ -86,38 +95,61 @@ func _integrate_forces():
 func _network_process(input: Dictionary) -> void:
 	ticks += 1.
 	var joy_direction = input.get("joy_direction", Vector4i.ZERO)
+
 	var jumping = input.get("jumping", false)
 	var kicking = input.get("kicking", false)
 	var supering = input.get("supering", false)
+
+	if jumping:
+		jumping_for_ticks += 1
+	else:
+		jumping_for_ticks = 0
+	if kicking:
+		kicking_for_ticks += 1
+	else:
+		kicking_for_ticks = 0
+	if supering:
+		supering_for_ticks += 1
+	else:
+		supering_for_ticks = 0
 	
 	_direction = joy_direction
 
-	if input.get("jumping", false):
+	if jumping_for_ticks == 1:
 		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
-	# Make sure the kick area is aware of collisions
-	%KickArea.sync_to_physics_engine()
-	var bodies = %KickArea.get_overlapping_bodies()
-	var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
-	if ball_index > 0 and kicking:
-		var ball: Ball2D = bodies[ball_index]
-		var hit_direction = ball.fixed_position.direction_to(fixed_position)
-		var hit_force_vector = SGFixed.vector2(15 * -hit_direction.x + velocity.x,15 * -hit_direction.y + velocity.y)
-		var ball_rad = 99091
-		var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))
-		ball.apply_impulse(hit_force_vector,hit_distance_vector)
-		
-	_last_jumping = false
-	_last_kicking = false
-	_last_supering = false
+	if kicking_for_ticks > 1 and kicking_for_ticks <= 5 and (ticks - last_kicked_on_ticked) > KICK_COOLDOWN_TICKS:
+		last_kicked_on_ticked = ticks
+		play_kick_animation.emit(false)
+		# Make sure the kick area is aware of collisions
+		%KickArea.sync_to_physics_engine()
+		var bodies = %KickArea.get_overlapping_bodies()
+		var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
+
+		if ball_index > 0:
+			play_kick_animation.emit(true)
+			var ball: Ball2D = bodies[ball_index]
+			var hit_direction = ball.fixed_position.direction_to(fixed_position)
+			var hit_force_vector = SGFixed.vector2(KICK_POWER * -hit_direction.x + velocity.x,KICK_POWER * -hit_direction.y + velocity.y)
+			var ball_rad = 99091
+			var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))
+			ball.apply_impulse(hit_force_vector,hit_distance_vector)
 
 	super._network_process(input)
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()
 	state["ticks"] = ticks
+	state["jumping_for_ticks"] = jumping_for_ticks
+	state["kicking_for_ticks"] = kicking_for_ticks
+	state["supering_for_ticks"] = supering_for_ticks
+	state["last_kicked_on_ticked"] = last_kicked_on_ticked
 	return state
 
 func _load_state(state):
 	ticks = state["ticks"]
+	jumping_for_ticks = state["jumping_for_ticks"]
+	kicking_for_ticks = state["kicking_for_ticks"]
+	supering_for_ticks = state["supering_for_ticks"]
+	last_kicked_on_ticked = state["last_kicked_on_ticked"]
 	super._load_state(state)

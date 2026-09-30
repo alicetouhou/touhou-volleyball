@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://bu1yigksoxrh1" path="res://game_objects/player/player_2d.gd" id="1_hkkr1"]
 
 [sub_resource type="SGRectangleShape2D" id="SGRectangleShape2D_h32g3"]
-extents_x = 6923388
-extents_y = 8052495
+extents_x = 6558184
+extents_y = 7127040
 
 [sub_resource type="SGRectangleShape2D" id="SGRectangleShape2D_s23s1"]
 extents_x = 4112889

@@ -16,13 +16,14 @@ func _network_process(_input):
 
 func _save_state() -> Dictionary:
 	return {
-		fixed_position=fixed_position,
+		fixed_position_x=fixed_position_x,
+		fixed_position_y=fixed_position_y,
 		fixed_rotation=fixed_rotation,
 		velocity=velocity,
 	}
 
 func _load_state(state: Dictionary):
-	fixed_position = state["fixed_position"]
+	fixed_position = SGFixed.vector2(state["fixed_position_x"], state["fixed_position_y"])
 	fixed_rotation = state["fixed_rotation"]
 	velocity = state["velocity"]
 

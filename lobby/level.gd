@@ -55,6 +55,7 @@ func start_game() -> void:
 			"input_device": peer.input_device,
 			"character": peer.character,
 		})
+		break
 		
 		var charge_bar = preload("res://game_objects/SuperCharge.tscn").instantiate()
 		charge_bar.name = str(peer)

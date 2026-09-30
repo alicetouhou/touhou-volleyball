@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bluw2veqruu0j" path="res://assets/sprites/characters/yuyuko.png" id="2_kxtgu"]
 [ext_resource type="PackedScene" uid="uid://butv44ydur5tf" path="res://game_objects/player/Player2D.tscn" id="3_bp3gs"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://c14uejte347bk" path="res://player/animations.tres" id="3_kxtgu"]
+[ext_resource type="Texture2D" uid="uid://vsimlmjv380n" path="res://icon.svg" id="4_bp3gs"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_0xfd7"]
 radius = 0.93847656
@@ -149,9 +150,17 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.016141, 0, 0, 0, 1, 0, 0.048423328, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0427042, 0, 0, 0, 1, 0, 0.12811272, 0)
+visible = false
 flip_h = true
 texture = ExtResource("2_kxtgu")
+
+[node name="Sprite3D2" type="Sprite3D" parent="Texture" unique_id=8804191]
+unique_name_in_owner = true
+transform = Transform3D(5, 0, 0, 0, 5.225, 0, 0, 0, 5, 0, 0.13574225, 0)
+flip_h = true
+billboard = 1
+texture = ExtResource("4_bp3gs")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Texture" unique_id=1157334092]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09686279, 0)

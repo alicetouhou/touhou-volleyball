@@ -2,7 +2,7 @@ class_name Player2D
 
 extends SyncedRigidBody
 
-const SPEED = 30
+const SPEED = 15
 const JUMP = 65536*30
 
 var input_device = -99
@@ -87,12 +87,12 @@ func _network_process(input: Dictionary) -> void:
 
 	super._network_process(input)
 
-	display_position = Vector2(SGFixed.to_float(fixed_position_x), SGFixed.to_float(fixed_position_y))
-
 func _interpolate_state(old_state: Dictionary, new_state: Dictionary, weight: float) -> void:
-	var sprite_pos_x = lerp(SGFixed.to_float(old_state["fixed_position"].x), SGFixed.to_float(new_state["fixed_position"].x), weight)
-	var sprite_pos_y = lerp(SGFixed.to_float(old_state["fixed_position"].y), SGFixed.to_float(new_state["fixed_position"].y), weight)
-	display_position = Vector2(sprite_pos_x, sprite_pos_y)
+	var sprite_pos_x: int = lerp(old_state["fixed_position_x"], new_state["fixed_position_x"], weight)
+	var sprite_pos_y: int = lerp(old_state["fixed_position_y"], new_state["fixed_position_y"], weight)
+	
+	display_position.x = SGFixed.to_float(sprite_pos_x)
+	display_position.y = SGFixed.to_float(sprite_pos_y)
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()

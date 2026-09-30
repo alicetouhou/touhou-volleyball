@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
 [ext_resource type="Script" uid="uid://bmbuwtj33vxgo" path="res://lobby/frame_rate.gd" id="9_8v3m6"]
 [ext_resource type="Script" uid="uid://bvamk6gb8rnnl" path="res://lobby/pinger.gd" id="9_8367x"]
+[ext_resource type="Script" uid="uid://dddatanto7h41" path="res://lobby/sprite_2d.gd" id="10_8v3m6"]
+[ext_resource type="Texture2D" uid="uid://vsimlmjv380n" path="res://icon.svg" id="10_oi18d"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_4veey"]
 properties/0/path = NodePath(".:visible")
@@ -240,6 +242,11 @@ offset_bottom = 53.0
 grow_horizontal = 0
 text = "60FPS"
 script = ExtResource("9_8v3m6")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=193897415]
+position = Vector2(484, 273)
+texture = ExtResource("10_oi18d")
+script = ExtResource("10_8v3m6")
 
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Host" method="show"]
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Join" method="show"]

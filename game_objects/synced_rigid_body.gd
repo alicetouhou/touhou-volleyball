@@ -88,15 +88,13 @@ func _integrate_forces():
 		return v
 	var f_yv = func(t: int, x: int, v: int):
 		return integrated_forces.y
-	var x_approximation = rk4(f_x,f_xv,0,0,linear_velocity.x,DELTA,20)
-	var y_approximation = rk4(f_y,f_yv,0,0,linear_velocity.y,DELTA,20)
+	var x_approximation = rk4(f_x,f_xv,0,0,linear_velocity.x,DELTA,5)
+	var y_approximation = rk4(f_y,f_yv,0,0,linear_velocity.y,DELTA,5)
 		
-	linear_velocity.x = x_approximation
-	linear_velocity.y = y_approximation
+	# Clamp linear velocity to avoid ballooning to huge velocities
+	linear_velocity.x = clamp(x_approximation,-1966080,1966080)
+	linear_velocity.y = clamp(y_approximation,-1966080,1966080)
 	
-	print(linear_velocity.x)
-	print(linear_velocity.y)
-
 	for impulse in _impulses:
 		linear_velocity.x += impulse.x
 		linear_velocity.y += impulse.y
@@ -104,20 +102,18 @@ func _integrate_forces():
 	_impulses = []
 
 func _network_process(_input):
+	velocity.x = 0
+	velocity.y = 0
+	
 	apply_central_force(GRAVITY)
-	
-	print(position)
-	
 	
 	_integrate_forces()
 	
-	velocity.x = linear_velocity.x
-	velocity.y = linear_velocity.y
+	velocity.x += linear_velocity.x
+	velocity.y += linear_velocity.y
 	
 	move_and_slide()
 	
-	print(is_on_floor())
-
 func _interpolate_state(old_state: Dictionary, new_state: Dictionary, weight: float) -> void:
 	var sprite_pos_x: int = lerp(old_state["fixed_position_x"], new_state["fixed_position_x"], weight)
 	var sprite_pos_y: int = lerp(old_state["fixed_position_y"], new_state["fixed_position_y"], weight)

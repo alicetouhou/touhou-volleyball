@@ -103,12 +103,11 @@ sync_debug={
 
 [network]
 
-rollback/input_delay=0
+rollback/input_delay=1
 rollback/interpolation=true
 
 [physics]
 
-common/physics_ticks_per_second=30
 2d/physics_engine="Dummy"
 3d/physics_engine="Dummy"
 3d/default_linear_damp=0.0

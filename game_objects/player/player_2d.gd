@@ -2,8 +2,8 @@ class_name Player2D
 
 extends SyncedRigidBody
 
-const SPEED = 20
-const JUMP = 65536*30
+const SPEED = 10
+const JUMP = int(65536*21.5)
 
 var input_device = -99
 var player_id: int

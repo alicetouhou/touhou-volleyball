@@ -3,6 +3,9 @@ class_name SyncedRigidBody
 extends SGCharacterBody2D
 
 @export var MASS: int = 65536
+@export_range(0,65536) var BOUNCINESS: int = 65536
+@export_range(0,65536) var LINEAR_DAMPING: int = 655
+@export var BOUNCE_THRESHOLD: int = 150000
 
 @onready var GRAVITY: SGFixedVector2 = SGFixed.vector2(0.0,Globals.GRAVITY)
 @onready var DELTA = 2185
@@ -11,6 +14,8 @@ extends SGCharacterBody2D
 var _forces: Array[SGFixedVector2] = []
 var _impulses: Array[SGFixedVector2] = []
 var _angular_forces: Array[SGFixedVector2] = []
+
+var _integrated_forces: SGFixedVector2 = SGFixed.vector2(0,0)
 
 var linear_velocity: SGFixedVector2 = SGFixed.vector2(0,0)
 var angular_velocity: SGFixedVector2
@@ -52,7 +57,7 @@ func apply_central_impulse(force: SGFixedVector2):
 # v0 - initial velocity
 # x - target x (time)
 # n - iteration number
-func rk4(f: Callable,g: Callable,x0: int,y0: int,v0: int,x: int,n: int):	
+func rk4(f: Callable,g: Callable,x0: int,y0: int,v0: int,x: int,n: int) -> int:	
 	var h = SGFixed.div(DELTA,n * SGFixed.ONE)
 	var y = y0
 	var v = v0
@@ -74,33 +79,48 @@ func rk4(f: Callable,g: Callable,x0: int,y0: int,v0: int,x: int,n: int):
 		x0 += h
 	return v
 	
-func _integrate_forces():
-	var integrated_forces: SGFixedVector2 = SGFixed.vector2(0,0)
-	for force in _forces:
-		linear_velocity.x += force.x
-		linear_velocity.y += force.y
+func f_x(t: int, x: int, v: int):
+	return v
+func f_xv(t: int, x: int, v: int):
+	return _integrated_forces.x
+func f_y(t: int, x: int, v: int):
+	return v
+func f_yv(t: int, x: int, v: int):
+	return _integrated_forces.y
 	
-	var f_x = func(t: int, x: int, v: int):
-		return v
-	var f_xv = func(t: int, x: int, v: int):
-		return integrated_forces.x
-	var f_y = func(t: int, x: int, v: int):
-		return v
-	var f_yv = func(t: int, x: int, v: int):
-		return integrated_forces.y
+func _integrate_forces():
+	for force in _forces:
+		_integrated_forces.x += force.x
+		_integrated_forces.y += force.y
 
-	var x_approximation = rk4(f_x,f_xv,0,0,linear_velocity.x,DELTA,5)
-	var y_approximation = rk4(f_y,f_yv,0,0,linear_velocity.y,DELTA,5)
+	#Discrete integral approximation to get new velocity
+	var x_approximation = rk4(f_x,f_xv,0,0,linear_velocity.x+_integrated_forces.x,DELTA,1)
+	var y_approximation = rk4(f_y,f_yv,0,0,linear_velocity.y+_integrated_forces.y,DELTA,1)
+	
+	#Bouncing
+	if BOUNCINESS > 0 and is_on_floor():
+		var d = SGFixed.mul(SGFixed.TWO,SGFixed.vector2(x_approximation,y_approximation).dot(up_direction))
+		x_approximation -= SGFixed.mul(SGFixed.mul(d,up_direction.x),BOUNCINESS)
+		y_approximation -= SGFixed.mul(SGFixed.mul(d,up_direction.y),BOUNCINESS)
+		if abs(y_approximation)<BOUNCE_THRESHOLD:
+			y_approximation = 0
+	# If on floor and not a bouncy object, remove gravity before adding impulses
+	elif is_on_floor():
+		y_approximation = 0
+		
+	#Add impulses now, after integration
+	for impulse in _impulses:
+		x_approximation += impulse.x
+		y_approximation += impulse.y
 		
 	# Clamp linear velocity to avoid ballooning to huge velocities
-	linear_velocity.x = clamp(x_approximation,-1966080,1966080)
-	linear_velocity.y = clamp(y_approximation,-1966080,1966080)
-	
-	for impulse in _impulses:
-		linear_velocity.x += impulse.x
-		linear_velocity.y += impulse.y
+	linear_velocity.x = clamp(SGFixed.mul(x_approximation,SGFixed.ONE-LINEAR_DAMPING),-1966080,1966080)
+	linear_velocity.y = clamp(SGFixed.mul(y_approximation,SGFixed.ONE-LINEAR_DAMPING),-1966080,1966080)
+
 	_forces = []
 	_impulses = []
+	
+	_integrated_forces = SGFixed.vector2(0,0)
 
 func _network_process(_input):
 	display_position.x = SGFixed.to_float(fixed_position.x)

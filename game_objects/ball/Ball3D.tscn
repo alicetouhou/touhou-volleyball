@@ -53,7 +53,10 @@ script = ExtResource("1_1awvx")
 collision_layer = 4
 collision_mask = 4
 unique_name_in_owner = true
+visible = false
 script = ExtResource("2_cy21b")
+BOUNCINESS = 59000
+BOUNCE_THRESHOLD = 200000
 metadata/_custom_type_script = "uid://r8e80j04btgn"
 
 [node name="SGCollisionShape2D" type="SGCollisionShape2D" parent="Ball2D" unique_id=357563604]

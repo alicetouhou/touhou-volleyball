@@ -24,7 +24,7 @@ func set_input_device(device):
 func set_physics_position(p):
 	%Player2d.fixed_position = p
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var camera = get_viewport().get_camera_3d()
 	var position_xy = camera.project_position(%Player2d.display_position, camera.position.z)
 	position = Vector3(position_xy.x, position_xy.y, 0)

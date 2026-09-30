@@ -142,6 +142,8 @@ _data = {
 script = ExtResource("1_bn5eq")
 
 [node name="Player2d" parent="." unique_id=802664772 instance=ExtResource("3_bp3gs")]
+collision_layer = 2
+collision_mask = 0
 unique_name_in_owner = true
 BOUNCINESS = 0
 LINEAR_DAMPING = 0
@@ -153,7 +155,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0264144, 0, 0, 0, 1, 0, 0.07924333, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0489627, 0, 0, 0, 1, 0, 0.14688815, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 

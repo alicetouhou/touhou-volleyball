@@ -58,7 +58,7 @@ func apply_central_impulse(force: SGFixedVector2):
 # v0 - initial velocity
 # x - target x (time)
 # n - iteration number
-func rk4(f: Callable,g: Callable,x0: int,y0: int,v0: int,x: int,n: int) -> int:	
+func rk4(f: Callable,g: Callable,x0: int,y0: int,v0: int,x: int,n: int) -> int:
 	var h = SGFixed.div(DELTA,n * SGFixed.ONE)
 	var y = y0
 	var v = v0
@@ -95,56 +95,19 @@ func _integrate_forces():
 		_integrated_forces.y += force.y
 
 	#Discrete integral approximation to get new velocity
-	var x_approximation = rk4(f_x,f_xv,0,0,linear_velocity.x+_integrated_forces.x,DELTA,1)
-	var y_approximation = rk4(f_y,f_yv,0,0,linear_velocity.y+_integrated_forces.y,DELTA,1)
-	
-	#Bouncing
-	if BOUNCINESS > 0 and is_on_floor():
-		var d = SGFixed.mul(SGFixed.TWO,SGFixed.vector2(x_approximation,y_approximation).dot(up_direction))
-		var x_force = SGFixed.mul(SGFixed.mul(d,up_direction.x),BOUNCINESS)
-		var y_force = SGFixed.mul(SGFixed.mul(d,up_direction.y),BOUNCINESS)
-		x_approximation -= x_force
-		y_approximation -= y_force
-		#Add some friction
-		_angular_impulses.push_back(SGFixed.mul(-angular_velocity,SGFixed.mul(angular_velocity,ANGULAR_DAMPING)))
-		if abs(y_approximation)<BOUNCE_THRESHOLD:
-			y_approximation = 0
-		else:
-			_impulses.push_back(
-			SGFixed.vector2(
-				SGFixed.mul(-linear_velocity.x,SGFixed.mul(linear_velocity.x,LINEAR_DAMPING)),
-				SGFixed.mul(-linear_velocity.y,SGFixed.mul(linear_velocity.y,LINEAR_DAMPING))
-				)
-			)
-	# If on floor and not a bouncy object, remove gravity before adding impulses
-	elif is_on_floor():
-		y_approximation = 0
-		
-	if BOUNCINESS > 0 and is_on_ceiling():
-		var down_direction = SGFixed.vector2(0, 65536)
-		var d = SGFixed.mul(SGFixed.TWO,SGFixed.vector2(x_approximation,y_approximation).dot(down_direction))
-		var x_force = SGFixed.mul(SGFixed.mul(d,down_direction.x),BOUNCINESS)
-		var y_force = SGFixed.mul(SGFixed.mul(d,down_direction.y),BOUNCINESS)
-		x_approximation -= x_force
-		y_approximation -= y_force
-	if BOUNCINESS > 0 and is_on_wall():
-		var side_direction = SGFixed.vector2(-65536, 0)
-		var d = SGFixed.mul(SGFixed.TWO,SGFixed.vector2(x_approximation,y_approximation).dot(side_direction))
-		var x_force = SGFixed.mul(SGFixed.mul(d,side_direction.x),BOUNCINESS)
-		var y_force = SGFixed.mul(SGFixed.mul(d,side_direction.y),BOUNCINESS)
-		x_approximation -= x_force
-		y_approximation -= y_force
-		
+	var x_approximation: int = rk4(f_x,f_xv,0,0,linear_velocity.x+_integrated_forces.x,DELTA,1)
+	var y_approximation: int = rk4(f_y,f_yv,0,0,linear_velocity.y+_integrated_forces.y,DELTA,1)
+
 	#Add impulses now, after integration
 	for impulse in _impulses:
 		x_approximation += impulse.x
 		y_approximation += impulse.y
-		
+
 	var angular_velocity_sum = 0
 	for impulse in _angular_impulses:
 		angular_velocity_sum += impulse
 	angular_velocity = clamp(angular_velocity + angular_velocity_sum - SGFixed.mul(angular_velocity + angular_velocity_sum,ANGULAR_DAMPING),-1966080,1966080)
-		
+
 	# Clamp linear velocity to avoid ballooning to huge velocities
 	linear_velocity.x = clamp(x_approximation - SGFixed.mul(x_approximation,LINEAR_DAMPING),-1966080,1966080)
 	linear_velocity.y = clamp(y_approximation - SGFixed.mul(y_approximation,LINEAR_DAMPING),-1966080,1966080)
@@ -154,6 +117,15 @@ func _integrate_forces():
 	_angular_impulses = []
 	
 	_integrated_forces = SGFixed.vector2(0,0)
+
+func _bounce(prev_velocity: SGFixedVector2):
+	for c_id in get_slide_count():
+		var c = get_slide_collision(c_id)
+		var d = SGFixed.mul(SGFixed.TWO,prev_velocity.dot(c.normal))
+		var x_force = SGFixed.mul(SGFixed.mul(d,c.normal.x),-BOUNCINESS)
+		var y_force = SGFixed.mul(SGFixed.mul(d,c.normal.y),-BOUNCINESS)
+		return SGFixed.vector2(x_force, y_force)
+	return prev_velocity
 
 func _network_process(_input):
 	display_position.x = SGFixed.to_float(fixed_position.x)
@@ -173,28 +145,47 @@ func _network_process(_input):
 	angle += SGFixed.mul(angular_velocity,DELTA)
 	fixed_rotation = angle
 	
+	var prev_velocity_x = velocity.x
+	var prev_velocity_y = velocity.y
 	move_and_slide()
+	linear_velocity = _bounce(SGFixed.vector2(prev_velocity_x, prev_velocity_y))
+	
+	sync_to_physics_engine()
 	
 func _interpolate_state(old_state: Dictionary, new_state: Dictionary, weight: float) -> void:
 	var sprite_pos_x: int = lerp(old_state["fixed_position_x"], new_state["fixed_position_x"], weight)
 	var sprite_pos_y: int = lerp(old_state["fixed_position_y"], new_state["fixed_position_y"], weight)
-	
+
 	display_position.x = SGFixed.to_float(sprite_pos_x)
 	display_position.y = SGFixed.to_float(sprite_pos_y)
+
+func fixed_vec_arr_to_vec_i_arr(vecs: Array[SGFixedVector2]) -> Array[Vector2i]:
+	var out: Array[Vector2i] = []
+	for vec in vecs:
+		out.push_back(Vector2i(vec.x, vec.y))
+	return out
+
+func vec_i_arr_to_fixed_vec_arr(vecs: Array[Vector2i]) -> Array[SGFixedVector2]:
+	var out: Array[SGFixedVector2] = []
+	for vec in vecs:
+		out.push_back(SGFixed.vector2(vec.x, vec.y))
+	return out
 
 func _save_state() -> Dictionary:
 	return {
 		fixed_position_x=fixed_position_x,
 		fixed_position_y=fixed_position_y,
 		fixed_rotation=fixed_rotation,
-		velocity_x=velocity.x,
-		velocity_y=velocity.y,
+		linear_velocity_x=linear_velocity.x,
+		linear_velocity_y=linear_velocity.y,
+		angular_velocity=angular_velocity,
 	}
 
 func _load_state(state: Dictionary):
 	fixed_position_x = state["fixed_position_x"]
 	fixed_position_y = state["fixed_position_y"]
 	fixed_rotation = state["fixed_rotation"]
-	velocity = SGFixed.vector2(state["velocity_x"], state["velocity_y"])
+	linear_velocity = SGFixed.vector2(state["linear_velocity_x"], state["linear_velocity_y"])
+	angular_velocity = state["angular_velocity"]
 
-	# sync_to_physics_engine()
+	sync_to_physics_engine()

@@ -85,7 +85,6 @@ func _integrate_forces():
 
 func _network_process(input: Dictionary) -> void:
 	ticks += 1.
-	super._network_process(input)
 	var joy_direction = input.get("joy_direction", Vector4i.ZERO)
 	var jumping = input.get("jumping", false)
 	var kicking = input.get("kicking", false)
@@ -111,6 +110,8 @@ func _network_process(input: Dictionary) -> void:
 	_last_jumping = false
 	_last_kicking = false
 	_last_supering = false
+
+	super._network_process(input)
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()

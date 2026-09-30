@@ -1,6 +1,8 @@
 extends Node2D
 
-# Lodovico Ferrari's method yoinked from the quartic equation wiki. This only returns real numbers.
+# Lodovico Ferrari's method yoinked from the quartic equation wiki.
+# Only returns real roots.
+# Does not accept lower-order polynomials.
 func ferrari_real(A: float, B: float, C: float, D: float, E: float) -> Array[float]:
 	assert(A != 0., "QuarticSolver tried to solve a non-quartic polynomial.")
 	
@@ -48,4 +50,47 @@ func ferrari_real(A: float, B: float, C: float, D: float, E: float) -> Array[flo
 		for j in [-1,1]:
 			result.push_back(k + (0.5 * (i*W + j*m)))
 	
-	return []
+	return result
+
+# Solution using the radical formula but with some cacheing.
+# Only returns real roots.
+# Does not accept lower-order polynomials.
+# I assumed that complex terms will onlly yield complex roots. I am uncertain of its accuracy.
+func radical_real(A: float, B: float, C: float, D: float, E: float) -> Array[float]:
+	assert(A != 0., "QuarticSolver tried to solve a non-quartic polynomial.")
+	
+	var result: Array[float] = []
+	var a: float = B/A
+	var b: float = C/A
+	var c: float = D/A
+	var d: float = E/A
+	
+	var m = pow(b,2) - 3*a*c + 12*d
+	var n = 2*pow(b,3) - 9*a*b*c + 27*(pow(c,2) + pow(a,2)*d) - 72*b*d
+	var o = pow(n,2) - 4*pow(m,3)
+	if o < 0:
+		return result
+	o = pow(n + sqrt(o),1./3)
+	
+	var p = pow(2,1./3) / (3*o)
+	var q = o / pow(54, 1./3)
+	var r = pow(a,2)*0.25 - (2*b/3)
+	var s = p + q
+	var t = r + s
+	if t < 0:
+		return result
+	var u = 0.5 * sqrt(s)
+	var v = r - s
+	var w = -pow(a,3) + 4*a*b - 8*c
+	var x = w / (8*u)
+	var y = -a / 4
+	
+	for i in [-1,1]:
+		var z = v + i*x
+		if z < 0:
+			continue
+		z = 0.5 * sqrt(z)
+		for j in [-1,1]:
+			result.push_back(y + i*u + j*z)
+	
+	return result

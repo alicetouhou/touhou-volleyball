@@ -13,3 +13,4 @@ scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_dcikb")
 
 [node name="QuarticSolver" parent="." unique_id=911731467 instance=ExtResource("3_dcikb")]
+unique_name_in_owner = true

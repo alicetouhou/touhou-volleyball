@@ -35,9 +35,9 @@ func ferrari_real(A: float, B: float, C: float, D: float, E: float) -> Array[flo
 	
 	var y = -a * 5/6
 	if is_zero_approx(R):
-		y -= pow(Q,1./3)
+		y -= cbrt(Q)
 	else:
-		var U = pow(R,1./3)
+		var U = cbrt(R)
 		y += U - U/3
 	
 	var W = sqrt(a + (2*y)) # Supposedly, this is always real.
@@ -70,10 +70,10 @@ func radical_real(A: float, B: float, C: float, D: float, E: float) -> Array[flo
 	var o = pow(n,2) - 4*pow(m,3)
 	if o < 0:
 		return result
-	o = pow(n + sqrt(o),1./3)
+	o = cbrt(n + sqrt(o))
 	
-	var p = pow(2,1./3) / (3*o)
-	var q = o / pow(54, 1./3)
+	var p = cbrt(2) / (3*o)
+	var q = o / cbrt(54)
 	var r = pow(a,2)*0.25 - (2*b/3)
 	var s = p + q
 	var t = r + s
@@ -94,3 +94,9 @@ func radical_real(A: float, B: float, C: float, D: float, E: float) -> Array[flo
 			result.push_back(y + i*u + j*z)
 	
 	return result
+
+func cbrt(x: float) -> float:
+	if x < 0:
+		return -pow(-x, 1./3)
+	else:
+		return pow(x, 1./3)

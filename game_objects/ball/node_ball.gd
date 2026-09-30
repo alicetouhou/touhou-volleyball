@@ -10,24 +10,26 @@ enum Collision{
 }
 
 var velocity: Vector2 = Vector2.ZERO
-var gravity: Vector2 = Vector2(0, 9.8)
+var gravity: Vector2 = Vector2(0, 980)
 var frozen: bool = false
 
-const RADIUS = 0.46
+const RADIUS = 46
 const FLOOR = 0
-const CEILING = 10
-const WALL = -11
-const NET_HEIGHT = -2.25
+const CEILING = 1000
+const WALL = -1100
+const NET_HEIGHT = -225
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	pass
+	global_position = Vector2(0,-300)
+	velocity = Vector2(0,200)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
 	var next = next_pos(global_position, velocity, gravity, delta)
-	global_position = next[0]
+	global_position = next[0] 
 	velocity = next[1]
 
 func next_pos(p: Vector2, v: Vector2, g: Vector2, delta: float) -> Array[Vector2]:
@@ -43,14 +45,14 @@ func next_pos(p: Vector2, v: Vector2, g: Vector2, delta: float) -> Array[Vector2
 		score() 
 	
 	t_wall = ((WALL - RADIUS)*sign(v.x) - p.x) / v.x
-	if v.x * p.x < 0:
+	if v.x * p.x < 0 or abs(p.x) < RADIUS:
 		var t = (-RADIUS - p.x) / v.x
 		var y = p.y + v.y * t + 0.5 * g.y * pow(t,2)
-		var dx = -p.x
-		var dy = NET_HEIGHT - p.y
-		
+		var dx = p.x
+		var dy = p.y - NET_HEIGHT
 		if abs(p.x) < RADIUS or (y < NET_HEIGHT and y > NET_HEIGHT - RADIUS):
-			var results = %QuarticSolver.radical_real(0.25*(pow(g.x,2)+pow(g.y,2)), v.x*g.x+v.y*g.y, g.x*dx+g.y*dy, 2*(v.x*dx+v.y*dy), pow(dx,2)+pow(dy,2)-pow(RADIUS,2))
+			var results = %QuarticSolver.ferrari_real(0.25*(pow(g.x,2)+pow(g.y,2)), (v.x*g.x)+(v.y*g.y), (g.x*dx)+(g.y*dy)+pow(v.x,2)+pow(v.y,2), 2*((v.x*dx)+(v.y*dy)), pow(dx,2)+pow(dy,2)-pow(RADIUS,2))
+			print(results,global_position)
 			if results.size() > 0:
 				var min = 1.
 				for r in results:
@@ -70,7 +72,7 @@ func next_pos(p: Vector2, v: Vector2, g: Vector2, delta: float) -> Array[Vector2
 	if t_net and t_net < t_min:
 		t_min = t_net
 		collision = net_collision
-	if t_ceiling < t_min:
+	if t_ceiling and t_ceiling < t_min:
 		t_min = t_ceiling
 		collision = Collision.CEILING
 	if t_wall < t_min:

@@ -1,10 +1,16 @@
 [gd_scene format=3 uid="uid://b1iqwa3fhfcka"]
 
 [ext_resource type="PackedScene" uid="uid://dd4lurvjr1ga8" path="res://game_objects/ball/node_ball.tscn" id="1_5eg0j"]
+[ext_resource type="Texture2D" uid="uid://vsimlmjv380n" path="res://icon.svg" id="2_ljs0r"]
 
 [node name="Test" type="Node2D" unique_id=1670134507]
 
 [node name="NodeBall" parent="." unique_id=839769202 instance=ExtResource("1_5eg0j")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=543572778]
-position = Vector2(0, -400)
+position = Vector2(0, -480)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2003857871]
+position = Vector2(0, -112.5)
+scale = Vector2(1, 1.758)
+texture = ExtResource("2_ljs0r")

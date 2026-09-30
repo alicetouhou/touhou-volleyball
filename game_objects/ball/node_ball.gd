@@ -22,8 +22,8 @@ const NET_HEIGHT = -225
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
-	global_position = Vector2(0,-300)
-	velocity = Vector2(0,200)
+	global_position = Vector2(-10,-300)
+	velocity = Vector2(0,0)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -69,13 +69,13 @@ func next_pos(p: Vector2, v: Vector2, g: Vector2, delta: float) -> Array[Vector2
 			t_ceiling = (sqrt(pow(v.y,2) + 2 * g.y * (CEILING + RADIUS + p.x)) - v.y) / g.y
 	
 	var t_min = delta
-	if t_net and t_net < t_min:
+	if t_net and not is_zero_approx(t_net) and t_net < t_min:
 		t_min = t_net
 		collision = net_collision
-	if t_ceiling and t_ceiling < t_min:
+	if t_ceiling and not is_zero_approx(t_ceiling) and t_ceiling < t_min:
 		t_min = t_ceiling
 		collision = Collision.CEILING
-	if t_wall < t_min:
+	if not is_zero_approx(t_wall) and t_wall < t_min:
 		t_min = t_wall
 		collision = Collision.WALL
 	
@@ -95,4 +95,4 @@ func next_pos(p: Vector2, v: Vector2, g: Vector2, delta: float) -> Array[Vector2
 	return next_pos(p, v, g, delta)
 
 func score():
-	pass
+	velocity *= 0

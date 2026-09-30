@@ -82,12 +82,11 @@ func _network_process(input: Dictionary) -> void:
 	
 	_direction = joy_direction
 
-
 	if input.get("jumping", false) and is_on_floor():
 		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
 	# Make sure the kick area is aware of collisions
-	%KickArea.sync_to_physics_engine()
+	# %KickArea.sync_to_physics_engine()
 	var ball = %KickArea.get_overlapping_bodies().filter(func(x): return x.is_in_group("ball"))
 	if ball and kicking:
 		print("kick the ball here")

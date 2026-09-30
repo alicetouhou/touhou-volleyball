@@ -102,6 +102,9 @@ func _integrate_forces():
 	_impulses = []
 
 func _network_process(_input):
+	display_position.x = SGFixed.to_float(fixed_position.x)
+	display_position.y = SGFixed.to_float(fixed_position.y)
+
 	velocity.x = 0
 	velocity.y = 0
 	

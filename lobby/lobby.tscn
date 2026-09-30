@@ -114,27 +114,27 @@ script = ExtResource("1_uj4ub")
 
 [node name="P1BallSpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=450378299]
 unique_name_in_owner = true
-position = Vector2(560, 400)
+position = Vector2(733, 654)
 
 [node name="P2BallSpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=2047380491]
 unique_name_in_owner = true
-position = Vector2(1360, 400)
+position = Vector2(1275, 648)
 
 [node name="P1SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=1452683293]
 unique_name_in_owner = true
-position = Vector2(228, 755)
+position = Vector2(397, 736)
 
 [node name="P2SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=1672842030]
 unique_name_in_owner = true
-position = Vector2(1547, 757)
+position = Vector2(1349, 748)
 
 [node name="P3SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=1318271061]
 unique_name_in_owner = true
-position = Vector2(380, 739)
+position = Vector2(521, 739)
 
 [node name="P4SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=613854870]
 unique_name_in_owner = true
-position = Vector2(1768, 769)
+position = Vector2(1460, 744)
 
 [node name="Players" type="Node3D" parent="Level" unique_id=1411736408]
 

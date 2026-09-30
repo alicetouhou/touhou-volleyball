@@ -49,12 +49,12 @@ func start_game() -> void:
 		var use_player_scene: PackedScene = player_scene
 
 		var player_name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
-		var player: Player3D = SyncManager.spawn(player_name, players, use_player_scene)
-
-		# Disable input for CPUs and players on other computers
-		player.set_player_id(peer.peer_id)
-		player.set_input_device(peer.input_device)
-		player.set_physics_position(SGFixed.from_float_vector2(player_positions[i]))
+		SyncManager.spawn(player_name, players, use_player_scene, {
+			"player_id": peer.peer_id,
+			"fixed_position": SGFixed.from_float_vector2(player_positions[i]),
+			"input_device": peer.input_device,
+			"character": peer.character,
+		})
 		
 		var charge_bar = preload("res://game_objects/SuperCharge.tscn").instantiate()
 		charge_bar.name = str(peer)
@@ -70,9 +70,6 @@ func start_game() -> void:
 		#)
 		#player.create_fx.connect(create_fx)
 		#
-
-		if peer.peer_id > 0:
-			player.set_character(peer.character)
 
 		i += 1
 	

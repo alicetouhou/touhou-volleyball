@@ -5,7 +5,8 @@ extends Node3D
 signal create_fx(fx: PackedScene, pos: Vector3)
 
 func _network_spawn(data):
-	%Ball2D.fixed_position = data["fixed_position"]
+	%Ball2D.fixed_position_x = data["fixed_position_x"]
+	%Ball2D.fixed_position_y = data["fixed_position_y"]
 	%Ball2D.sync_to_physics_engine()
 
 func _process(_delta: float) -> void:

@@ -153,20 +153,19 @@ func on_sync_manager_started():
 		if not DirAccess.dir_exists_absolute(LOG_FILE_DIRECTORY):
 			DirAccess.make_dir_absolute(LOG_FILE_DIRECTORY)
 
-			var datetime := Time.get_datetime_dict_from_system(true)
-			var log_file_name = "%04d%02d%02d-%02d%02d%02d-peer-%d.log" % [
-				datetime['year'],
-				datetime['month'],
-				datetime['day'],
-				datetime['hour'],
-				datetime['minute'],
-				datetime['second'],
-				multiplayer.get_unique_id(),
-			]
+		var datetime := Time.get_datetime_dict_from_system(true)
+		var log_file_name = "%04d%02d%02d-%02d%02d%02d-peer-%d.log" % [
+			datetime['year'],
+			datetime['month'],
+			datetime['day'],
+			datetime['hour'],
+			datetime['minute'],
+			datetime['second'],
+			multiplayer.get_unique_id(),
+		]
 
-			SyncManager.start_logging(LOG_FILE_DIRECTORY + '/' + log_file_name)
+		SyncManager.start_logging(LOG_FILE_DIRECTORY + '/' + log_file_name)
 
-	# Only the main server should run start game
 	%Level.start_game()
 
 func on_sync_manager_stopped():

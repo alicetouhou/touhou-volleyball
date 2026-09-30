@@ -12,13 +12,11 @@ signal super_charge_updated(value: float)
 signal create_fx(fx: PackedScene, pos: Vector3)
 
 func _network_spawn(data):
-	set_multiplayer_authority(data["player_id"])
-
 	%Player2d.set_character(data["character"])
 	%Player2d.player_id = data["player_id"]
 	%Player2d.input_device = data["input_device"]
-
-	%Player2d.fixed_position = data["fixed_position"]
+	%Player2d.fixed_position_x = data["fixed_position_x"]
+	%Player2d.fixed_position_y = data["fixed_position_y"]
 	%Player2d.sync_to_physics_engine()
 
 func _process(_delta: float) -> void:

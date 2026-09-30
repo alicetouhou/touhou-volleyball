@@ -7,7 +7,7 @@ extends SGCharacterBody2D
 @export_range(0,65536) var LINEAR_DAMPING: int = 655
 @export var BOUNCE_THRESHOLD: int = 150000
 
-@onready var GRAVITY: SGFixedVector2 = SGFixed.vector2(0.0,Globals.GRAVITY)
+@onready var GRAVITY: SGFixedVector2 = SGFixed.vector2(0,Globals.GRAVITY)
 @onready var DELTA = 2185
 
 
@@ -150,13 +150,14 @@ func _save_state() -> Dictionary:
 		fixed_position_x=fixed_position_x,
 		fixed_position_y=fixed_position_y,
 		fixed_rotation=fixed_rotation,
-		velocity=velocity,
+		velocity_x=velocity.x,
+		velocity_y=velocity.y,
 	}
 
 func _load_state(state: Dictionary):
 	fixed_position_x = state["fixed_position_x"]
 	fixed_position_y = state["fixed_position_y"]
 	fixed_rotation = state["fixed_rotation"]
-	velocity = state["velocity"]
+	velocity = SGFixed.vector2(state["velocity_x"], state["velocity_y"])
 
-	sync_to_physics_engine()
+	# sync_to_physics_engine()

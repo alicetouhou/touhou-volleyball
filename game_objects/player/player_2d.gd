@@ -66,9 +66,17 @@ func _get_local_input() -> Dictionary:
 	}
 
 func _predict_remote_input(previous_input: Dictionary, ticks_since_real_input: int) -> Dictionary:
-	previous_input.erase("jumping")
-	previous_input.erase("kicking")
-	previous_input.erase("supering")
+	if ticks_since_real_input > 1:
+		previous_input.erase("jumping")
+		previous_input.erase("kicking")
+		previous_input.erase("supering")
+
+	## Input decay
+	if previous_input.get("joy_direction"):
+		var decay_amount = SGFixed.from_int((4. - ticks_since_real_input) / 4.)
+		previous_input["joy_direction"].x = SGFixed.mul(previous_input["joy_direction"].x, decay_amount)
+		previous_input["joy_direction"].y = SGFixed.mul(previous_input["joy_direction"].y, decay_amount)
+
 	return previous_input
 	
 func _integrate_forces():
@@ -95,7 +103,7 @@ func _network_process(input: Dictionary) -> void:
 	if ball_index > 0 and kicking:
 		var ball: Ball2D = bodies[ball_index]
 		ball.apply_central_impulse(SGFixed.vector2(SGFixed.ONE * 10, -SGFixed.ONE * 50))
-		
+
 	_last_jumping = false
 	_last_kicking = false
 	_last_supering = false

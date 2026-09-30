@@ -16,20 +16,6 @@ radius = 0.46
 
 [sub_resource type="SphereMesh" id="SphereMesh_km8ha"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_1jdt5"]
-properties/0/path = NodePath(".:linear_velocity")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:angular_velocity")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath(".:position")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath(".:rotation")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_xn203"]
 random_pitch = 1.035265
 streams_count = 2
@@ -46,7 +32,7 @@ random_pitch = 1.0594631
 streams_count = 1
 stream_0/stream = ExtResource("3_gkwjo")
 
-[node name="Ball3d" type="Node3D" unique_id=1077794002]
+[node name="Ball3d" type="Node3D" unique_id=1077794002 groups=["network_sync"]]
 script = ExtResource("1_1awvx")
 
 [node name="Ball2D" type="SGCharacterBody2D" parent="." unique_id=978173109 groups=["ball", "network_sync"]]
@@ -78,9 +64,6 @@ shape = SubResource("SphereShape3D_1awvx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.047618628)
 cast_shadow = 3
 mesh = SubResource("SphereMesh_km8ha")
-
-[node name="ServerSync" type="MultiplayerSynchronizer" parent="." unique_id=1199347144]
-replication_config = SubResource("SceneReplicationConfig_1jdt5")
 
 [node name="KickStream" type="AudioStreamPlayer" parent="." unique_id=762630356]
 stream = SubResource("AudioStreamRandomizer_xn203")

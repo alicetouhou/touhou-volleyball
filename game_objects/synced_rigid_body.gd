@@ -38,6 +38,8 @@ func apply_force(force: SGFixedVector2, _position: SGFixedVector2):
 func apply_angular_impulse(force: SGFixedVector2, force_position: SGFixedVector2):
 	var torque = SGFixed.mul(force_position.y,force.x) - SGFixed.mul(force_position.x,force.y)
 	var moi = SGFixed.mul(MASS,SGFixed.pow(force_position.length(),2))
+	if moi < 1000:
+		return
 	var angular_acceleration = SGFixed.div(torque,moi)
 	_angular_impulses.push_back(angular_acceleration)
 

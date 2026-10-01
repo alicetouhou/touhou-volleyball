@@ -17,6 +17,10 @@ const evolve_flash = preload("res://resources/effects/evolve-flash.tscn")
 
 func _process(delta: float) -> void:
 	for u in update_positions:
+		if u[0] == null:
+			continue
+		if u[1] == null:
+			continue
 		u[0].position = project_pos_to_viewport(u[1].global_position)
 
 func project_pos_to_viewport(c: Vector3) -> Vector2:

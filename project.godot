@@ -104,6 +104,7 @@ sync_debug={
 [network]
 
 rollback/input_delay=0
+rollback/debug/random_rollback_ticks=3
 
 [physics]
 

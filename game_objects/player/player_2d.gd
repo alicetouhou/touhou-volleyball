@@ -144,8 +144,8 @@ func _network_process(input: Dictionary) -> void:
 			var hit_direction = ball.fixed_position.direction_to(fixed_position)
 			var hit_force_vector = SGFixed.vector2(-SGFixed.mul(KICK_POWER, hit_direction.x) + velocity.x, -SGFixed.mul(KICK_POWER, hit_direction.y) + velocity.y)
 			var ball_rad = 99091
-			var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))
-			ball.apply_impulse(hit_force_vector,hit_distance_vector)
+			var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))			
+			ball.add_kick_request(hit_force_vector, hit_distance_vector)
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()

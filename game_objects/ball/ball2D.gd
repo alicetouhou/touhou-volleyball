@@ -22,7 +22,7 @@ func _network_postprocess(_input):
 		)
 	kick_requests = []
 	
-	super._network_postprocess(_input)
+	super._network_process()
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()

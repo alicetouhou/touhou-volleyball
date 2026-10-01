@@ -1,5 +1,6 @@
-extends Node3D
+extends Node
 class_name InputManager
+
 ## Processes local input into [InputFrame]s. Also handles broadcasting this input to remote peers,
 ## and handling remote input recieved from other peers.
 ## Triggers rollbacks when an input frame is recieved that does not match the predicted input.
@@ -38,7 +39,7 @@ var supering := false
 var debug_current_tick = 0
 
 ## The parent of all player nodes. Player nodes should be named by their remote peer id.
-@export var player_root: Node3D
+@export var player_root: Node2D
 
 ## Recieve an [InputFrame] and compare it with the predicted input.
 ## If it is incorrect, invalidate our cache and trigger a rollback with the new input.
@@ -130,14 +131,6 @@ func predict_player_input_for_tick(player_mid: int, tick: int) -> InputFrame:
 func apply_input_for_tick(tick: int) -> void:
 	for node in player_root.get_children():
 		var input := predict_player_input_for_tick(player_mid_by_peer_id[int(node.name)], tick)
-		var vel = PhysicsServer3D.body_get_state(
-			(node as RigidBody3D).get_rid(), PhysicsServer3D.BODY_STATE_LINEAR_VELOCITY
-		)
-		PhysicsServer3D.body_set_state(
-			(node as RigidBody3D).get_rid(),
-			PhysicsServer3D.BODY_STATE_LINEAR_VELOCITY,
-			Vector3(input.direction.x * 9.0, vel.y, vel.z)
-		)
 		node.direction = input.direction
 		node.jumping = input.jumping
 		node.kicking = input.kicking
@@ -151,11 +144,12 @@ func get_player_input(tick: int) -> InputFrame:
 	var frame = InputFrame.new()
 	frame.tick = tick
 	frame.player_map_id = player_map_id
-	
-	frame.direction = Vector2(
-		action_strength.y - action_strength.x,
-		action_strength.z - action_strength.w,
-	).normalized()
+	frame.direction = Vector2i(
+		# We can use floats here, because they are converted to ints before
+		# being sent through the network.
+		SGFixed.from_float(action_strength.y - action_strength.x),
+		SGFixed.from_float(action_strength.z - action_strength.w),
+	)
 
 	frame.set_button_flags(jumping, kicking, supering)
 	
@@ -187,12 +181,15 @@ func reverse_peer_id(value) -> void:
 ## When a packet is recieved from a remote peer, read the input and acknowledgements.
 ## Input is sent to [method player_set_input].
 ## Acknowledgements are saved in [member acknowledged_inputs].
-func packet_recieved(from, packet) -> void:
+func packet_recieved(from: int, packet) -> void:
 	var buffer := StreamPeerBuffer.new()
 	buffer.put_data(packet)
 	buffer.seek(0)
-	
-	var mid := player_mid_by_peer_id[from]
+
+	var mid: int = player_mid_by_peer_id.get(from, -1)
+	if mid == -1:
+		print("Player with mid ", from, " does not exist.")
+		return
 	
 	var inputs := buffer.get_8()
 	for _i in inputs:

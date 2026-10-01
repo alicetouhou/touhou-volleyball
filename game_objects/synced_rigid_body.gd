@@ -143,7 +143,7 @@ func _network_preprocess(_input):
 	_angular_impulses = []
 	_integrated_forces = SGFixed.vector2(0,0)
 
-func _network_postprocess(_input):
+func _network_process():
 	display_position.x = SGFixed.to_float(fixed_position.x)
 	display_position.y = SGFixed.to_float(fixed_position.y)
 

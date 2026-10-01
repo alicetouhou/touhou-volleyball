@@ -14,7 +14,7 @@ var prediction := false
 @export_flags("jump", "kick", "use_super")
 var button_flags := 0
 ## The players direction action strengths.
-var direction: Vector2
+var direction: Vector2i
 
 ## If true, the player is jumping on this frame.
 var jumping: bool :
@@ -42,9 +42,10 @@ func serialise(to: StreamPeerBuffer) -> void:
 	# 4-7: Reserved
 	var flags = 0
 	flags |= button_flags
-	flags |= (1 << 3) if direction == Vector2.ZERO else 0
+	flags |= (1 << 3) if direction == Vector2i.ZERO else 0
 	to.put_u8(flags)
-	to.put_float(direction.angle())
+	to.put_64(direction.x)
+	to.put_64(direction.y)
 
 ## Deserialise a buffer into an input frame.
 func deserialise(serial: StreamPeerBuffer) -> void:
@@ -52,9 +53,11 @@ func deserialise(serial: StreamPeerBuffer) -> void:
 	var flags = serial.get_8()
 	button_flags = flags & 0b111
 	
-	direction = Vector2.from_angle(serial.get_float())
+	var direction_x = serial.get_64()
+	var direction_y = serial.get_64()
+	direction = Vector2i(direction_x, direction_y)
 	if flags & (1 << 3):
-		direction = Vector2.ZERO
+		direction = Vector2i.ZERO
 
 ## Test if two input frames are performing the same action.
 func actions_equal(other: InputFrame) -> bool:

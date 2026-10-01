@@ -33,10 +33,6 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-rollback-netcode/plugin.cfg")
-
-[editor_plugins]
-
 enabled=PackedStringArray()
 
 [filesystem]

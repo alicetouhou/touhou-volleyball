@@ -100,7 +100,8 @@ func _integrate_forces():
 		turn.emit(sign(velocity.x))
 	super._integrate_forces()
 
-func _network_process(input: Dictionary) -> void:
+func _network_process() -> void:
+	var input
 	ticks += 1.
 	var joy_direction = input.get("joy_direction", Vector4i.ZERO)
 

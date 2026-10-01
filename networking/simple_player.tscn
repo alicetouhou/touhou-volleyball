@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://rjldd1wns2ve"]
+
+[ext_resource type="Script" uid="uid://ut7tcqohbw1w" path="res://networking/player_body.gd" id="1_fejk0"]
+[ext_resource type="Texture2D" uid="uid://vsimlmjv380n" path="res://icon.svg" id="2_y8lrw"]
+
+[sub_resource type="SGRectangleShape2D" id="SGRectangleShape2D_y8lrw"]
+extents_x = 4053416
+extents_y = 3939356
+
+[node name="1" type="SGCharacterBody2D" unique_id=450818538 groups=["rollback"]]
+script = ExtResource("1_fejk0")
+metadata/_custom_type_script = "uid://r8e80j04btgn"
+
+[node name="MeshInstance3D" type="Sprite2D" parent="." unique_id=2240494]
+texture = ExtResource("2_y8lrw")
+
+[node name="CollisionShape3D" type="SGCollisionShape2D" parent="." unique_id=1750490158]
+shape = SubResource("SGRectangleShape2D_y8lrw")

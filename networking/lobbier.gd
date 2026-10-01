@@ -121,8 +121,8 @@ func start_game() -> void:
 		return
 	multiplayer.multiplayer_peer.refuse_new_connections = true
 	map_peer_ids()
-	$Node3D.start_game()
-	$Node3D.start_tracking.rpc(Time.get_unix_time_from_system() + 2)
+	%StateManager.start_game()
+	%StateManager.start_tracking.rpc(Time.get_unix_time_from_system() + 2)
 
 func _ready() -> void:
 	if OS.has_feature("dedicated_server"):

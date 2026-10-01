@@ -40,16 +40,12 @@ func log_hash() -> void:
 func target_tick(target: int) -> void:
 	log_tick = target
 
-func simulate_tick(at: int, rolling:bool = false) -> void:
+func simulate_tick(at: int) -> void:
 	var space := get_viewport().world_3d.space
 	input_manager.apply_input_for_tick(at)
 
 	RapierPhysicsServer3D.space_step(space, tick_time)
 	RapierPhysicsServer3D.space_flush_queries(space)
-	#print(
-	#	"Physics hash %s at tick %s" % [hash(manager.export_state(space, "RustBincode")), at],
-	#	" (rollback)" if rolling else ""
-	#)
 
 ## Rollback and resimulate to the current tick
 func rollback(to: int) -> void:
@@ -63,15 +59,10 @@ func rollback(to: int) -> void:
 		push_error("Failed to find tick %s in cache! States will diverge." % to)
 		return
 	
-	print("BEFORE-RELOAD: Tick %s, hash %s" % [to, hash(manager.export_state(space, "RustBincode"))])
-	
 	manager.load_cached_state(space, index)
-	
-	print("RELOAD: Tick %s, hash %s" % [to, hash(manager.export_state_from_cache(index, "RustBincode"))])
-	print("RELOAD: Tick %s, hash %s" % [to, hash(manager.export_state(space, "RustBincode"))])
 
-	for i in range(to, roll_to):
-		simulate_tick(i, true)
+	for i in range(to, roll_to + 1):
+		simulate_tick(i)
 
 	get_tree().call_group("rollback", "stop_rollback")
 
@@ -80,7 +71,6 @@ func rollback(to: int) -> void:
 ## Cache state, advance tick and apply input for this tick.
 func _physics_process(_delta: float) -> void:
 	var space := get_viewport().world_3d.space
-	print("Tick %s cached, hash is %s" % [tick, hash(manager.export_state(space, "RustBincode"))])
 	manager.cache_state(space, tick)
 
 	input_manager.get_player_input(tick)
@@ -88,8 +78,11 @@ func _physics_process(_delta: float) -> void:
 	
 	if input_manager.rollback:
 		input_manager.rollback = false
-		rollback(input_manager.rollback_to - 1)
+		rollback(input_manager.rollback_to - 5)
 		input_manager.rollback_to = UINT32_MAX
+	
+	if tick == log_tick:
+		print("Tick %s hash %s" % [tick, hash(manager.export_state(space, "RustBincode"))])
 
 	tick += 1
 

@@ -20,7 +20,9 @@ var kicking: bool
 var supering: bool
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
-	linear_velocity.x = direction.x * MOVEMENT_SPEED
+	#linear_velocity.x = direction.x * MOVEMENT_SPEED
+	#if rollback:
+	#	print(direction)
 	
 	# https://forum.godotengine.org/t/how-to-check-if-rigid-body-is-on-floor/65679/3
 	var i := 0

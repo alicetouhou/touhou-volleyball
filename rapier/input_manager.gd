@@ -128,15 +128,20 @@ func predict_player_input_for_tick(player_mid: int, tick: int) -> InputFrame:
 
 ## Update the player nodes with the correct inputs, then broadcast our input to peers.
 func apply_input_for_tick(tick: int) -> void:
-	var inputs = []
 	for node in player_root.get_children():
 		var input := predict_player_input_for_tick(player_mid_by_peer_id[int(node.name)], tick)
-		inputs.push_back(input.direction)
+		var vel = PhysicsServer3D.body_get_state(
+			(node as RigidBody3D).get_rid(), PhysicsServer3D.BODY_STATE_LINEAR_VELOCITY
+		)
+		PhysicsServer3D.body_set_state(
+			(node as RigidBody3D).get_rid(),
+			PhysicsServer3D.BODY_STATE_LINEAR_VELOCITY,
+			Vector3(input.direction.x * 9.0, vel.y, vel.z)
+		)
 		node.direction = input.direction
 		node.jumping = input.jumping
 		node.kicking = input.kicking
 		node.supering = input.supering
-	#print("Input hash %s at tick %s" % [hash(inputs), tick])
 
 ## Get the local player input for a given tick.
 func get_player_input(tick: int) -> InputFrame:

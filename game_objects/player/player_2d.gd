@@ -17,7 +17,7 @@ var _last_supering = false
 
 var _direction = Vector4i(0,0,0,0)
 
-const KICK_COOLDOWN_TICKS = 5
+const KICK_COOLDOWN_TICKS = 20
 
 var ticks = 0
 var jumping_for_ticks = 0
@@ -123,7 +123,7 @@ func _network_process(input: Dictionary) -> void:
 		supering_for_ticks += 1
 	else:
 		supering_for_ticks = 0
-	
+
 	_direction = joy_direction
 
 	if jumping_for_ticks == 1:
@@ -146,7 +146,7 @@ func _network_process(input: Dictionary) -> void:
 			kick.emit(true)
 			last_kicked_on_tick = ticks
 			var hit_direction = ball.fixed_position.direction_to(fixed_position)
-			var hit_force_vector = SGFixed.vector2(KICK_POWER * -hit_direction.x + velocity.x,KICK_POWER * -hit_direction.y + velocity.y)
+			var hit_force_vector = SGFixed.vector2(-SGFixed.mul(KICK_POWER, hit_direction.x) + velocity.x, -SGFixed.mul(KICK_POWER, hit_direction.y) + velocity.y)
 			var ball_rad = 99091
 			var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))
 			ball.apply_impulse(hit_force_vector,hit_distance_vector)

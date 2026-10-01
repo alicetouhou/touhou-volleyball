@@ -90,6 +90,8 @@ func f_yv(t: int, x: int, v: int):
 	return _integrated_forces.y
 	
 func _integrate_forces():
+	_integrated_forces = SGFixed.vector2(0,0)
+
 	for force in _forces:
 		_integrated_forces.x += force.x
 		_integrated_forces.y += force.y
@@ -111,7 +113,7 @@ func _integrate_forces():
 	# Clamp linear velocity to avoid ballooning to huge velocities
 	linear_velocity.x = clamp(x_approximation - SGFixed.mul(x_approximation,LINEAR_DAMPING),-1966080,1966080)
 	linear_velocity.y = clamp(y_approximation - SGFixed.mul(y_approximation,LINEAR_DAMPING),-1966080,1966080)
-		
+
 	_forces = []
 	_impulses = []
 	_angular_impulses = []
@@ -127,8 +129,7 @@ func _collide(prev_velocity: SGFixedVector2):
 		var y_force = SGFixed.mul(d,c.normal.y)
 		force.x += x_force
 		force.y += y_force
-				
-							
+
 	return SGFixed.vector2(prev_velocity.x - force.x,prev_velocity.y - force.y)
 
 func _network_process(_input):
@@ -140,7 +141,7 @@ func _network_process(_input):
 	velocity.y = 0
 	
 	apply_central_force(GRAVITY)
-	
+
 	_integrate_forces()
 	
 	velocity.x += linear_velocity.x
@@ -153,7 +154,7 @@ func _network_process(_input):
 	linear_velocity = _collide(SGFixed.vector2(linear_velocity.x, linear_velocity.y))
 	
 	sync_to_physics_engine()
-	
+
 func _interpolate_state(old_state: Dictionary, new_state: Dictionary, weight: float) -> void:
 	var sprite_pos_x: int = lerp(old_state["fixed_position_x"], new_state["fixed_position_x"], weight)
 	var sprite_pos_y: int = lerp(old_state["fixed_position_y"], new_state["fixed_position_y"], weight)
@@ -181,6 +182,10 @@ func _save_state() -> Dictionary:
 		linear_velocity_x=linear_velocity.x,
 		linear_velocity_y=linear_velocity.y,
 		angular_velocity=angular_velocity,
+
+		_forces=fixed_vec_arr_to_vec_i_arr(_forces),
+		_impulses=fixed_vec_arr_to_vec_i_arr(_impulses),
+		_angular_impulses=_angular_impulses,
 	}
 
 func _load_state(state: Dictionary):
@@ -189,5 +194,10 @@ func _load_state(state: Dictionary):
 	fixed_rotation = state["fixed_rotation"]
 	linear_velocity = SGFixed.vector2(state["linear_velocity_x"], state["linear_velocity_y"])
 	angular_velocity = state["angular_velocity"]
+
+
+	_forces=state["_forces"]
+	_impulses=vec_i_arr_to_fixed_vec_arr(state["_impulses"])
+	_angular_impulses=state["_angular_impulses"]
 
 	sync_to_physics_engine()

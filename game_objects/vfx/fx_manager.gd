@@ -19,7 +19,7 @@ func _process(delta: float) -> void:
 	for u in update_positions:
 		u[0].position = project_pos_to_viewport(u[1].global_position)
 
-func project_pos_to_viewport(c: Vector3):
+func project_pos_to_viewport(c: Vector3) -> Vector2:
 	var camera: Camera3D = get_viewport().get_camera_3d()
 	return camera.unproject_position(c)
 
@@ -33,7 +33,20 @@ func create_at_pos(fx: PackedScene, pos: Vector3, reflect = false):
 	f.animation_finished.connect(func():
 		f.queue_free()
 	)
+
+func create_at_camera_pos(fx: PackedScene, pos: Vector2, reflect = false):
+	var f: AnimatedSprite2D = fx.instantiate()
+	%Viewport.add_child(f)
+	f.position = pos
+	if reflect:
+		f.scale.y *= -1
+	f.play()
+	f.animation_finished.connect(func():
+		f.queue_free()
+	)
 	
+
+
 func create_particle_at_pos(particle: String, pos: Vector3, reflect = false):
 	var f: GPUParticles2D
 	if particle == "master_spark_star":

@@ -25,9 +25,6 @@ var supering_for_ticks = 0
 
 var kicking_for_ticks = 0
 var last_kicked_on_tick = -10
-var kick_button_last_pressed_on_tick = 0
-
-var last_collided_with_ball_tick = 0
 
 var ball: Ball2D
 
@@ -134,22 +131,16 @@ func _network_process(input: Dictionary) -> void:
 	if jumping_for_ticks == 1:
 		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
-	if kicking:
-		kick_button_last_pressed_on_tick = ticks
-	var time_since_kick_pressed_started = (ticks - kick_button_last_pressed_on_tick) + kicking_for_ticks
-
 	# Make sure the kick area is aware of collisions
-	%KickArea.sync_to_physics_engine()
-	var bodies = %KickArea.get_overlapping_bodies()
-	var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
-	if ball_index > 0:
-		ball = bodies[ball_index]
-		last_collided_with_ball_tick = ticks
-
-	if ball != null:
-		if time_since_kick_pressed_started < 10 and (ticks - last_collided_with_ball_tick) < 10 and (ticks - last_kicked_on_tick) > KICK_COOLDOWN_TICKS:
+	if kicking_for_ticks > 0 and kicking_for_ticks <= 4 and (ticks - last_kicked_on_tick) > KICK_COOLDOWN_TICKS:
+		kick.emit(false)
+		last_kicked_on_tick = ticks
+		%KickArea.sync_to_physics_engine()
+		var bodies = %KickArea.get_overlapping_bodies()
+		var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
+		if ball_index > 0:
 			kick.emit(true)
-			last_kicked_on_tick = ticks
+			ball = bodies[ball_index]
 			var hit_direction = ball.fixed_position.direction_to(fixed_position)
 			var hit_force_vector = SGFixed.vector2(-SGFixed.mul(KICK_POWER, hit_direction.x) + velocity.x, -SGFixed.mul(KICK_POWER, hit_direction.y) + velocity.y)
 			var ball_rad = 99091
@@ -163,8 +154,6 @@ func _save_state() -> Dictionary:
 	state["kicking_for_ticks"] = kicking_for_ticks
 	state["supering_for_ticks"] = supering_for_ticks
 	state["last_kicked_on_tick"] = last_kicked_on_tick
-	state["kick_button_last_pressed_on_tick"] = kick_button_last_pressed_on_tick
-	state["last_collided_with_ball_tick"] = last_collided_with_ball_tick
 	return state
 
 func _load_state(state):
@@ -173,6 +162,4 @@ func _load_state(state):
 	kicking_for_ticks = state["kicking_for_ticks"]
 	supering_for_ticks = state["supering_for_ticks"]
 	last_kicked_on_tick = state["last_kicked_on_tick"]
-	kick_button_last_pressed_on_tick = state["kick_button_last_pressed_on_tick"]
-	last_collided_with_ball_tick = state["last_collided_with_ball_tick"]
 	super._load_state(state)

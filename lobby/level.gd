@@ -66,12 +66,11 @@ func start_game() -> void:
 	get_tree().call_group("cpu", "cpu_init", ball, players.get_children())
 	get_tree().call_group("cpu", "update_game_state", false)
 
-
 func create_dust_trail(player: Player3D, direction: int):
 	%FxManager.create_at_pos(FXManager.dust_settle, player.position - Vector3(0, .6, 0), direction != 1)
 
 func create_ball_hit_visual(player: Player3D):
-	%FxManager.create_at_pos(FXManager.pummel_pop, player.position + ball.position / 2.)
+	%FxManager.create_at_pos(FXManager.pummel_pop, (player.position + ball.position) / 2.)
 	%FxManager.create_with_parent_3D(FXManager.pressure_ring, ball)
 	%Camera.add_trauma(.1)
 

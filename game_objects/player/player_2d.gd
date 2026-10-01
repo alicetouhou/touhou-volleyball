@@ -110,6 +110,11 @@ func _network_process(input: Dictionary) -> void:
 	var jumping = input.get("jumping", false)
 	var kicking = input.get("kicking", false)
 	var supering = input.get("supering", false)
+	
+	if joy_direction.w > 0.9:
+		GRAVITY_SCALE = SGFixed.from_int(7)
+	else:
+		GRAVITY_SCALE = SGFixed.ONE
 
 	if jumping:
 		jumping_for_ticks += 1

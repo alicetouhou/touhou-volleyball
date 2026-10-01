@@ -6,7 +6,7 @@ extends SGCharacterBody2D
 @export_range(0,65536) var BOUNCINESS: int = 65536
 @export_range(0,65536) var LINEAR_DAMPING: int = 655
 @export_range(0,65536) var ANGULAR_DAMPING: int = 655
-@export var BOUNCE_THRESHOLD: int = 150000
+@export var GRAVITY_SCALE: int = 65536
 
 @onready var GRAVITY: SGFixedVector2 = SGFixed.vector2(0,Globals.GRAVITY)
 @onready var DELTA = 2185
@@ -31,18 +31,18 @@ func _ready() -> void:
 func _network_spawn(_data):
 	sync_to_physics_engine()
 	
-func apply_force(force: SGFixedVector2, position: SGFixedVector2):
+func apply_force(force: SGFixedVector2, _position: SGFixedVector2):
 	_forces.push_back(force)
 	
-func apply_angular_impulse(force: SGFixedVector2, position: SGFixedVector2):
-	var torque = SGFixed.mul(position.y,force.x) - SGFixed.mul(position.x,force.y)
-	var moi = SGFixed.mul(MASS,SGFixed.pow(position.length(),2))
+func apply_angular_impulse(force: SGFixedVector2, force_position: SGFixedVector2):
+	var torque = SGFixed.mul(force_position.y,force.x) - SGFixed.mul(force_position.x,force.y)
+	var moi = SGFixed.mul(MASS,SGFixed.pow(force_position.length(),2))
 	var angular_acceleration = SGFixed.div(torque,moi)
 	_angular_impulses.push_back(angular_acceleration)
 
-func apply_impulse(force: SGFixedVector2, position: SGFixedVector2):
+func apply_impulse(force: SGFixedVector2, force_position: SGFixedVector2):
 	if position.length() > 0:
-		apply_angular_impulse(force,position)
+		apply_angular_impulse(force,force_position)
 	_impulses.push_back(force)
 	
 func apply_central_force(force: SGFixedVector2):
@@ -58,7 +58,7 @@ func apply_central_impulse(force: SGFixedVector2):
 # v0 - initial velocity
 # x - target x (time)
 # n - iteration number
-func rk4(f: Callable,g: Callable,x0: int,y0: int,v0: int,x: int,n: int) -> int:
+func rk4(f: Callable,g: Callable,x0: int,y0: int,v0: int,_x: int,n: int) -> int:
 	var h = SGFixed.div(DELTA,n * SGFixed.ONE)
 	var y = y0
 	var v = v0
@@ -80,13 +80,13 @@ func rk4(f: Callable,g: Callable,x0: int,y0: int,v0: int,x: int,n: int) -> int:
 		x0 += h
 	return v
 	
-func f_x(t: int, x: int, v: int):
+func f_x(_t: int, _x: int, v: int):
 	return v
-func f_xv(t: int, x: int, v: int):
+func f_xv(_t: int, _x: int, _v: int):
 	return _integrated_forces.x
-func f_y(t: int, x: int, v: int):
+func f_y(_t: int, _x: int, v: int):
 	return v
-func f_yv(t: int, x: int, v: int):
+func f_yv(_t: int, _x: int, _v: int):
 	return _integrated_forces.y
 	
 func _integrate_forces():
@@ -141,7 +141,7 @@ func _network_process(_input):
 	velocity.x = 0
 	velocity.y = 0
 	
-	apply_central_force(GRAVITY)
+	apply_central_force(SGFixed.vector2(SGFixed.mul(GRAVITY.x,GRAVITY_SCALE),SGFixed.mul(GRAVITY.y,GRAVITY_SCALE)))
 
 	_integrate_forces()
 	

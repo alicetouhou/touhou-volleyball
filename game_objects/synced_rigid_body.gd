@@ -18,6 +18,8 @@ var _angular_impulses: Array[int] = []
 
 var _integrated_forces: SGFixedVector2 = SGFixed.vector2(0,0)
 
+var is_on_floor_USE_THIS_ONE = false
+
 var linear_velocity: SGFixedVector2 = SGFixed.vector2(0,0)
 var angular_velocity: = 0
 
@@ -115,10 +117,19 @@ func _integrate_forces():
 
 func _collide(prev_velocity: SGFixedVector2):
 	var force = SGFixed.vector2(0,0)
+		
+	is_on_floor_USE_THIS_ONE = false
 	for c_id in get_slide_count():
 		var c: SGKinematicCollision2D = get_slide_collision(c_id)
-		var c_angle = prev_velocity.dot(c.normal)
-		var d = SGFixed.mul(SGFixed.ONE + BOUNCINESS,c_angle)
+		var dot_c = prev_velocity.dot(c.normal)
+		var UP = SGFixed.vector2(0,SGFixed.ONE)
+		var c_up = c.normal.dot(UP)
+		var body_up = prev_velocity.normalized().dot(UP)
+				
+		if c_up <= SGFixed.HALF*-1 and body_up >= SGFixed.HALF:
+			is_on_floor_USE_THIS_ONE = true
+		
+		var d = SGFixed.mul(SGFixed.ONE + BOUNCINESS,dot_c)
 		var x_force = SGFixed.mul(d,c.normal.x)
 		var y_force = SGFixed.mul(d,c.normal.y)
 		force.x += x_force

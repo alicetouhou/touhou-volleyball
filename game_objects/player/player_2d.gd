@@ -156,8 +156,6 @@ func _network_process(input: Dictionary) -> void:
 			var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))
 			ball.apply_impulse(hit_force_vector,hit_distance_vector)
 
-	super._network_process(input)
-
 func _save_state() -> Dictionary:
 	var state = super._save_state()
 	state["ticks"] = ticks

@@ -12,6 +12,11 @@ extents_y = 4104657
 
 [node name="Player2d" type="SGCharacterBody2D" unique_id=802664772 groups=["network_sync", "player"]]
 script = ExtResource("1_hkkr1")
+MASS = null
+BOUNCINESS = null
+LINEAR_DAMPING = null
+ANGULAR_DAMPING = null
+GRAVITY_SCALE = null
 metadata/_custom_type_script = "uid://r8e80j04btgn"
 
 [node name="KickArea" type="SGArea2D" parent="." unique_id=162389694]

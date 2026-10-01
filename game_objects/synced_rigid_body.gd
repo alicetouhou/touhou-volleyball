@@ -18,7 +18,6 @@ var _angular_impulses: Array[int] = []
 
 var _integrated_forces: SGFixedVector2 = SGFixed.vector2(0,0)
 
-var angle = 0
 var linear_velocity: SGFixedVector2 = SGFixed.vector2(0,0)
 var angular_velocity: = 0
 
@@ -114,12 +113,6 @@ func _integrate_forces():
 	linear_velocity.x = clamp(x_approximation - SGFixed.mul(x_approximation,LINEAR_DAMPING),-1966080,1966080)
 	linear_velocity.y = clamp(y_approximation - SGFixed.mul(y_approximation,LINEAR_DAMPING),-1966080,1966080)
 
-	_forces = []
-	_impulses = []
-	_angular_impulses = []
-	
-	_integrated_forces = SGFixed.vector2(0,0)
-
 func _collide(prev_velocity: SGFixedVector2):
 	var force = SGFixed.vector2(0,0)
 	for c_id in get_slide_count():
@@ -133,10 +126,15 @@ func _collide(prev_velocity: SGFixedVector2):
 
 	return SGFixed.vector2(prev_velocity.x - force.x,prev_velocity.y - force.y)
 
-func _network_process(_input):
+func _network_preprocess(_input):
+	_forces = []
+	_impulses = []
+	_angular_impulses = []
+	_integrated_forces = SGFixed.vector2(0,0)
+
+func _network_postprocess(_input):
 	display_position.x = SGFixed.to_float(fixed_position.x)
 	display_position.y = SGFixed.to_float(fixed_position.y)
-	display_rotation = SGFixed.to_float(fixed_rotation)
 
 	velocity.x = 0
 	velocity.y = 0
@@ -147,9 +145,9 @@ func _network_process(_input):
 	
 	velocity.x += linear_velocity.x
 	velocity.y += linear_velocity.y
-	
-	angle += SGFixed.mul(angular_velocity,DELTA)
-	fixed_rotation = angle
+
+	fixed_rotation += SGFixed.mul(angular_velocity,DELTA)
+	display_rotation = SGFixed.to_float(fixed_rotation)
 
 	move_and_slide()
 	linear_velocity = _collide(SGFixed.vector2(linear_velocity.x, linear_velocity.y))
@@ -183,10 +181,6 @@ func _save_state() -> Dictionary:
 		linear_velocity_x=linear_velocity.x,
 		linear_velocity_y=linear_velocity.y,
 		angular_velocity=angular_velocity,
-
-		_forces=fixed_vec_arr_to_vec_i_arr(_forces),
-		_impulses=fixed_vec_arr_to_vec_i_arr(_impulses),
-		_angular_impulses=_angular_impulses,
 	}
 
 func _load_state(state: Dictionary):
@@ -195,10 +189,5 @@ func _load_state(state: Dictionary):
 	fixed_rotation = state["fixed_rotation"]
 	linear_velocity = SGFixed.vector2(state["linear_velocity_x"], state["linear_velocity_y"])
 	angular_velocity = state["angular_velocity"]
-
-
-	_forces=state["_forces"]
-	_impulses=vec_i_arr_to_fixed_vec_arr(state["_impulses"])
-	_angular_impulses=state["_angular_impulses"]
 
 	sync_to_physics_engine()

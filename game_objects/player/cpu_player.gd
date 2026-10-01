@@ -40,7 +40,6 @@ var ball: Node3D
 
 func cpu_init(world_ball: Node3D, _world_players: Array[Node]) -> void:
 	ball = world_ball
-	#print(time, " init")
 	
 	var u = JUMP_POWER / mass
 	MAX_JUMP_TIME = u / -get_gravity().y
@@ -49,20 +48,6 @@ func cpu_init(world_ball: Node3D, _world_players: Array[Node]) -> void:
 func update_game_state(game_running: bool) -> void:
 	started = game_running
 	I = sign(global_position.x)
-
-func _process(delta: float) -> void:
-	for p in previews:
-		p.queue_free()
-		previews.erase(p)
-	for i in ball_predictions + player_predictions:
-		var p = $"Pred".duplicate()
-		$"..".add_child(p)
-		p.position = i
-		previews.push_back(p)
-	if ball_target:
-		%Target.global_position = Vector3(ball_target[1], ball_target[2], ball_target[3])
-	else:
-		%Target.global_position = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:
 	%Debug1.text = ["Counterspike", "Counterset", "Reposition", "Return", "Set", "Spike", "Wait"][intention] + (str(ball_target[0]) if ball_target else "")
@@ -76,13 +61,12 @@ func _physics_process(delta: float) -> void:
 		ball_target[0] -= 1
 		if ball_target[0] < 0:
 			ball_target = []
-			#print(time, " cancel")
 			reset_intentions()
 	
 	if !started:
 		return
 	
-	ball_predictions = predict_ball_locations(delta, ball.linear_velocity, 250)
+	ball_predictions = predict_ball_locations(delta, ball.linear_velocity, 100)
 	
 	# Cancel intention if something changed.
 	if ball_target:
@@ -149,7 +133,7 @@ func _physics_process(delta: float) -> void:
 			%ActionSync.kick.rpc()
 	if intention == Intention.COUNTERSPIKE:
 		var target = ball_predictions[ball_target[0]]
-		if ball_target[0] <= ceil(sqrt(2 * (target.y - global_position.y) / (14 * gravity.y))) / delta:
+		if ball_target[0] <= ceil(sqrt(2 * (target.y - global_position.y) / (gravity.y * (14. if direction.y != -1 else 1.))) / delta):
 			spike()
 		else:
 			if ball_target[0] < 2 or target.x + 1.5*I < global_position.x:
@@ -204,6 +188,7 @@ func _physics_process(delta: float) -> void:
 		for j in range(i):
 			tracker[i][j] = tracker[i][j+1]
 		tracker[i][i] = (ball_predictions[i] if ball_predictions.size() > i else null)
+	
 	super(delta)
 
 func get_direction() -> int:
@@ -225,7 +210,7 @@ func get_direction() -> int:
 		return 1
 	
 func predict_ball_locations(delta: float, v: Vector3, n: int) -> Array[Vector3]:
-	var g = ball.gravity_scale * get_gravity()
+	var g = ball.get_gravity()
 	var p = ball.position
 	var t = 1
 	var predictions: Array[Vector3] = []
@@ -245,8 +230,24 @@ func predict_ball_locations(delta: float, v: Vector3, n: int) -> Array[Vector3]:
 		if new_pos.y > 1.5:
 			t += 1
 		else:
+			visualize_predictions()
 			return predictions
+	visualize_predictions()
 	return predictions
+
+func visualize_predictions():
+	for p in previews:
+		p.queue_free()
+		previews.erase(p)
+	for i in ball_predictions + player_predictions:
+		var p = $"Pred".duplicate()
+		$"..".add_child(p)
+		p.position = i
+		previews.push_back(p)
+	if ball_target:
+		%Target.global_position = Vector3(ball_target[1], ball_target[2], ball_target[3])
+	else:
+		%Target.global_position = Vector3.ZERO
 
 func reset_intentions():
 	intention = Intention.STANDBY

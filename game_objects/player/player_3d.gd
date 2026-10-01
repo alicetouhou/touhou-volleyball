@@ -12,6 +12,7 @@ signal create_fx(fx: PackedScene, pos: Vector3)
 
 ## Config values
 const MOVEMENT_SPEED := 9.0
+const FAST_FALL_MULT := 14.0
 const JUMP_POWER := 10.0
 const JUMP_COOLDOWN := 0.1
 

@@ -15,6 +15,10 @@ run/main_scene="uid://c8lfngdce82fl"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://btdfuwvwralce"
+
 [autoload]
 
 Supers="*uid://djih161ntx8ci"
@@ -30,6 +34,10 @@ window/stretch/mode="canvas_items"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot-rollback-netcode/plugin.cfg")
+
+[editor_plugins]
+
+enabled=PackedStringArray()
 
 [filesystem]
 

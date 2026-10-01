@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://6qduejdh4m4q"]
+
+[ext_resource type="Script" uid="uid://c1nyqh5qc1ec1" path="res://rapier/lobbier.gd" id="1_jq7bq"]
+[ext_resource type="Script" uid="uid://bvgb6tvhaiogw" path="res://rapier/state_manager.gd" id="1_sxdb3"]
+[ext_resource type="Script" uid="uid://x2j7auxsdyfc" path="res://addons/godot-rapier3d/custom_nodes/rapier_static_body_3d.gd" id="3_jq7bq"]
+[ext_resource type="Script" uid="uid://b0faj7lv12xxn" path="res://rapier/input_manager.gd" id="4_oqha4"]
+[ext_resource type="Script" uid="uid://bvamk6gb8rnnl" path="res://lobby/pinger.gd" id="5_jq7bq"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_h3fx5"]
+
+[node name="Lobby" type="Node" unique_id=987172966]
+script = ExtResource("1_jq7bq")
+
+[node name="InputManager" type="Node3D" parent="." unique_id=1959005697 node_paths=PackedStringArray("player_root")]
+unique_name_in_owner = true
+script = ExtResource("4_oqha4")
+player_root = NodePath("../Node3D/Players")
+
+[node name="StateManager3D" type="StateManager3D" parent="." unique_id=1553768428 node_paths=PackedStringArray("root_node")]
+root_node = NodePath("../Node3D")
+max_cache_length = 20
+rolling_cache = true
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1218033940]
+process_physics_priority = 99
+script = ExtResource("1_sxdb3")
+
+[node name="Players" type="Node3D" parent="Node3D" unique_id=494449559]
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="Node3D" unique_id=1900702218]
+_spawnable_scenes = PackedStringArray("uid://rjldd1wns2ve")
+spawn_path = NodePath("../Players")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Node3D" unique_id=373242391]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1127748, 0)
+script = ExtResource("3_jq7bq")
+metadata/_custom_type_script = "uid://x2j7auxsdyfc"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/StaticBody3D" unique_id=1927293733]
+shape = SubResource("WorldBoundaryShape3D_h3fx5")
+
+[node name="Camera3D" type="Camera3D" parent="Node3D" unique_id=1988457234]
+transform = Transform3D(1, 0, 0, 0, 0.9759956, 0.21779016, 0, -0.21779016, 0.9759956, 0, 0, 2.864606)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Node3D" unique_id=303472825]
+transform = Transform3D(0.59851176, 0, -0.801114, 0.21602675, 0.9629562, 0.16139345, 0.7714377, -0.26965794, 0.5763406, 0, 0.49214387, 1.1716651)
+
+[node name="ConnectionManager" type="Control" parent="." unique_id=501187125]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ConnectionManager" unique_id=783852997]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Button" type="Button" parent="ConnectionManager/HBoxContainer" unique_id=1016488590]
+layout_mode = 2
+text = "Start server"
+
+[node name="Button2" type="Button" parent="ConnectionManager/HBoxContainer" unique_id=176537612]
+layout_mode = 2
+text = "Start client"
+
+[node name="Button3" type="Button" parent="ConnectionManager/HBoxContainer" unique_id=1007508640]
+layout_mode = 2
+text = "Start sync"
+
+[node name="Button4" type="Button" parent="ConnectionManager/HBoxContainer" unique_id=1399110039]
+layout_mode = 2
+text = "Get hash"
+
+[node name="IP" type="LineEdit" parent="ConnectionManager/HBoxContainer" unique_id=963784535]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "127.0.0.1"
+
+[node name="Label" type="Label" parent="ConnectionManager" unique_id=1528659732]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+text = "0.00ms"
+script = ExtResource("5_jq7bq")
+
+[connection signal="pressed" from="ConnectionManager/HBoxContainer/Button" to="." method="host_game"]
+[connection signal="pressed" from="ConnectionManager/HBoxContainer/Button2" to="." method="join_game"]
+[connection signal="pressed" from="ConnectionManager/HBoxContainer/Button3" to="." method="start_game"]
+[connection signal="pressed" from="ConnectionManager/HBoxContainer/Button4" to="Node3D" method="log_hash"]

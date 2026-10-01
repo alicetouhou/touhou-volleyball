@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="InputFrame" format=3 uid="uid://wnve47r56r5v"]
+
+[ext_resource type="Script" uid="uid://bts62utnyipx" path="res://rapier/input_frame.gd" id="1_fle2l"]
+
+[resource]
+script = ExtResource("1_fle2l")
+button_flags = 4

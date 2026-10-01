@@ -9,7 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://cbi71iqnvterj" path="res://assets/sound/ball_big_kick.mp3" id="5_hovsl"]
 
 [sub_resource type="SGCircleShape2D" id="SGCircleShape2D_cy21b"]
-radius = 3907299
+radius = 4811761
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1awvx"]
 radius = 0.46
@@ -39,9 +39,7 @@ script = ExtResource("1_1awvx")
 collision_layer = 4
 collision_mask = 4
 unique_name_in_owner = true
-visible = false
 script = ExtResource("2_cy21b")
-MASS = 262144
 BOUNCINESS = 59000
 LINEAR_DAMPING = 600
 BOUNCE_THRESHOLD = 100000
@@ -49,10 +47,7 @@ metadata/_custom_type_script = "uid://r8e80j04btgn"
 
 [node name="SGCollisionShape2D" type="SGCollisionShape2D" parent="Ball2D" unique_id=357563604]
 shape = SubResource("SGCircleShape2D_cy21b")
-fixed_scale_x = 99091
-fixed_scale_y = 99091
 unique_name_in_owner = true
-scale = Vector2(1.5120087, 1.5120087)
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1464322554]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, -0.003, 0)

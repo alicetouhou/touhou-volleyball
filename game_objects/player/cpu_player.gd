@@ -3,6 +3,7 @@ extends Player
 enum Intention {
 	COUNTERSPIKE,
 	COUNTERSET,
+	HARASS,
 	REPOSITION,
 	RETURN,
 	SET,
@@ -23,7 +24,7 @@ var MAX_JUMP_TIME: float
 var I: int
 var intention_cache
 
-const COUNTERSPIKE_THRESHOLD_V = 8
+const COUNTERSPIKE_THRESHOLD_V_Y = 15
 const COUNTERSPIKE_THRESHOLD_Y_MIN = 3.25
 const COUNTERSPIKE_THRESHOLD_Y_MAX = 6.5
 const SPIKE_Y_MIN = 3.5
@@ -97,9 +98,11 @@ func _physics_process(delta: float) -> void:
 			if target_selected:
 				continue
 			var p = ball_predictions[i]
+			# Harass Decision
+			# Counterspike decision
 			if abs(p.x + 0.2*I) <= 0.6 and p.y >= p.x*I + COUNTERSPIKE_THRESHOLD_Y_MIN*I and p.y < COUNTERSPIKE_THRESHOLD_Y_MAX:
 				if not ((global_position.x - p.x - 1.5*I) * MOVEMENT_SPEED > i * delta and (p.x + 1.*I - global_position.x) > i * delta):
-					var dropfv = ceil(COUNTERSPIKE_THRESHOLD_V / abs(14 * gravity.y) / delta)
+					var dropfv = ceil(COUNTERSPIKE_THRESHOLD_V_Y / abs(14 * gravity.y) / delta)
 					var u_y = 10. if linear_velocity.y <= 0. else linear_velocity.y
 					if i > dropfv + ceil((sqrt(pow(u_y, 2) + (2 * gravity.y * (p.y - global_position.y + (0.5*14 * -gravity.y * pow(dropfv * delta,2))))) - u_y) / gravity.y) + (ceil(sqrt(pow(u_y, 2) + (2*14*gravity.y*global_position.y) - u_y) if linear_velocity.y < 0. else 0.)):
 						if not (linear_velocity.y > 0 and i * delta < (u_y + sqrt(pow(u_y, 2) + 2 * gravity.y * (p.y - global_position.y))) / 2 * gravity.y):
@@ -155,14 +158,16 @@ func _physics_process(delta: float) -> void:
 			var kick_preds = predict_ball_locations(delta, KICK_VELOCITY * global_position.direction_to(ball.global_position), 40)
 			var can_kick = true
 			for pred in kick_preds:
-				if can_kick and pred.x*I > 0 and pred.x*I <= 0.46 and pred.y < 2.75:
+				# If it hits the net:
+				if can_kick and ball.global_position.x*I > 0 and pred.x*I > 0 and pred.x*I <= 0.46 and pred.y < 2.75:
 					can_kick = false
 			if can_kick:
-				if kick_preds[0].y > global_position.y:
+				if kick_preds[0].y > ball.global_position.y:
 					direction.y = 0
 				%ActionSync.kick.rpc()
 	
 	%ActionSync.direction = direction
+	
 	var FRAMES = 10
 	var txt = ""
 	var curr = ball.global_position
@@ -199,7 +204,7 @@ func get_direction() -> int:
 	# Pick the latest prediction
 	var choice = ball_predictions.back() + Vector3(0.25,0.0,0.0)
 	
-	if abs(choice.x + 0.5 - self.position.x) < 0.5:
+	if abs(choice.x + 0.25 - self.position.x) < 0.25:
 		return 0
 	
 	if (choice.x < self.position.x):

@@ -23,7 +23,7 @@ const NET_HEIGHT = -225
 func _ready() -> void:
 	pass
 	global_position = Vector2(-150,-400)
-	velocity = Vector2(400,-2400)
+	velocity = Vector2(400,400)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -54,8 +54,8 @@ func next_pos(p: Vector2, v: Vector2, g: Vector2, delta: float) -> Array[Vector2
 	if v.x * p.x < 0 or abs(p.x) < RADIUS:
 		var t = (RADIUS*sign(p.x) - p.x) / v.x
 		var y = p.y + v.y * t + 0.5 * g.y * pow(t,2)
-		var dx = -p.x
-		var dy = NET_HEIGHT - p.y
+		var dx = p.x
+		var dy = p.y - NET_HEIGHT
 		
 		if t > 0 and y >= NET_HEIGHT:
 			t_net = t

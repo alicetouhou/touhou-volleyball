@@ -11,10 +11,10 @@ func ferrari_real(A: float, B: float, C: float, D: float, E: float) -> Array[flo
 	var b: float = (D/A) - (0.5 *B*C/pow(A,2)) + pow(0.5*B/A, 3)
 	var c: float = (E/A) - (0.25*B*D/pow(A,2)) + (1./16)*C*pow(B,2)/pow(A,3) - (3./256)*pow(B/A,4)
 	
-	var a_squared: float = pow(a,2)
 	var k = -0.25*B/A
 	
 	if is_zero_approx(b):
+		var a_squared: float = pow(a,2)
 		if a_squared < 4*c:
 			return result
 		var l = sqrt(a_squared - (4*c))
@@ -31,7 +31,7 @@ func ferrari_real(A: float, B: float, C: float, D: float, E: float) -> Array[flo
 	var R = pow(Q/2,2) + pow(P/3,3)
 	if R < 0:
 		return result
-	R -= (Q/2)
+	R = sqrt(R) - (Q/2)
 	
 	var y = -a * 5/6
 	if is_zero_approx(R):
@@ -49,7 +49,7 @@ func ferrari_real(A: float, B: float, C: float, D: float, E: float) -> Array[flo
 		m = sqrt(m)
 		for j in [-1,1]:
 			result.push_back(k + (0.5 * (i*W + j*m)))
-			print([a,b,c,P,Q,R,W,y])
+	print([a,b,c,P,Q,R,W,y])
 	
 	return result
 
@@ -70,6 +70,7 @@ func radical_real(A: float, B: float, C: float, D: float, E: float) -> Array[flo
 	var n = 2*pow(b,3) - 9*a*b*c + 27*(pow(c,2) + pow(a,2)*d) - 72*b*d
 	var o = pow(n,2) - 4*pow(m,3)
 	if o < 0:
+		print("o")
 		return result
 	o = cbrt(n + sqrt(o))
 	
@@ -79,6 +80,7 @@ func radical_real(A: float, B: float, C: float, D: float, E: float) -> Array[flo
 	var s = p + q
 	var t = r + s
 	if t < 0:
+		print("t")
 		return result
 	var u = 0.5 * sqrt(s)
 	var v = r - s
@@ -93,6 +95,7 @@ func radical_real(A: float, B: float, C: float, D: float, E: float) -> Array[flo
 		z = 0.5 * sqrt(z)
 		for j in [-1,1]:
 			result.push_back(y + i*u + j*z)
+		print([m,n,o,p,q,r,s,t,u,v,w,x,y,z])
 	
 	return result
 

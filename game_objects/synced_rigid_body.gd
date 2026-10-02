@@ -109,7 +109,7 @@ func _integrate_forces():
 	var angular_velocity_sum = 0
 	for impulse in _angular_impulses:
 		angular_velocity_sum += impulse
-	angular_velocity = clamp(angular_velocity + angular_velocity_sum - SGFixed.mul(angular_velocity + angular_velocity_sum,ANGULAR_DAMPING),-1966080,1966080)
+	#angular_velocity = clamp(angular_velocity + angular_velocity_sum - SGFixed.mul(angular_velocity + angular_velocity_sum,ANGULAR_DAMPING),-1966080,1966080)
 
 	# Clamp linear velocity to avoid ballooning to huge velocities
 	linear_velocity.x = clamp(x_approximation - SGFixed.mul(x_approximation,LINEAR_DAMPING),-1966080,1966080)

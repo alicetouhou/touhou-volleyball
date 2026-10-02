@@ -31,14 +31,11 @@ script = ExtResource("2_prqa1")
 metadata/_custom_type_script = "uid://biv5gpq46pxiq"
 
 [node name="Sprite3D" parent="Texture" parent_id_path=PackedInt32Array(1883257529) index="0" unique_id=705725850]
-transform = Transform3D(1, 0, 0, 0, 1.0094595, 0, 0, 0, 1, 0, 0.028378733, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0229208, 0, 0, 0, 1, 0, 0.06876242, 0)
 
 [node name="KickCollider" parent="." index="2" unique_id=1627492970]
 script = ExtResource("3_l773t")
 metadata/_custom_type_script = "uid://brl5sqlrori3i"
-
-[node name="Collider" parent="KickCollider" index="0" unique_id=996229372]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
 
 [node name="ServerSync2" type="MultiplayerSynchronizer" parent="Networking" parent_id_path=PackedInt32Array(320817667) index="0" unique_id=1005482676]
 editor_description = "This sync node handles anything the server has authority over.

@@ -107,6 +107,7 @@ func find_ball():
 
 func kick(velocity = KICK_VELOCITY, ball: Ball = null):
 	Animations.travel("kick_miss")
+	%KickCollider.rotation.y = 90 - (90 * %ActionSync.direction.x)
 	
 	if !ball:
 		ball = find_ball()

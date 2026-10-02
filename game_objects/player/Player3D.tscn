@@ -18,7 +18,7 @@ rough = true
 size = Vector3(0.64, 1, 0.3)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kxtgu"]
-size = Vector3(2, 2, 1)
+size = Vector3(2, 2, 2)
 
 [sub_resource type="Animation" id="Animation_kxtgu"]
 length = 0.001
@@ -205,7 +205,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0077968, 0, 0, 0, 1, 0, 0.023390278, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0006092, 0, 0, 0, 1, 0, 0.0018273499, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 

@@ -47,7 +47,6 @@ func cpu_init(world_ball: Node3D, world_players: Array[Node]) -> void:
 			me = i
 	for i in len(world_players):
 		var player = world_players[i]
-		print([player,player.side])
 		if i == me:
 			continue
 		if player.side == side:
@@ -113,13 +112,16 @@ func _physics_process(delta: float) -> void:
 			if target_selected:
 				continue
 			var p = ball_predictions[i]
+			var dp = dp(global_position, p)
+			var dtx = dtx(global_position.x, p.x, MOVEMENT_SPEED)
+			var dty = dty(global_position.y, p.y, JUMP_POWER / mass if on_floor else linear_velocity.y, gravity.y)
 			# Harass Decision
 			var harassable = true
 			for player in OPPONENTS:
 				if not harassable:
 					continue
 				#print([p.x,I,max(abs(p.x - global_position.x) + (1./MOVEMENT_SPEED if sign(p.x-global_position.x) == sign(p.x-player.global_position.x) else 0)),max(abs(p.x - player.global_position.x))])
-				if sign(p.x) == I or max(abs(p.x - global_position.x) + (1./MOVEMENT_SPEED if sign(p.x-global_position.x) == sign(p.x-player.global_position.x) else 0),0) > max(abs(p.x - player.global_position.x),0):
+				if sign(p.x) == I or max((abs(dp.x) + (1 if sign(dp.x) == sign(p.x-player.global_position.x) else 0)) / MOVEMENT_SPEED, dty) > max(abs(p.x - player.global_position.x) / player.MOVEMENT_SPEED, 0):
 					harassable = false
 			if harassable:
 				harass(i, p)
@@ -160,7 +162,32 @@ func _physics_process(delta: float) -> void:
 			(on_floor or ball.global_position.x < global_position.x) and 
 			ball.global_position.x*I >= 0
 		):
-			%ActionSync.kick.rpc()
+			cpu_kick(direction)
+	if intention == Intention.HARASS:
+		var target = ball_predictions[ball_target[0]]
+		if ball_target[0] <= ceil(sqrt(2 * (target.y - global_position.y) / (gravity.y * (14. if direction.y != -1 else 1.))) / delta):
+			spike()
+		else:
+			var onefm = MOVEMENT_SPEED * delta
+			var dp = dp(global_position, target)
+			var ball_sandwiched = false # Only by opponents
+			if len(OPPONENTS) > 1:
+				var side
+				for player in OPPONENTS:
+					var this_side = sign(dp(player.global_position, target).x)
+					if ball_sandwiched:
+						continue
+					if side and side != this_side:
+						ball_sandwiched = true
+					side = this_side
+			if ball_sandwiched and abs(dp.x) >= onefm:
+					direction = -sign(dp.x)
+			else:
+				var opponent_side = sign(dp(OPPONENTS[0].global_position, target).x)
+				if sign(dp.x) != opponent_side and abs(dp.x) > 1.4:
+					direction.x = -1
+				elif sign(dp.x) == opponent_side and abs(dp.x) > 1.4:
+					direction.x = 1
 	if intention == Intention.COUNTERSPIKE:
 		var target = ball_predictions[ball_target[0]]
 		if ball_target[0] <= ceil(sqrt(2 * (target.y - global_position.y) / (gravity.y * (14. if direction.y != -1 else 1.))) / delta):
@@ -191,7 +218,7 @@ func _physics_process(delta: float) -> void:
 			if can_kick:
 				if kick_preds[0].y > ball.global_position.y:
 					direction.y = 0
-				%ActionSync.kick.rpc()
+				cpu_kick(direction)
 	
 	%ActionSync.direction = direction
 	
@@ -221,7 +248,12 @@ func _physics_process(delta: float) -> void:
 			tracker[i][j] = tracker[i][j+1]
 		tracker[i][i] = (ball_predictions[i] if ball_predictions.size() > i else null)
 	
+	visualize_predictions()
 	super(delta)
+
+func cpu_kick(direction: Vector2):
+	%KickCollider.rotation.y = 90 - (90 * direction.x)
+	%ActionSync.kick.rpc()
 
 func get_direction() -> int:
 	# If we have no predictions, do nothing
@@ -240,10 +272,11 @@ func get_direction() -> int:
 		return 0
 	else:
 		return 1
-	
-func predict_ball_locations(delta: float, v: Vector3, n: int) -> Array[Vector3]:
-	var g = ball.get_gravity()
-	var p = ball.position
+
+func predict_ball_locations(delta: float, v: Vector3, n: int):
+	return foresight(delta, ball.position, v, ball.get_gravity(), n)
+
+func foresight(delta: float, p: Vector3, v: Vector3, g: Vector3, n: int) -> Array[Vector3]:
 	var predictions: Array[Vector3] = []
 	for i in range(0,n):
 		var new_pos = p + v * delta + g * pow(delta, 2)
@@ -259,9 +292,7 @@ func predict_ball_locations(delta: float, v: Vector3, n: int) -> Array[Vector3]:
 			p = new_pos
 			v += g * delta
 		else:
-			visualize_predictions()
 			return predictions
-	visualize_predictions()
 	return predictions
 
 func visualize_predictions():
@@ -277,6 +308,31 @@ func visualize_predictions():
 		%Target.global_position = Vector3(ball_target[1], ball_target[2], ball_target[3])
 	else:
 		%Target.global_position = Vector3.ZERO
+
+func dp(here: Vector3, target: Vector3) -> Vector3:
+	return target - here
+
+func dt(here: Vector3, target: Vector3, v: Vector3, g: Vector3) -> float:
+	return max(dtx(here.x, target.x, v.x), dty(here.y, target.y, v.y, g.y))
+
+func dtx(herex: float, targetx: float, vx: float) -> float:
+	return abs(targetx - herex) / vx
+
+func dty(herey: float, targety: float, vy: float, gy: float) -> float:
+	var u2as = pow(vy,2) + (2*gy*(targety - herey))
+	if u2as < 0:
+		return -1
+		
+	var result
+	for i in [-1,1]:
+		var t = (u2as - vy) / gy
+		if t < 0 or (result and result < t):
+			continue
+		result = t
+	
+	if result:
+		return result
+	return -1
 
 func reset_intentions():
 	intention = Intention.STANDBY

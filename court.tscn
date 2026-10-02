@@ -81,7 +81,7 @@ sky = SubResource("Sky_utqu1")
 friction = 0.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_km8ha"]
-size = Vector3(0.125, 2.4799805, 8.51)
+size = Vector3(0, 2.48, 8.51)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_g4v7s"]
 friction = 0.0

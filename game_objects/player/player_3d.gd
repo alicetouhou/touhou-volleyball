@@ -16,7 +16,7 @@ const FAST_FALL_MULT := 14.0
 const JUMP_POWER := 10.0
 const JUMP_COOLDOWN := 0.1
 
-const SET_ANGLE := PI/4 # radians
+const SET_ANGLE := PI/3 # radians
 
 const KICK_VELOCITY = 7.
 const KICK_TIME_GRACE := .15

@@ -2,17 +2,18 @@ extends Player
 
 enum Intention {
 	COUNTERSPIKE,
-	COUNTERSET,
 	HARASS,
 	REPOSITION,
 	RETURN,
 	SET,
 	SPIKE,
+	START,
 	STANDBY
 }
 var intention: Intention = Intention.STANDBY
 var actpoints: Array[Array] = [] # [t, x, J, D, Z, X, C]
 var ball_target # [t, x, y, z]
+var harassment: bool = true
 var previews = []
 var prev: Vector3
 var tracker: Array[Array] = []
@@ -27,7 +28,7 @@ var intention_cache
 
 const COUNTERSPIKE_THRESHOLD_V_Y = 15
 const COUNTERSPIKE_THRESHOLD_Y_MIN = 3.25
-const COUNTERSPIKE_THRESHOLD_Y_MAX = 6.5
+const COUNTERSPIKE_THRESHOLD_Y_MAX = 5
 const SPIKE_Y_MIN = 3.5
 
 var ball_predictions: Array[Vector3] = []
@@ -65,7 +66,7 @@ func update_game_state(game_running: bool) -> void:
 	I = sign(global_position.x)
 
 func _physics_process(delta: float) -> void:
-	%Debug1.text = ["Counterspike", "Counterset", "Harass", "Reposition", "Return", "Set", "Spike", "Standby"][intention] + (str(ball_target[0]) if ball_target else "")
+	%Debug1.text = ["Counterspike", "Harass", "Reposition", "Return", "Set", "Spike", "Start", "Standby"][intention] + (str(ball_target[0]) if ball_target else "")
 	%Debug2.text = str(MAX_JUMP) + "\n" + (str(intention_cache * 60) if intention_cache else "")
 	
 	for act in actpoints:
@@ -80,6 +81,7 @@ func _physics_process(delta: float) -> void:
 	
 	if !started:
 		return
+		intention = Intention.START
 	
 	ball_predictions = predict_ball_locations(delta, ball.linear_velocity, 100)
 	
@@ -116,7 +118,7 @@ func _physics_process(delta: float) -> void:
 			var dtx = dtx(global_position.x, p.x, MOVEMENT_SPEED)
 			var dty = dty(global_position.y, p.y, JUMP_POWER / mass if on_floor else linear_velocity.y, gravity.y)
 			# Harass Decision
-			var harassable = true
+			var harassable = harassment
 			for player in OPPONENTS:
 				if not harassable:
 					continue
@@ -235,7 +237,7 @@ func _physics_process(delta: float) -> void:
 			tracker[i].push_back(null)
 	for i in range(FRAMES):
 		if tracker[i][0]:
-			txt += "" if (curr.y-tracker[i][0].y) < 0 else "+" +  str((curr.y-tracker[i][0].y))
+			txt += "" if (curr.x-tracker[i][0].x) < 0 else "+" +  str((curr.x-tracker[i][0].x))
 		else:
 			txt += "--"
 		if not i == FRAMES - 1:

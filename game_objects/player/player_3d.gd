@@ -45,13 +45,11 @@ const SUPER_COOLDOWN = .2
 const DUST_SETTLE_FX = preload("res://resources/effects/dust-settle.tscn")
 const POMMEL_POP_FX = preload("res://resources/effects/pommel-pop.tscn")
 
-var movement_scale = 1.
 var input_device: int = -99:
 	set(v):
 		%ActionSync.input_device = v
 	get():
 		return input_device
-
 var player_id: int:
 	set(value):
 		player_id = value
@@ -61,6 +59,9 @@ var player_id: int:
 			%ActionSync.disable_input = true
 	get():
 		return player_id
+var side: int
+
+var movement_scale = 1.
 var velocity_multiplier: float = 1.0
 var new_velocity_multiplier: float = 1.0
 var time: float = 0.0

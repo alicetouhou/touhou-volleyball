@@ -44,15 +44,20 @@ func start_game() -> void:
 	var connected_players: Array = get_parent().players
 	if len(connected_players) % 2 == 1:
 		connected_players.push_back(PlayerPeer.new_cpu_player())
-
+	
+	var cpu_counter = 1
 	var i = 0
 	for peer: PlayerPeer in connected_players:
 		var player: Player = (player_scene if peer.peer_id > -1 else cpu_scene).instantiate()
 		
 		player.name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
-
-		# Disable input for CPUs and players on other computers
+		
 		player.player_id = peer.peer_id
+		if player.player_id < 0:
+			player.player_id *= cpu_counter
+			cpu_counter += 1
+		
+		# Disable input for CPUs and players on other computers
 		if peer.peer_id < 0 or (player.player_id != multiplayer.get_unique_id() and not peer.local_co_op):
 			player.disable_input()
 
@@ -61,9 +66,8 @@ func start_game() -> void:
 		
 		var charge_bar = preload("res://game_objects/SuperCharge.tscn").instantiate()
 		charge_bar.name = str(peer)
-		var side = 0
-		if i >= floori(len(connected_players) / 2.):
-			side = 1
+		var side = i % 2
+		player.side = side
 		%ChargeBars.get_child(side).add_child(charge_bar)
 		
 		player.on_hit_ball.connect(player_hit_ball)

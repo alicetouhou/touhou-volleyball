@@ -1,7 +1,9 @@
 extends Player
 
 enum Intention {
+	COUNTERSET,
 	COUNTERSPIKE,
+	DJUMP,
 	HARASS,
 	REPOSITION,
 	RETURN,
@@ -14,17 +16,19 @@ var intention: Intention = Intention.STANDBY
 var actpoints: Array[Array] = [] # [t, x, J, D, Z, X, C]
 var ball_target # [t, x, y, z]
 var harassment: bool = true
-var previews = []
-var prev: Vector3
-var tracker: Array[Array] = []
+var previews = [] # Debug
+var prev: Vector3 # Debug
+var tracker: Array[Array] = [] # Debug
 
 # These are basically cached calculations.
 var ALLIES: Array[Player] = []
 var OPPONENTS: Array[Player] = []
 var MAX_JUMP: float
 var MAX_JUMP_TIME: float
+var F_NET: int
 var I: int # Which side is this on
 var intention_cache
+var jumped = false # Debug
 
 const COUNTERSPIKE_THRESHOLD_V_Y = 15
 const COUNTERSPIKE_THRESHOLD_Y_MIN = 3.25
@@ -66,8 +70,8 @@ func update_game_state(game_running: bool) -> void:
 	I = sign(global_position.x)
 
 func _physics_process(delta: float) -> void:
-	%Debug1.text = ["Counterspike", "Harass", "Reposition", "Return", "Set", "Spike", "Start", "Standby"][intention] + (str(ball_target[0]) if ball_target else "")
-	%Debug2.text = str(MAX_JUMP) + "\n" + (str(intention_cache * 60) if intention_cache else "")
+	%Debug1.text = ["Counterset", "Counterspike", "DJump", "Harass", "Reposition", "Return", "Set", "Spike", "Start", "Standby"][intention] + (str(ball_target[0]) if ball_target else "")
+	%Debug2.text = str(MAX_JUMP) + "\n" + (str(intention_cache * 60) if (intention_cache and not intention_cache is bool) else "")
 	
 	for act in actpoints:
 		act[0] -= 1
@@ -80,8 +84,8 @@ func _physics_process(delta: float) -> void:
 			reset_intentions()
 	
 	if !started:
-		return
 		intention = Intention.START
+		intention_cache = true
 	
 	ball_predictions = predict_ball_locations(delta, ball.linear_velocity, 100)
 	
@@ -106,6 +110,30 @@ func _physics_process(delta: float) -> void:
 	
 	var direction = Vector2.ZERO
 	var gravity = get_gravity()
+	if intention == Intention.DJUMP:
+		if on_floor or intention_cache[3]:
+			intention_cache[0] -= 1
+		if intention_cache[0] == F_NET or intention_cache == 0:
+			%ActionSync.jump.rpc()
+		if intention_cache == F_NET+1 or intention_cache[0] <= 1:
+			direction.y = -1
+		if (sign(global_position.x == sign(ball_target[1])) and abs(global_position.x) > .32) or (sign(global_position.x) != sign(ball_target[1]) and global_position.x * sign(ball_target[1]) < 0.32):
+			direction.x = -sign(global_position.x)
+	if intention == Intention.START:
+		if not jumped and on_floor:
+			intention_cache = true
+			%ActionSync.jump.rpc()
+			jumped = true
+		else:
+			jumped = false
+		if global_position.y > 2.75:
+			intention_cache = false
+		if not intention_cache:
+			direction.y = -1
+		if abs(global_position.x) > .2:
+			direction.x = -sign(global_position.x)
+		direction.x = -sign(global_position.x)
+		print([global_position.y,on_floor,linear_velocity.y,direction.y,jumped])
 	if intention == Intention.STANDBY:
 		# Check each prediction
 		player_predictions = []
@@ -354,3 +382,6 @@ func spike():
 func harass(t: int, p: Vector3):
 	intention = Intention.HARASS
 	ball_target = [t, p.x, p.y, p.z]
+
+func djump():
+	intention_cache = [F_NET+1, intention, intention_cache, on_floor]

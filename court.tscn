@@ -81,7 +81,7 @@ sky = SubResource("Sky_utqu1")
 friction = 0.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_km8ha"]
-size = Vector3(0, 2.48, 8.51)
+size = Vector3(0, 2.5, 8.51)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_g4v7s"]
 friction = 0.0
@@ -134,7 +134,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.106257, 2.9032006, 6.93665
 physics_material_override = SubResource("PhysicsMaterial_klx28")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Wall" unique_id=506340396]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0100098, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_km8ha")
 
 [node name="net" parent="Wall" unique_id=2125422396 instance=ExtResource("7_pujm6")]

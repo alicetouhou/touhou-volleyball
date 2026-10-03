@@ -1,5 +1,9 @@
 extends Player
 
+enum Objects {
+	BALL,
+	PLAYER
+}
 enum Intention {
 	COUNTERSET,
 	COUNTERSPIKE,
@@ -111,14 +115,18 @@ func _physics_process(delta: float) -> void:
 	var direction = Vector2.ZERO
 	var gravity = get_gravity()
 	if intention == Intention.DJUMP:
-		if on_floor or intention_cache[3]:
-			intention_cache[0] -= 1
-		if intention_cache[0] == F_NET or intention_cache == 0:
+		if on_floor:
+			if global_position.y > 2.5:
+				intention_cache[2] += 1
 			%ActionSync.jump.rpc()
-		if intention_cache == F_NET+1 or intention_cache[0] <= 1:
+			intention_cache[2] += 1
+		if intention_cache[2] == 0 or global_position.y > 2.75:
 			direction.y = -1
 		if (sign(global_position.x == sign(ball_target[1])) and abs(global_position.x) > .32) or (sign(global_position.x) != sign(ball_target[1]) and global_position.x * sign(ball_target[1]) < 0.32):
 			direction.x = -sign(global_position.x)
+		if intention_cache[2] >= 2:
+			intention = intention_cache[0]
+			intention_cache = intention_cache[1]
 	if intention == Intention.START:
 		if not jumped and on_floor:
 			intention_cache = true
@@ -304,25 +312,30 @@ func get_direction() -> int:
 		return 1
 
 func predict_ball_locations(delta: float, v: Vector3, n: int):
-	return foresight(delta, ball.position, v, ball.get_gravity(), n)
+	return foresight(delta, ball.position, v, ball.get_gravity(), Objects.BALL, n)
 
-func foresight(delta: float, p: Vector3, v: Vector3, g: Vector3, n: int) -> Array[Vector3]:
+func foresight(delta: float, p: Vector3, v: Vector3, g: Vector3, o: Objects, n: int) -> Array[Vector3]:
 	var predictions: Array[Vector3] = []
 	for i in range(0,n):
-		var new_pos = p + v * delta + g * pow(delta, 2)
+		p += v * delta + g * pow(delta, 2)
+		v += g * delta
 		
-		if abs(new_pos.x) > 11.:
-			v.x *= -ball.physics_material_override.bounce
-		if new_pos.y > 10.:
-			v.y *= -1
+		if o == Objects.BALL:
+			if p.y < 1.5:
+				predictions.push_back(p)
+				return predictions
+			if abs(p.x) > 11.:
+				v.x *= -ball.physics_material_override.bounce
+			if p.y > 10.:
+				v.y *= -ball.physics_material_override.bounce
+		elif o == Objects.PLAYER:
+			if abs(p.x) > 10.96:
+				v.x = 0
+			if p.y <= 0.5 or p.y > 9.96:
+				v.y = 0
 		
-		predictions.push_back(new_pos)
-		
-		if new_pos.y > 1.5:
-			p = new_pos
-			v += g * delta
-		else:
-			return predictions
+		predictions.push_back(p)
+	
 	return predictions
 
 func visualize_predictions():
@@ -384,4 +397,4 @@ func harass(t: int, p: Vector3):
 	ball_target = [t, p.x, p.y, p.z]
 
 func djump():
-	intention_cache = [F_NET+1, intention, intention_cache, on_floor]
+	intention_cache = [intention, intention_cache, 0]

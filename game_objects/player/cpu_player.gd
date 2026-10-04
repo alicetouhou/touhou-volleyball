@@ -29,7 +29,7 @@ var ALLIES: Array[Player] = []
 var OPPONENTS: Array[Player] = []
 var MAX_JUMP: float
 var MAX_JUMP_TIME: float
-var F_NET: int
+var F_NET: int # Frames to reach net height
 var I: int # Which side is this on
 var intention_cache
 var jumped = false # Debug
@@ -39,8 +39,8 @@ const COUNTERSPIKE_THRESHOLD_Y_MIN = 3.25
 const COUNTERSPIKE_THRESHOLD_Y_MAX = 5
 const SPIKE_Y_MIN = 3.5
 
-var ball_predictions: Array[Vector3] = []
-var player_predictions: Array[Vector3] = []
+var ball_predictions: Array[PVA3] = []
+var player_predictions: Array[PVA3] = []
 
 var can_kick := true
 var started := false
@@ -77,6 +77,20 @@ func _physics_process(delta: float) -> void:
 	%Debug1.text = ["Counterset", "Counterspike", "DJump", "Harass", "Reposition", "Return", "Set", "Spike", "Start", "Standby"][intention] + (str(ball_target[0]) if ball_target else "")
 	%Debug2.text = str(MAX_JUMP) + "\n" + (str(intention_cache * 60) if (intention_cache and not intention_cache is bool) else "")
 	
+	var direction = Vector2.ZERO
+	var gravity = get_gravity()
+	
+	ball_predictions = predict_ball_locations(delta, ball.linear_velocity, 100)
+	player_predictions = foresight(delta, global_position, Vector3(0, JUMP_POWER/mass, 0), gravity, Objects.PLAYER, len(ball_predictions))
+	
+	if on_floor and global_position.x <= 0.5:
+		F_NET = 9999
+		for i in len(player_predictions):
+			if F_NET < 999:
+				continue
+			if player_predictions[i].p.y > 2.75:
+				F_NET = i+1
+	
 	for act in actpoints:
 		act[0] -= 1
 		if act[0] == 0:
@@ -91,29 +105,25 @@ func _physics_process(delta: float) -> void:
 		intention = Intention.START
 		intention_cache = true
 	
-	ball_predictions = predict_ball_locations(delta, ball.linear_velocity, 100)
-	
 	# Cancel intention if something changed.
 	if ball_target:
 		if ball_predictions.size() <= ball_target[0]:
 			reset_intentions()
-		elif (Vector3(ball_target[1], ball_target[2], ball_target[3]) - ball_predictions[ball_target[0]]).length() > 0.01:
-			var min_diff = 999999.
+		elif (Vector3(ball_target[1], ball_target[2], ball_target[3]) - ball_predictions[ball_target[0]].p).length() > 0.01:
+			var min_diff = 999.
 			var min_i = 0
 			for i in range(ball_target[0] - 2, ball_target[0] + 2):
 				if i < 0 or i >= ball_predictions.size():
 					continue
-				var diff = Vector3(ball_target[1], ball_target[2], ball_target[3]).distance_to(ball_predictions[i])
+				var diff = Vector3(ball_target[1], ball_target[2], ball_target[3]).distance_to(ball_predictions[i].p)
 				if diff < min_diff:
 					min_diff = diff
 					min_i = i
 			if min_diff > 0.002:
 				reset_intentions()
 			else:
-				ball_target = [min_i, ball_predictions[min_i].x, ball_predictions[min_i].y, ball_predictions[min_i].z]
+				ball_target = [min_i, ball_predictions[min_i].p.x, ball_predictions[min_i].p.y, ball_predictions[min_i].p.z]
 	
-	var direction = Vector2.ZERO
-	var gravity = get_gravity()
 	if intention == Intention.DJUMP:
 		if on_floor:
 			if global_position.y > 2.5:
@@ -144,12 +154,11 @@ func _physics_process(delta: float) -> void:
 		print([global_position.y,on_floor,linear_velocity.y,direction.y,jumped])
 	if intention == Intention.STANDBY:
 		# Check each prediction
-		player_predictions = []
 		var target_selected = false
 		for i in len(ball_predictions):
 			if target_selected:
 				continue
-			var p = ball_predictions[i]
+			var p = ball_predictions[i].p
 			var dp = dp(global_position, p)
 			var dtx = dtx(global_position.x, p.x, MOVEMENT_SPEED)
 			var dty = dty(global_position.y, p.y, JUMP_POWER / mass if on_floor else linear_velocity.y, gravity.y)
@@ -174,11 +183,6 @@ func _physics_process(delta: float) -> void:
 							counterspike(i, p)
 							target_selected = true
 							continue
-		
-			player_predictions.push_back(
-				global_position +
-				Vector3(0, JUMP_POWER * delta * 5 * (i+1) + gravity.y * (i+1) * (i+1) * delta * 2.5, 0)
-			)
 			# Will jumping put us in a good position?
 			if (
 				i >= 1 and
@@ -202,7 +206,7 @@ func _physics_process(delta: float) -> void:
 		):
 			cpu_kick(direction)
 	if intention == Intention.HARASS:
-		var target = ball_predictions[ball_target[0]]
+		var target = ball_predictions[ball_target[0]].p
 		if ball_target[0] <= ceil(sqrt(2 * (target.y - global_position.y) / (gravity.y * (14. if direction.y != -1 else 1.))) / delta):
 			spike()
 		else:
@@ -227,7 +231,7 @@ func _physics_process(delta: float) -> void:
 				elif sign(dp.x) == opponent_side and abs(dp.x) > 1.4:
 					direction.x = 1
 	if intention == Intention.COUNTERSPIKE:
-		var target = ball_predictions[ball_target[0]]
+		var target = ball_predictions[ball_target[0]].p
 		if ball_target[0] <= ceil(sqrt(2 * (target.y - global_position.y) / (gravity.y * (14. if direction.y != -1 else 1.))) / delta):
 			spike()
 		else:
@@ -238,7 +242,7 @@ func _physics_process(delta: float) -> void:
 			if on_floor and ball_target[0] <= (MAX_JUMP_TIME + intention_cache) / delta:
 				%ActionSync.jump.rpc()
 	if intention == Intention.SPIKE:
-		var target = ball_predictions[ball_target[0]]
+		var target = ball_predictions[ball_target[0]].p
 		direction.y = -1
 		
 		if ball_target[0] < 1 or target.x + 1.5*I < global_position.x:
@@ -265,7 +269,7 @@ func _physics_process(delta: float) -> void:
 	var curr = ball.global_position
 	var vel = ball.linear_velocity
 	var k = 0.5 * gravity.y * pow(delta,2)
-	prev = ball_predictions[0]
+	prev = ball_predictions[0].p
 	while tracker.size() <= FRAMES:
 		tracker.push_back([])
 	for i in range(FRAMES):
@@ -284,7 +288,7 @@ func _physics_process(delta: float) -> void:
 	for i in range(FRAMES):
 		for j in range(i):
 			tracker[i][j] = tracker[i][j+1]
-		tracker[i][i] = (ball_predictions[i] if ball_predictions.size() > i else null)
+		tracker[i][i] = (ball_predictions[i].p if ball_predictions.size() > i else null)
 	
 	visualize_predictions()
 	super(delta)
@@ -299,7 +303,7 @@ func get_direction() -> int:
 		return 0
 	
 	# Pick the latest prediction
-	var choice = ball_predictions.back() + Vector3(0.25,0.0,0.0)
+	var choice = ball_predictions.back().p + Vector3(0.25,0.0,0.0)
 	
 	if abs(choice.x + 0.25 - self.position.x) < 0.25:
 		return 0
@@ -314,27 +318,27 @@ func get_direction() -> int:
 func predict_ball_locations(delta: float, v: Vector3, n: int):
 	return foresight(delta, ball.position, v, ball.get_gravity(), Objects.BALL, n)
 
-func foresight(delta: float, p: Vector3, v: Vector3, g: Vector3, o: Objects, n: int) -> Array[Vector3]:
-	var predictions: Array[Vector3] = []
+func foresight(delta: float, p: Vector3, v: Vector3, g: Vector3, o: Objects, n: int) -> Array[PVA3]:
+	var predictions: Array[PVA3] = []
 	for i in range(0,n):
-		p += v * delta + g * pow(delta, 2)
+		p += delta * (v + g * delta)
 		v += g * delta
 		
 		if o == Objects.BALL:
 			if p.y < 1.5:
-				predictions.push_back(p)
+				predictions.push_back(PVA3.new(p,v,g))
 				return predictions
 			if abs(p.x) > 11.:
 				v.x *= -ball.physics_material_override.bounce
 			if p.y > 10.:
 				v.y *= -ball.physics_material_override.bounce
 		elif o == Objects.PLAYER:
-			if abs(p.x) > 10.96:
+			if abs(p.x) > 11.14:
 				v.x = 0
 			if p.y <= 0.5 or p.y > 9.96:
 				v.y = 0
 		
-		predictions.push_back(p)
+		predictions.push_back(PVA3.new(p,v,g))
 	
 	return predictions
 
@@ -345,7 +349,7 @@ func visualize_predictions():
 	for i in ball_predictions + player_predictions:
 		var p = $"Pred".duplicate()
 		$"..".add_child(p)
-		p.position = i
+		p.position = i.p
 		previews.push_back(p)
 	if ball_target:
 		%Target.global_position = Vector3(ball_target[1], ball_target[2], ball_target[3])

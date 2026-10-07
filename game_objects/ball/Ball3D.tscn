@@ -63,15 +63,17 @@ cast_shadow = 3
 mesh = SubResource("SphereMesh_km8ha")
 
 [node name="KickStream" type="AudioStreamPlayer" parent="." unique_id=762630356]
+unique_name_in_owner = true
 stream = SubResource("AudioStreamRandomizer_xn203")
 volume_db = -6.0
 
 [node name="BigKickStream" type="AudioStreamPlayer" parent="." unique_id=446266283]
+unique_name_in_owner = true
 stream = SubResource("AudioStreamRandomizer_cy21b")
 volume_db = -3.0
 pitch_scale = 0.95
 
 [node name="LandStream" type="AudioStreamPlayer" parent="." unique_id=1416960746]
+unique_name_in_owner = true
 stream = SubResource("AudioStreamRandomizer_km8ha")
 volume_db = -6.0
-max_polyphony = 2

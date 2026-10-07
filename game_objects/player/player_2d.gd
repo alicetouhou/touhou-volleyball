@@ -3,7 +3,7 @@ class_name Player2D
 extends SyncedRigidBody
 
 const SPEED = 10
-const JUMP = int(65536*21.5)
+const JUMP = int(65536*21 + 65536*SGFixed.HALF)
 const KICK_POWER = SGFixed.ONE * 20
 
 var input_device = -99
@@ -17,14 +17,14 @@ var _last_supering = false
 
 var _direction = Vector4i(0,0,0,0)
 
-const KICK_COOLDOWN_TICKS = 20
+const KICK_COOLDOWN_TICKS = 30
 
-var ticks = 0
-var jumping_for_ticks = 0
-var supering_for_ticks = 0
+var ticks := 0
+var jumping_for_ticks := 0
+var supering_for_ticks := 0
 
-var kicking_for_ticks = 0
-var last_kicked_on_tick = -10
+var kicking_for_ticks := 0
+var last_kicked_on_tick := -10
 
 var ball: Ball2D
 
@@ -80,18 +80,14 @@ func _get_local_input() -> Dictionary:
 	}
 
 func _predict_remote_input(previous_input: Dictionary, ticks_since_real_input: int) -> Dictionary:
-	if ticks_since_real_input > 1:
-		previous_input.erase("jumping")
-		previous_input.erase("kicking")
-		previous_input.erase("supering")
+	var out = previous_input.duplicate()
 
-	## Input decay
-	if previous_input.get("joy_direction"):
-		var decay_amount = SGFixed.from_int((4. - ticks_since_real_input) / 4.)
-		previous_input["joy_direction"].x = SGFixed.mul(previous_input["joy_direction"].x, decay_amount)
-		previous_input["joy_direction"].y = SGFixed.mul(previous_input["joy_direction"].y, decay_amount)
+	if ticks_since_real_input >= 1:
+		out["kicking_for_ticks"] = 0
 
-	return previous_input
+	out["joy_direction"] = Vector4.ZERO
+
+	return out
 	
 func _integrate_forces():
 	var prev_velocity = velocity.x
@@ -100,15 +96,19 @@ func _integrate_forces():
 		turn.emit(sign(velocity.x))
 	super._integrate_forces()
 
+func _network_preprocess(input):
+	super._network_preprocess(input)
+	%KickArea.sync_to_physics_engine()
+ 
 func _network_process(input: Dictionary) -> void:
-	ticks += 1.
+	ticks += 1
 	var joy_direction = input.get("joy_direction", Vector4i.ZERO)
 
 	var jumping = input.get("jumping", false)
 	var kicking = input.get("kicking", false)
 	var supering = input.get("supering", false)
 	
-	if joy_direction.w > 0.9:
+	if joy_direction.w >= 1:
 		GRAVITY_SCALE = SGFixed.from_int(7)
 	else:
 		GRAVITY_SCALE = SGFixed.ONE
@@ -132,20 +132,19 @@ func _network_process(input: Dictionary) -> void:
 		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
 	# Make sure the kick area is aware of collisions
-	if kicking_for_ticks > 0 and kicking_for_ticks <= 4 and (ticks - last_kicked_on_tick) > KICK_COOLDOWN_TICKS:
+	if kicking_for_ticks == 1 and (ticks - last_kicked_on_tick) > KICK_COOLDOWN_TICKS:
 		kick.emit(false)
 		last_kicked_on_tick = ticks
-		%KickArea.sync_to_physics_engine()
 		var bodies = %KickArea.get_overlapping_bodies()
 		var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
 		if ball_index >= 0:
 			kick.emit(true)
 			ball = bodies[ball_index]
 			var hit_direction = ball.fixed_position.direction_to(fixed_position)
-			var hit_force_vector = SGFixed.vector2(-SGFixed.mul(KICK_POWER, hit_direction.x) + velocity.x, -SGFixed.mul(KICK_POWER, hit_direction.y) + velocity.y)
+			var hit_force_vector = SGFixed.vector2(-SGFixed.mul(KICK_POWER, hit_direction.x) + linear_velocity.x, -SGFixed.mul(KICK_POWER, hit_direction.y) + linear_velocity.y)
 			var ball_rad = 99091
-			var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))			
-			ball.add_kick_request(hit_force_vector, hit_distance_vector)
+			var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))	
+			ball.apply_impulse(hit_force_vector, hit_distance_vector)
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()
@@ -163,3 +162,4 @@ func _load_state(state):
 	supering_for_ticks = state["supering_for_ticks"]
 	last_kicked_on_tick = state["last_kicked_on_tick"]
 	super._load_state(state)
+	%KickArea.sync_to_physics_engine()

@@ -18,7 +18,7 @@ var _angular_impulses: Array[int] = []
 
 var _integrated_forces: SGFixedVector2 = SGFixed.vector2(0,0)
 
-var is_on_floor_USE_THIS_ONE = false
+var is_on_floor_USE_THIS_ONE := false
 
 var linear_velocity: SGFixedVector2 = SGFixed.vector2(0,0)
 var angular_velocity: = 0
@@ -36,13 +36,15 @@ func apply_force(force: SGFixedVector2, _position: SGFixedVector2):
 	_forces.push_back(force)
 	
 func apply_angular_impulse(force: SGFixedVector2, force_position: SGFixedVector2):
-	var torque = SGFixed.mul(force_position.y,force.x) - SGFixed.mul(force_position.x,force.y)
 	var moi = SGFixed.mul(MASS,SGFixed.pow(force_position.length(),2))
+	if moi < 100:
+		return
+	var torque = SGFixed.mul(force_position.y,force.x) - SGFixed.mul(force_position.x,force.y)
 	var angular_acceleration = SGFixed.div(torque,moi)
 	_angular_impulses.push_back(angular_acceleration)
 
 func apply_impulse(force: SGFixedVector2, force_position: SGFixedVector2):
-	if position.length() > 0:
+	if fixed_position.length() > 0:
 		apply_angular_impulse(force,force_position)
 	_impulses.push_back(force)
 	
@@ -60,7 +62,7 @@ func apply_central_impulse(force: SGFixedVector2):
 # x - target x (time)
 # n - iteration number
 func rk4(f: Callable,g: Callable,x0: int,y0: int,v0: int,_x: int,n: int) -> int:
-	var h = SGFixed.div(DELTA,n * SGFixed.ONE)
+	var h: int = SGFixed.div(DELTA,n * SGFixed.ONE)
 	var y = y0
 	var v = v0
 	for i in range(0,n):
@@ -81,13 +83,13 @@ func rk4(f: Callable,g: Callable,x0: int,y0: int,v0: int,_x: int,n: int) -> int:
 		x0 += h
 	return v
 	
-func f_x(_t: int, _x: int, v: int):
+func f_x(_t: int, _x: int, v: int) -> int:
 	return v
-func f_xv(_t: int, _x: int, _v: int):
+func f_xv(_t: int, _x: int, _v: int) -> int:
 	return _integrated_forces.x
-func f_y(_t: int, _x: int, v: int):
+func f_y(_t: int, _x: int, v: int) -> int:
 	return v
-func f_yv(_t: int, _x: int, _v: int):
+func f_yv(_t: int, _x: int, _v: int) -> int:
 	return _integrated_forces.y
 	
 func _integrate_forces():
@@ -138,6 +140,8 @@ func _collide(prev_velocity: SGFixedVector2):
 	return SGFixed.vector2(prev_velocity.x - force.x,prev_velocity.y - force.y)
 
 func _network_preprocess(_input):
+	sync_to_physics_engine()
+
 	_forces = []
 	_impulses = []
 	_angular_impulses = []
@@ -149,7 +153,7 @@ func _network_postprocess(_input):
 
 	velocity.x = 0
 	velocity.y = 0
-	
+
 	apply_central_force(SGFixed.vector2(SGFixed.mul(GRAVITY.x,GRAVITY_SCALE),SGFixed.mul(GRAVITY.y,GRAVITY_SCALE)))
 
 	_integrate_forces()
@@ -164,6 +168,11 @@ func _network_postprocess(_input):
 	linear_velocity = _collide(SGFixed.vector2(linear_velocity.x, linear_velocity.y))
 	
 	sync_to_physics_engine()
+
+	_integrated_forces = SGFixed.vector2(0,0)
+	_forces = []
+	_impulses = []
+	_angular_impulses = []
 
 func _interpolate_state(old_state: Dictionary, new_state: Dictionary, weight: float) -> void:
 	var sprite_pos_x: int = lerp(old_state["fixed_position_x"], new_state["fixed_position_x"], weight)
@@ -191,14 +200,21 @@ func _save_state() -> Dictionary:
 		fixed_rotation=fixed_rotation,
 		linear_velocity_x=linear_velocity.x,
 		linear_velocity_y=linear_velocity.y,
+		velocity_x=velocity.x,
+		velocity_y=velocity.y,
 		angular_velocity=angular_velocity,
+		is_on_floor_USE_THIS_ONE=is_on_floor_USE_THIS_ONE,
 	}
 
 func _load_state(state: Dictionary):
 	fixed_position_x = state["fixed_position_x"]
 	fixed_position_y = state["fixed_position_y"]
 	fixed_rotation = state["fixed_rotation"]
-	linear_velocity = SGFixed.vector2(state["linear_velocity_x"], state["linear_velocity_y"])
+	linear_velocity.x = state["linear_velocity_x"]
+	linear_velocity.y = state["linear_velocity_y"]
+	velocity.x = state["velocity_x"]
+	velocity.y = state["velocity_y"]
 	angular_velocity = state["angular_velocity"]
+	is_on_floor_USE_THIS_ONE = state["is_on_floor_USE_THIS_ONE"]
 
 	sync_to_physics_engine()

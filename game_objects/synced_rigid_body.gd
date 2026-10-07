@@ -96,8 +96,8 @@ func _integrate_forces():
 	_integrated_forces = SGFixed.vector2(0,0)
 
 	for force in _forces:
-		_integrated_forces.x += force.x
-		_integrated_forces.y += force.y
+		_integrated_forces.x += SGFixed.div(force.x,MASS)
+		_integrated_forces.y += SGFixed.div(force.y,MASS)
 
 	#Discrete integral approximation to get new velocity
 	var x_approximation: int = rk4(f_x,f_xv,0,0,linear_velocity.x+_integrated_forces.x,DELTA,1)
@@ -105,8 +105,8 @@ func _integrate_forces():
 
 	#Add impulses now, after integration
 	for impulse in _impulses:
-		x_approximation += impulse.x
-		y_approximation += impulse.y
+		x_approximation += SGFixed.div(impulse.x,MASS)
+		y_approximation += SGFixed.div(impulse.y,MASS)
 
 	var angular_velocity_sum = 0
 	for impulse in _angular_impulses:
@@ -153,8 +153,10 @@ func _network_postprocess(_input):
 
 	velocity.x = 0
 	velocity.y = 0
+	
+	var g_scale = SGFixed.mul(GRAVITY_SCALE,MASS)
 
-	apply_central_force(SGFixed.vector2(SGFixed.mul(GRAVITY.x,GRAVITY_SCALE),SGFixed.mul(GRAVITY.y,GRAVITY_SCALE)))
+	apply_central_force(SGFixed.vector2(SGFixed.mul(GRAVITY.x,g_scale),SGFixed.mul(GRAVITY.y,g_scale)))
 
 	_integrate_forces()
 	

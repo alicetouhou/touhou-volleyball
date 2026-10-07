@@ -12,10 +12,10 @@ func _network_process(_input):
 	else:
 		last_on_floor = false
 
-func play_kick_sound() -> void:
+func play_kick_sound(hit_force: SGFixedVector2) -> void:
 	if SyncManager.is_in_rollback():
 		return
-	if linear_velocity.length() > SGFixed.ONE * 20:
+	if hit_force.length() > SGFixed.ONE * 29:
 		%BigKickStream.play(0.04)
 	else:
 		%KickStream.play(0.04)

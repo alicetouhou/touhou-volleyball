@@ -17,14 +17,16 @@ var _last_supering = false
 
 var _direction = Vector4i(0,0,0,0)
 
-const KICK_COOLDOWN_TICKS = 30
+const KICK_COOLDOWN_SYNCED_ticks = 30
 
-var ticks := 0
-var jumping_for_ticks := 0
-var supering_for_ticks := 0
+var SYNCED_ticks := 0
+var SYNCED_jumping_for_ticks := 0
+var SYNCED_supering_for_ticks := 0
 
-var kicking_for_ticks := 0
-var last_kicked_on_tick := -10
+var SYNCED_kicking_for_ticks := 0
+var SYNCED_last_kicked_on_tick := -10
+
+var SYNCED_facing_direction = 1
 
 var ball: Ball2D
 
@@ -79,21 +81,21 @@ func _get_local_input() -> Dictionary:
 		supering=_last_supering,
 	}
 
-func _predict_remote_input(previous_input: Dictionary, ticks_since_real_input: int) -> Dictionary:
+func _predict_remote_input(previous_input: Dictionary, SYNCED_ticks_since_real_input: int) -> Dictionary:
 	var out = previous_input.duplicate()
 
-	if ticks_since_real_input >= 1:
-		out["kicking_for_ticks"] = 0
+	if SYNCED_ticks_since_real_input >= 1:
+		out["SYNCED_kicking_for_ticks"] = 0
 
 	out["joy_direction"] = Vector4.ZERO
 
 	return out
 	
 func _integrate_forces():
-	var prev_velocity = velocity.x
 	velocity.x += SPEED * (_direction.y - _direction.x)
-	if sign(velocity.x) != sign(prev_velocity) and sign(velocity.x) != 0:
+	if sign(velocity.x) != SYNCED_facing_direction and sign(velocity.x) != 0:
 		turn.emit(sign(velocity.x))
+		SYNCED_facing_direction = sign(velocity.x)
 	super._integrate_forces()
 
 func _network_preprocess(input):
@@ -101,7 +103,7 @@ func _network_preprocess(input):
 	%KickArea.sync_to_physics_engine()
  
 func _network_process(input: Dictionary) -> void:
-	ticks += 1
+	SYNCED_ticks += 1
 	var joy_direction = input.get("joy_direction", Vector4i.ZERO)
 
 	var jumping = input.get("jumping", false)
@@ -114,27 +116,27 @@ func _network_process(input: Dictionary) -> void:
 		GRAVITY_SCALE = SGFixed.ONE
 
 	if jumping:
-		jumping_for_ticks += 1
+		SYNCED_jumping_for_ticks += 1
 	else:
-		jumping_for_ticks = 0
+		SYNCED_jumping_for_ticks = 0
 	if kicking:
-		kicking_for_ticks += 1
+		SYNCED_kicking_for_ticks += 1
 	else:
-		kicking_for_ticks = 0
+		SYNCED_kicking_for_ticks = 0
 	if supering:
-		supering_for_ticks += 1
+		SYNCED_supering_for_ticks += 1
 	else:
-		supering_for_ticks = 0
+		SYNCED_supering_for_ticks = 0
 
 	_direction = joy_direction
 
-	if jumping_for_ticks == 1 and is_on_floor_USE_THIS_ONE:
+	if SYNCED_jumping_for_ticks == 1 and is_on_floor_USE_THIS_ONE:
 		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
 	# Make sure the kick area is aware of collisions
-	if kicking_for_ticks == 1 and (ticks - last_kicked_on_tick) > KICK_COOLDOWN_TICKS:
+	if SYNCED_kicking_for_ticks == 1 and (SYNCED_ticks - SYNCED_last_kicked_on_tick) > KICK_COOLDOWN_SYNCED_ticks:
 		kick.emit(false)
-		last_kicked_on_tick = ticks
+		SYNCED_last_kicked_on_tick = SYNCED_ticks
 		var bodies = %KickArea.get_overlapping_bodies()
 		var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
 		if ball_index >= 0:
@@ -148,18 +150,20 @@ func _network_process(input: Dictionary) -> void:
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()
-	state["ticks"] = ticks
-	state["jumping_for_ticks"] = jumping_for_ticks
-	state["kicking_for_ticks"] = kicking_for_ticks
-	state["supering_for_ticks"] = supering_for_ticks
-	state["last_kicked_on_tick"] = last_kicked_on_tick
+	state["SYNCED_ticks"] = SYNCED_ticks
+	state["SYNCED_jumping_for_ticks"] = SYNCED_jumping_for_ticks
+	state["SYNCED_kicking_for_ticks"] = SYNCED_kicking_for_ticks
+	state["SYNCED_supering_for_ticks"] = SYNCED_supering_for_ticks
+	state["SYNCED_last_kicked_on_tick"] = SYNCED_last_kicked_on_tick
+	state["SYNCED_facing_direction"] = SYNCED_facing_direction
 	return state
 
 func _load_state(state):
-	ticks = state["ticks"]
-	jumping_for_ticks = state["jumping_for_ticks"]
-	kicking_for_ticks = state["kicking_for_ticks"]
-	supering_for_ticks = state["supering_for_ticks"]
-	last_kicked_on_tick = state["last_kicked_on_tick"]
+	SYNCED_ticks = state["SYNCED_ticks"]
+	SYNCED_jumping_for_ticks = state["SYNCED_jumping_for_ticks"]
+	SYNCED_kicking_for_ticks = state["SYNCED_kicking_for_ticks"]
+	SYNCED_supering_for_ticks = state["SYNCED_supering_for_ticks"]
+	SYNCED_last_kicked_on_tick = state["SYNCED_last_kicked_on_tick"]
+	SYNCED_facing_direction = state["SYNCED_facing_direction"]
 	super._load_state(state)
 	%KickArea.sync_to_physics_engine()

@@ -30,7 +30,6 @@ var SYNCED_facing_direction = 1
 
 var ball: Ball2D
 
-
 signal kick(successful: bool)
 signal turn(direction: int)
 
@@ -94,7 +93,8 @@ func _predict_remote_input(previous_input: Dictionary, SYNCED_ticks_since_real_i
 func _integrate_forces():
 	velocity.x += SPEED * (_direction.y - _direction.x)
 	if sign(velocity.x) != SYNCED_facing_direction and sign(velocity.x) != 0:
-		turn.emit(sign(velocity.x))
+		if not SyncManager.is_in_rollback():
+			turn.emit(sign(velocity.x))
 		SYNCED_facing_direction = sign(velocity.x)
 	super._integrate_forces()
 
@@ -135,12 +135,14 @@ func _network_process(input: Dictionary) -> void:
 
 	# Make sure the kick area is aware of collisions
 	if SYNCED_kicking_for_ticks == 1 and (SYNCED_ticks - SYNCED_last_kicked_on_tick) > KICK_COOLDOWN_SYNCED_ticks:
-		kick.emit(false)
+		if not SyncManager.is_in_rollback():
+			kick.emit(false)
 		SYNCED_last_kicked_on_tick = SYNCED_ticks
 		var bodies = %KickArea.get_overlapping_bodies()
 		var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
 		if ball_index >= 0:
-			kick.emit(true)
+			if not SyncManager.is_in_rollback():
+				kick.emit(true)
 			ball = bodies[ball_index]
 			var hit_direction = ball.fixed_position.direction_to(fixed_position)
 			var hit_force_vector = SGFixed.vector2(-SGFixed.mul(KICK_POWER, hit_direction.x) + linear_velocity.x, -SGFixed.mul(KICK_POWER, hit_direction.y) + linear_velocity.y)

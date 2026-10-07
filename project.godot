@@ -104,6 +104,8 @@ sync_debug={
 [network]
 
 rollback/interpolation=true
+rollback/debug/rollback_ticks=2
+rollback/debug/random_rollback_ticks=10
 
 [physics]
 

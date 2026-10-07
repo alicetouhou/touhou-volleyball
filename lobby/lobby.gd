@@ -198,4 +198,3 @@ func _ready() -> void:
 			connected = true
 			print("Accepting connections.")
 			multiplayer.multiplayer_peer = server
-	

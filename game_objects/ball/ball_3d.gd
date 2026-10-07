@@ -18,3 +18,6 @@ func play_kick_sound() -> void:
 
 func play_land_sound() -> void:
 	%Ball2D.play_land_sound()
+
+func get_ball_2d() -> Ball2D:
+	return %Ball2D

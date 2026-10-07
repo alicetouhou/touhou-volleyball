@@ -19,6 +19,7 @@ var _angular_impulses: Array[int] = []
 var _integrated_forces: SGFixedVector2 = SGFixed.vector2(0,0)
 
 var SYNCED_is_on_floor_USE_THIS_ONE := false
+var SYNCED_freeze := false
 
 var linear_velocity: SGFixedVector2 = SGFixed.vector2(0,0)
 var SYNCED_angular_velocity: = 0
@@ -156,17 +157,18 @@ func _network_postprocess(_input):
 
 	apply_central_force(SGFixed.vector2(SGFixed.mul(GRAVITY.x,GRAVITY_SCALE),SGFixed.mul(GRAVITY.y,GRAVITY_SCALE)))
 
-	_integrate_forces()
-	
-	velocity.x += linear_velocity.x
-	velocity.y += linear_velocity.y
+	if not SYNCED_freeze:
+		_integrate_forces()
+		velocity.x += linear_velocity.x
+		velocity.y += linear_velocity.y
+		fixed_rotation += SGFixed.mul(SYNCED_angular_velocity,DELTA)
 
-	fixed_rotation += SGFixed.mul(SYNCED_angular_velocity,DELTA)
 	display_rotation = SGFixed.to_float(fixed_rotation)
 
-	move_and_slide()
-	linear_velocity = _collide(SGFixed.vector2(linear_velocity.x, linear_velocity.y))
-	
+	if not SYNCED_freeze:
+		move_and_slide()
+		linear_velocity = _collide(SGFixed.vector2(linear_velocity.x, linear_velocity.y))
+
 	sync_to_physics_engine()
 
 	_integrated_forces = SGFixed.vector2(0,0)
@@ -204,6 +206,7 @@ func _save_state() -> Dictionary:
 		velocity_y=velocity.y,
 		SYNCED_angular_velocity=SYNCED_angular_velocity,
 		SYNCED_is_on_floor_USE_THIS_ONE=SYNCED_is_on_floor_USE_THIS_ONE,
+		SYNCED_freeze=SYNCED_freeze,
 	}
 
 func _load_state(state: Dictionary):
@@ -216,5 +219,6 @@ func _load_state(state: Dictionary):
 	velocity.y = state["velocity_y"]
 	SYNCED_angular_velocity = state["SYNCED_angular_velocity"]
 	SYNCED_is_on_floor_USE_THIS_ONE = state["SYNCED_is_on_floor_USE_THIS_ONE"]
+	SYNCED_freeze = state["SYNCED_freeze"]
 
 	sync_to_physics_engine()

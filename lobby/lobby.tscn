@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://ct5g5rqqffh3e" path="res://lobby/dedicated_server.gd" id="2_l3xxi"]
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="3_dk04u"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
+[ext_resource type="Script" uid="uid://vqkivouo6eom" path="res://addons/godot-rollback-netcode/NetworkTimer.gd" id="6_8v3m6"]
 [ext_resource type="Script" uid="uid://bmbuwtj33vxgo" path="res://lobby/frame_rate.gd" id="9_8v3m6"]
 [ext_resource type="Script" uid="uid://bvamk6gb8rnnl" path="res://lobby/pinger.gd" id="9_8367x"]
 
@@ -104,7 +105,7 @@ grow_vertical = 0
 theme_override_constants/separation = -150
 script = ExtResource("2_4veey")
 
-[node name="Level" type="Node3D" parent="." unique_id=489659158]
+[node name="Level" type="Node3D" parent="." unique_id=489659158 groups=["network_sync"]]
 unique_name_in_owner = true
 script = ExtResource("1_uj4ub")
 
@@ -139,6 +140,34 @@ position = Vector2(1460, 744)
 [node name="Players" type="Node3D" parent="Level" unique_id=1411736408]
 
 [node name="Ball" type="Node3D" parent="Level" unique_id=979437667]
+
+[node name="StartGameTimer3" type="Node" parent="Level" unique_id=307877150]
+unique_name_in_owner = true
+script = ExtResource("6_8v3m6")
+one_shot = true
+wait_ticks = 45
+metadata/_custom_type_script = "uid://vqkivouo6eom"
+
+[node name="StartGameTimer2" type="Node" parent="Level" unique_id=652207702]
+unique_name_in_owner = true
+script = ExtResource("6_8v3m6")
+one_shot = true
+wait_ticks = 90
+metadata/_custom_type_script = "uid://vqkivouo6eom"
+
+[node name="StartGameTimer1" type="Node" parent="Level" unique_id=1125457583]
+unique_name_in_owner = true
+script = ExtResource("6_8v3m6")
+one_shot = true
+wait_ticks = 135
+metadata/_custom_type_script = "uid://vqkivouo6eom"
+
+[node name="EndRoundTimer" type="Node" parent="Level" unique_id=1513500238]
+unique_name_in_owner = true
+script = ExtResource("6_8v3m6")
+one_shot = true
+wait_ticks = 105
+metadata/_custom_type_script = "uid://vqkivouo6eom"
 
 [node name="Camera" type="Camera3D" parent="Level" unique_id=757775853]
 unique_name_in_owner = true
@@ -183,6 +212,21 @@ offset_right = 2043.0
 offset_bottom = 879.0
 theme_override_font_sizes/font_size = 250
 text = "Score!"
+
+[node name="Countdown" type="Label" parent="UI" unique_id=298865777]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.47864583
+anchor_top = 0.18240741
+anchor_right = 0.52343756
+anchor_bottom = 0.37222221
+offset_right = -6.1035156e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 150
+text = "3"
+metadata/_edit_use_anchors_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1155132226]
 layout_mode = 1
@@ -264,3 +308,7 @@ script = ExtResource("9_8v3m6")
 [connection signal="pressed" from="LobbyOverlay/Network/Disconnect" to="." method="stop_connection"]
 [connection signal="pressed" from="LobbyOverlay/Network/Start" to="." method="start_game"]
 [connection signal="pressed" from="LobbyOverlay/Network/Start" to="DedicatedServerStart" method="start_dedicated_game"]
+[connection signal="timeout" from="Level/StartGameTimer3" to="Level" method="_on_start_game_timer_3_timeout"]
+[connection signal="timeout" from="Level/StartGameTimer2" to="Level" method="_on_start_game_timer_2_timeout"]
+[connection signal="timeout" from="Level/StartGameTimer1" to="Level" method="_on_start_game_timer_1_timeout"]
+[connection signal="timeout" from="Level/EndRoundTimer" to="Level" method="_on_end_round_timer_timeout"]

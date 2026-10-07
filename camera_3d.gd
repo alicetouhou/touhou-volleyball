@@ -8,8 +8,8 @@ var trauma = 0.0  # Current shake strength.
 var trauma_power = 1  # Trauma exponent. Use [2, 3].
 var target_object: Node3D
 
-func add_trauma(amount: float):
-	trauma = min(trauma + amount, 1.0)
+func add_trauma(amount: float, max: float = 1.0):
+	trauma = min(trauma + amount, max)
 
 func shake():
 	var amount = trauma

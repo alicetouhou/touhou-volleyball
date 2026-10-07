@@ -72,14 +72,10 @@ func create_dust_trail(player: Player3D, direction: int):
 func create_ball_hit_visual(player: Player3D):
 	%FxManager.create_at_pos(FXManager.pummel_pop, (player.position + ball.position) / 2.)
 	%FxManager.create_with_parent_3D(FXManager.pressure_ring, ball)
-	%Camera.add_trauma(.1)
+	%Camera.add_trauma(.1, .1)
 
 func create_fx(fx: PackedScene, pos: Vector3) -> void:
 	%FxManager.create_at_pos(fx, pos)
 
-func player_hit_ball() -> void:
-	# %FxManager.create_with_parent_3D(FXManager.pressure_ring, ball)
-	%Camera.add_trauma(.1)
-	
 func get_fx_manager():
 	return %FxManager

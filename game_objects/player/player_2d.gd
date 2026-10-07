@@ -2,8 +2,8 @@ class_name Player2D
 
 extends SyncedRigidBody
 
-const SPEED = 10
-const JUMP = int(65536*21 + 65536*SGFixed.HALF)
+const SPEED = 14
+const JUMP = int(65536*20 + SGFixed.HALF) 
 const KICK_POWER = SGFixed.ONE * 20
 
 var input_device = -99

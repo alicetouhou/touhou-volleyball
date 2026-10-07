@@ -149,6 +149,7 @@ func _network_process(input: Dictionary) -> void:
 			var ball_rad = 99091
 			var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))	
 			ball.apply_impulse(hit_force_vector, hit_distance_vector)
+			ball.play_kick_sound()
 
 func _save_state() -> Dictionary:
 	var state = super._save_state()

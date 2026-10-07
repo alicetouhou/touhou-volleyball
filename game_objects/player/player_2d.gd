@@ -4,7 +4,7 @@ extends SyncedRigidBody
 
 const SPEED = 14
 const JUMP = int(65536*20 + SGFixed.HALF) 
-const KICK_POWER = SGFixed.ONE * 20
+const KICK_POWER = SGFixed.ONE * 30
 
 var input_device = -99
 var player_id: int
@@ -130,7 +130,7 @@ func _network_process(input: Dictionary) -> void:
 
 	_direction = joy_direction
 
-	if SYNCED_jumping_for_ticks == 1 and is_on_floor_USE_THIS_ONE:
+	if SYNCED_jumping_for_ticks == 1 and SYNCED_is_on_floor_USE_THIS_ONE:
 		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
 	# Make sure the kick area is aware of collisions

@@ -18,10 +18,10 @@ var _angular_impulses: Array[int] = []
 
 var _integrated_forces: SGFixedVector2 = SGFixed.vector2(0,0)
 
-var is_on_floor_USE_THIS_ONE := false
+var SYNCED_is_on_floor_USE_THIS_ONE := false
 
 var linear_velocity: SGFixedVector2 = SGFixed.vector2(0,0)
-var angular_velocity: = 0
+var SYNCED_angular_velocity: = 0
 
 var display_position: Vector2 = Vector2.ZERO
 var display_rotation = 0
@@ -96,8 +96,8 @@ func _integrate_forces():
 	_integrated_forces = SGFixed.vector2(0,0)
 
 	for force in _forces:
-		_integrated_forces.x += SGFixed.div(force.x,MASS)
-		_integrated_forces.y += SGFixed.div(force.y,MASS)
+		_integrated_forces.x += force.x
+		_integrated_forces.y += force.y
 
 	#Discrete integral approximation to get new velocity
 	var x_approximation: int = rk4(f_x,f_xv,0,0,linear_velocity.x+_integrated_forces.x,DELTA,1)
@@ -105,13 +105,13 @@ func _integrate_forces():
 
 	#Add impulses now, after integration
 	for impulse in _impulses:
-		x_approximation += SGFixed.div(impulse.x,MASS)
-		y_approximation += SGFixed.div(impulse.y,MASS)
+		x_approximation += impulse.x
+		y_approximation += impulse.y
 
-	var angular_velocity_sum = 0
+	var SYNCED_angular_velocity_sum = 0
 	for impulse in _angular_impulses:
-		angular_velocity_sum += impulse
-	angular_velocity = clamp(angular_velocity + angular_velocity_sum - SGFixed.mul(angular_velocity + angular_velocity_sum,ANGULAR_DAMPING),-1966080,1966080)
+		SYNCED_angular_velocity_sum += impulse
+	SYNCED_angular_velocity = clamp(SYNCED_angular_velocity + SYNCED_angular_velocity_sum - SGFixed.mul(SYNCED_angular_velocity + SYNCED_angular_velocity_sum,ANGULAR_DAMPING),-1966080,1966080)
 
 	# Clamp linear velocity to avoid ballooning to huge velocities
 	linear_velocity.x = clamp(x_approximation - SGFixed.mul(x_approximation,LINEAR_DAMPING),-1966080,1966080)
@@ -120,7 +120,7 @@ func _integrate_forces():
 func _collide(prev_velocity: SGFixedVector2):
 	var force = SGFixed.vector2(0,0)
 		
-	is_on_floor_USE_THIS_ONE = false
+	SYNCED_is_on_floor_USE_THIS_ONE = false
 	for c_id in get_slide_count():
 		var c: SGKinematicCollision2D = get_slide_collision(c_id)
 		var dot_c = prev_velocity.dot(c.normal)
@@ -129,7 +129,7 @@ func _collide(prev_velocity: SGFixedVector2):
 		var body_up = prev_velocity.normalized().dot(UP)
 				
 		if c_up <= SGFixed.HALF*-1 and body_up >= SGFixed.HALF:
-			is_on_floor_USE_THIS_ONE = true
+			SYNCED_is_on_floor_USE_THIS_ONE = true
 		
 		var d = SGFixed.mul(SGFixed.ONE + BOUNCINESS,dot_c)
 		var x_force = SGFixed.mul(d,c.normal.x)
@@ -153,17 +153,15 @@ func _network_postprocess(_input):
 
 	velocity.x = 0
 	velocity.y = 0
-	
-	var g_scale = SGFixed.mul(GRAVITY_SCALE,MASS)
 
-	apply_central_force(SGFixed.vector2(SGFixed.mul(GRAVITY.x,g_scale),SGFixed.mul(GRAVITY.y,g_scale)))
+	apply_central_force(SGFixed.vector2(SGFixed.mul(GRAVITY.x,GRAVITY_SCALE),SGFixed.mul(GRAVITY.y,GRAVITY_SCALE)))
 
 	_integrate_forces()
 	
 	velocity.x += linear_velocity.x
 	velocity.y += linear_velocity.y
 
-	fixed_rotation += SGFixed.mul(angular_velocity,DELTA)
+	fixed_rotation += SGFixed.mul(SYNCED_angular_velocity,DELTA)
 	display_rotation = SGFixed.to_float(fixed_rotation)
 
 	move_and_slide()
@@ -200,23 +198,23 @@ func _save_state() -> Dictionary:
 		fixed_position_x=fixed_position_x,
 		fixed_position_y=fixed_position_y,
 		fixed_rotation=fixed_rotation,
-		linear_velocity_x=linear_velocity.x,
-		linear_velocity_y=linear_velocity.y,
+		SYNCED_linear_velocity_x=linear_velocity.x,
+		SYNCED_linear_velocity_y=linear_velocity.y,
 		velocity_x=velocity.x,
 		velocity_y=velocity.y,
-		angular_velocity=angular_velocity,
-		is_on_floor_USE_THIS_ONE=is_on_floor_USE_THIS_ONE,
+		SYNCED_angular_velocity=SYNCED_angular_velocity,
+		SYNCED_is_on_floor_USE_THIS_ONE=SYNCED_is_on_floor_USE_THIS_ONE,
 	}
 
 func _load_state(state: Dictionary):
 	fixed_position_x = state["fixed_position_x"]
 	fixed_position_y = state["fixed_position_y"]
 	fixed_rotation = state["fixed_rotation"]
-	linear_velocity.x = state["linear_velocity_x"]
-	linear_velocity.y = state["linear_velocity_y"]
+	linear_velocity.x = state["SYNCED_linear_velocity_x"]
+	linear_velocity.y = state["SYNCED_linear_velocity_y"]
 	velocity.x = state["velocity_x"]
 	velocity.y = state["velocity_y"]
-	angular_velocity = state["angular_velocity"]
-	is_on_floor_USE_THIS_ONE = state["is_on_floor_USE_THIS_ONE"]
+	SYNCED_angular_velocity = state["SYNCED_angular_velocity"]
+	SYNCED_is_on_floor_USE_THIS_ONE = state["SYNCED_is_on_floor_USE_THIS_ONE"]
 
 	sync_to_physics_engine()

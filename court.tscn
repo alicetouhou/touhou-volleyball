@@ -126,21 +126,24 @@ position = Vector2(948.18115, 900.26855)
 
 [node name="Roof" type="SGCollisionShape2D" parent="SGStaticBody2D" unique_id=792584086]
 shape = SubResource("SGRectangleShape2D_0xfd7")
-fixed_position_x = 62139626
-position = Vector2(948.1754, 0)
+fixed_position_x = 62139521
+fixed_position_y = -2500000
+position = Vector2(948.1738, -38.146973)
 
 [node name="Wall1" type="SGCollisionShape2D" parent="SGStaticBody2D" unique_id=1619321034]
 shape = SubResource("SGRectangleShape2D_0xfd7")
+fixed_position_x = -3000000
 fixed_scale_x = 65357
 fixed_rotation = 102954
+position = Vector2(-45.776367, 0)
 rotation = 1.5709534
 scale = Vector2(0.9972687, 1)
 
 [node name="Wall2" type="SGCollisionShape2D" parent="SGStaticBody2D" unique_id=1906966857]
 shape = SubResource("SGRectangleShape2D_0xfd7")
-fixed_position_x = 124399252
+fixed_position_x = 129099252
 fixed_scale_x = 65357
 fixed_rotation = 102954
-position = Vector2(1898.1819, 0)
+position = Vector2(1969.8982, 0)
 rotation = 1.5709534
 scale = Vector2(0.9972687, 1)

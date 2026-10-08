@@ -109,6 +109,9 @@ func start_round():
 	# Set up the server for the next round
 	serving = (serving + 1) % 2
 
+func reset() -> void:
+	print("Reset, this needs to do something btw...")
+
 func create_dust_trail(player: Player3D, direction: int):
 	%FxManager.create_at_pos(FXManager.dust_settle, player.position - Vector3(0, .6, 0), direction != 1)
 

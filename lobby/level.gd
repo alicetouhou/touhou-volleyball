@@ -75,7 +75,7 @@ func _network_process(_input):
 	if ball.get_ball_2d().SYNCED_is_on_floor_USE_THIS_ONE:
 		if SYNCED_round_running:
 			SYNCED_round_running = false
-			var winning_player = 1 if ball.get_ball_2d().fixed_position.x > 0 else 0
+			var winning_player = 0 if ball.get_ball_2d().fixed_position.x > SGFixed.from_int(540) else 1
 			SYNCED_score[winning_player] += 1
 			%EndRoundTimer.start()
 			write_score()
@@ -141,5 +141,5 @@ func _save_state() -> Dictionary:
 	}
 
 func _load_state(data):
-	SYNCED_score = [data.get("SYNCED_score_left", 0), data.get("SYNCED_score_right", 0)]
+	SYNCED_score = [data["SYNCED_score_left"], data["SYNCED_score_right"]]
 	SYNCED_round_running = data["SYNCED_round_running"]

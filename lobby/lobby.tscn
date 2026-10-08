@@ -162,13 +162,6 @@ one_shot = true
 wait_ticks = 135
 metadata/_custom_type_script = "uid://vqkivouo6eom"
 
-[node name="EndRoundTimer" type="Node" parent="Level" unique_id=1513500238]
-unique_name_in_owner = true
-script = ExtResource("6_8v3m6")
-one_shot = true
-wait_ticks = 105
-metadata/_custom_type_script = "uid://vqkivouo6eom"
-
 [node name="Camera" type="Camera3D" parent="Level" unique_id=757775853]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 0.9976108, 0.06908454, 0, -0.06908454, 0.9976108, 0, 4.368427, 8.134905)
@@ -311,4 +304,3 @@ script = ExtResource("9_8v3m6")
 [connection signal="timeout" from="Level/StartGameTimer3" to="Level" method="_on_start_game_timer_3_timeout"]
 [connection signal="timeout" from="Level/StartGameTimer2" to="Level" method="_on_start_game_timer_2_timeout"]
 [connection signal="timeout" from="Level/StartGameTimer1" to="Level" method="_on_start_game_timer_1_timeout"]
-[connection signal="timeout" from="Level/EndRoundTimer" to="Level" method="_on_end_round_timer_timeout"]

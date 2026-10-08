@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://dndlisrcw5um6" path="res://game_objects/ball/ball_3d.gd" id="1_1awvx"]
 [ext_resource type="Texture2D" uid="uid://cb70ljle7mf4h" path="res://volleyball.png" id="2_1awvx"]
 [ext_resource type="Script" uid="uid://cldxrfdpdlo3n" path="res://game_objects/ball/ball2D.gd" id="2_cy21b"]
-[ext_resource type="Script" uid="uid://cppuyia1qtdmc" path="res://game_objects/ball/trail.gd" id="3_7pixw"]
 [ext_resource type="AudioStream" uid="uid://c6qxqgpy014tq" path="res://assets/sound/ball_land.mp3" id="3_gkwjo"]
 [ext_resource type="AudioStream" uid="uid://dakrr1iyts2nd" path="res://assets/sound/ball_1.mp3" id="3_ltkfq"]
 [ext_resource type="AudioStream" uid="uid://v8iwtnluofi3" path="res://assets/sound/ball_2.mp3" id="4_xn203"]
@@ -65,7 +64,6 @@ width_curve = SubResource("Curve_616pu")
 gradient = SubResource("Gradient_tnhfv")
 joint_mode = 2
 antialiased = true
-script = ExtResource("3_7pixw")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1464322554]
 unique_name_in_owner = true

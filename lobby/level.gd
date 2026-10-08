@@ -11,7 +11,9 @@ var serving := 0
 ## If true, the round is currently running.
 var round_running := false
 ## Score [left, right]
-var score = [0, 0]
+var SYNCED_score = [0, 0]
+var SYNCED_round_running := false
+var SYNCED_time_since_round_ended = 0
 
 var ball: Ball3D
 
@@ -32,7 +34,7 @@ func start_game() -> void:
 	for child in players.get_children():
 		child.queue_free()
 	
-	score = [0, 0]
+	SYNCED_score = [0, 0]
 
 	# Ball
 	ball = SyncManager.spawn("ball", $Ball, preload("res://game_objects/ball/Ball3D.tscn"), {
@@ -71,12 +73,20 @@ func start_game() -> void:
 	setup_round()
 	
 func _network_process(_input):
+	return
 	if ball.get_ball_2d().SYNCED_is_on_floor_USE_THIS_ONE:
-		if %EndRoundTimer.is_stopped():
-			%EndRoundTimer.start()
-			var winning_player = 0 if ball.get_ball_2d().fixed_position.x > 0 else 1
-			score[winning_player] += 1
+		if SYNCED_round_running:
+			SYNCED_round_running = false
+			SYNCED_time_since_round_ended = 0
+			var winning_player = 1 if ball.get_ball_2d().fixed_position.x > 0 else 0
+			SYNCED_score[winning_player] += 1
 			write_score()
+
+	if not SYNCED_round_running:
+		SYNCED_time_since_round_ended += 1
+	
+	if SYNCED_time_since_round_ended == 60:
+		setup_round()
 
 func setup_round():
 	countdown_timer.text = "3"
@@ -93,6 +103,7 @@ func setup_round():
 
 func start_round():
 	countdown_timer.hide()
+	SYNCED_round_running = true
 	ball.get_ball_2d().SYNCED_freeze = false
 	
 	# Set up the server for the next round
@@ -113,7 +124,7 @@ func get_fx_manager():
 	return %FxManager
 
 func write_score():
-	scoreboard.text = str(score[0]) + " - " + str(score[1])
+	scoreboard.text = str(SYNCED_score[0]) + " - " + str(SYNCED_score[1])
 
 func _on_start_game_timer_3_timeout() -> void:
 	countdown_timer.text = "2"
@@ -124,5 +135,14 @@ func _on_start_game_timer_2_timeout() -> void:
 func _on_start_game_timer_1_timeout() -> void:
 	start_round()
 
-func _on_end_round_timer_timeout() -> void:
-	setup_round()
+func save_state():
+	return {
+		SYNCED_score: SYNCED_score.duplicate(),
+		SYNCED_round_running: SYNCED_round_running,
+		SYNCED_time_since_round_ended: SYNCED_time_since_round_ended,
+	}
+
+func load_state(data):
+	SYNCED_score = data["SYNCED_score"]
+	SYNCED_round_running = data["SYNCED_round_running"]
+	SYNCED_time_since_round_ended = data["SYNCED_time_since_round_ended"]

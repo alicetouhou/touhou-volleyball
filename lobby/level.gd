@@ -75,8 +75,10 @@ func _network_process(_input):
 	if ball.get_ball_2d().SYNCED_is_on_floor_USE_THIS_ONE:
 		if SYNCED_round_running:
 			SYNCED_round_running = false
-			var winning_player = 0 if ball.get_ball_2d().fixed_position.x > SGFixed.from_int(540) else 1
+			var winning_player = 0 if ball.get_ball_2d().fixed_position.x > SGFixed.from_int(960) else 1
 			SYNCED_score[winning_player] += 1
+			# Set up the server for the next round
+			serving = winning_player
 			%EndRoundTimer.start()
 			write_score()
 
@@ -97,9 +99,6 @@ func start_round():
 	countdown_timer.hide()
 	SYNCED_round_running = true
 	ball.get_ball_2d().SYNCED_freeze = false
-	
-	# Set up the server for the next round
-	serving = (serving + 1) % 2
 
 func reset() -> void:
 	print("Reset, this needs to do something btw...")

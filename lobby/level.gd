@@ -13,7 +13,6 @@ var round_running := false
 ## Score [left, right]
 var SYNCED_score = [0, 0]
 var SYNCED_round_running := false
-var SYNCED_time_since_round_ended = 0
 
 var ball: Ball3D
 
@@ -71,22 +70,15 @@ func start_game() -> void:
 	get_tree().call_group("cpu", "update_game_state", false)
 
 	setup_round()
-	
+
 func _network_process(_input):
-	return
 	if ball.get_ball_2d().SYNCED_is_on_floor_USE_THIS_ONE:
 		if SYNCED_round_running:
 			SYNCED_round_running = false
-			SYNCED_time_since_round_ended = 0
 			var winning_player = 1 if ball.get_ball_2d().fixed_position.x > 0 else 0
 			SYNCED_score[winning_player] += 1
+			%EndRoundTimer.start()
 			write_score()
-
-	if not SYNCED_round_running:
-		SYNCED_time_since_round_ended += 1
-	
-	if SYNCED_time_since_round_ended == 60:
-		setup_round()
 
 func setup_round():
 	countdown_timer.text = "3"
@@ -138,14 +130,16 @@ func _on_start_game_timer_2_timeout() -> void:
 func _on_start_game_timer_1_timeout() -> void:
 	start_round()
 
-func save_state():
+func _on_end_round_timer_timeout() -> void:
+	setup_round()
+
+func _save_state() -> Dictionary:
 	return {
-		SYNCED_score: SYNCED_score.duplicate(),
-		SYNCED_round_running: SYNCED_round_running,
-		SYNCED_time_since_round_ended: SYNCED_time_since_round_ended,
+		"SYNCED_score_left": SYNCED_score[0],
+		"SYNCED_score_right": SYNCED_score[1],
+		"SYNCED_round_running": SYNCED_round_running,
 	}
 
-func load_state(data):
-	SYNCED_score = data["SYNCED_score"]
+func _load_state(data):
+	SYNCED_score = [data.get("SYNCED_score_left", 0), data.get("SYNCED_score_right", 0)]
 	SYNCED_round_running = data["SYNCED_round_running"]
-	SYNCED_time_since_round_ended = data["SYNCED_time_since_round_ended"]

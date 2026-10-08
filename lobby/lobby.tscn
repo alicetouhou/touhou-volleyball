@@ -141,6 +141,13 @@ position = Vector2(1460, 744)
 
 [node name="Ball" type="Node3D" parent="Level" unique_id=979437667]
 
+[node name="EndRoundTimer" type="Node" parent="Level" unique_id=1950532382]
+unique_name_in_owner = true
+script = ExtResource("6_8v3m6")
+one_shot = true
+wait_ticks = 105
+metadata/_custom_type_script = "uid://vqkivouo6eom"
+
 [node name="StartGameTimer3" type="Node" parent="Level" unique_id=307877150]
 unique_name_in_owner = true
 script = ExtResource("6_8v3m6")
@@ -301,6 +308,7 @@ script = ExtResource("9_8v3m6")
 [connection signal="pressed" from="LobbyOverlay/Network/Disconnect" to="." method="stop_connection"]
 [connection signal="pressed" from="LobbyOverlay/Network/Start" to="." method="start_game"]
 [connection signal="pressed" from="LobbyOverlay/Network/Start" to="DedicatedServerStart" method="start_dedicated_game"]
+[connection signal="timeout" from="Level/EndRoundTimer" to="Level" method="_on_end_round_timer_timeout"]
 [connection signal="timeout" from="Level/StartGameTimer3" to="Level" method="_on_start_game_timer_3_timeout"]
 [connection signal="timeout" from="Level/StartGameTimer2" to="Level" method="_on_start_game_timer_2_timeout"]
 [connection signal="timeout" from="Level/StartGameTimer1" to="Level" method="_on_start_game_timer_1_timeout"]

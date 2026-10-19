@@ -5,9 +5,9 @@ extends SyncedRigidBody
 var last_on_floor = false
 
 func _network_process(_input):
-	if SYNCED_is_on_floor_USE_THIS_ONE and not last_on_floor:
+	if is_on_floor() and not last_on_floor:
 		play_land_sound()
-	if SYNCED_is_on_floor_USE_THIS_ONE:
+	if is_on_floor():
 		last_on_floor = true
 	else:
 		last_on_floor = false

@@ -72,7 +72,7 @@ func start_game() -> void:
 	setup_round()
 
 func _network_process(_input):
-	if ball.get_ball_2d().SYNCED_is_on_floor_USE_THIS_ONE:
+	if ball.get_ball_2d().is_on_floor():
 		if SYNCED_round_running:
 			SYNCED_round_running = false
 			var winning_player = 0 if ball.get_ball_2d().fixed_position.x > SGFixed.from_int(960) else 1
@@ -85,8 +85,8 @@ func _network_process(_input):
 func setup_round():
 	countdown_timer.text = "3"
 	countdown_timer.show()
-	ball.get_ball_2d().SYNCED_freeze = true
-	ball.get_ball_2d().linear_velocity = SGFixed.vector2(0, 0)
+	ball.get_ball_2d().freeze = true
+	ball.get_ball_2d().velocity = SGFixed.vector2(0, 0)
 
 	ball.get_ball_2d().fixed_position_x = SGFixed.from_float(ball_positions[serving].x)
 	ball.get_ball_2d().fixed_position_y = SGFixed.from_float(ball_positions[serving].y)
@@ -98,7 +98,7 @@ func setup_round():
 func start_round():
 	countdown_timer.hide()
 	SYNCED_round_running = true
-	ball.get_ball_2d().SYNCED_freeze = false
+	ball.get_ball_2d().freeze = false
 
 func reset() -> void:
 	print("Reset, this needs to do something btw...")

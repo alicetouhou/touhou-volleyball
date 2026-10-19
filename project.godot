@@ -103,9 +103,7 @@ sync_debug={
 
 [network]
 
-rollback/interpolation=true
-rollback/debug/rollback_ticks=10
-rollback/debug/random_rollback_ticks=10
+rollback/debug/rollback_ticks=7
 
 [physics]
 

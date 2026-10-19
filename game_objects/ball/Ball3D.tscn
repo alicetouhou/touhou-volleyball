@@ -8,8 +8,8 @@
 [ext_resource type="AudioStream" uid="uid://v8iwtnluofi3" path="res://assets/sound/ball_2.mp3" id="4_xn203"]
 [ext_resource type="AudioStream" uid="uid://cbi71iqnvterj" path="res://assets/sound/ball_big_kick.mp3" id="5_hovsl"]
 
-[sub_resource type="SGCircleShape2D" id="SGCircleShape2D_cy21b"]
-radius = 4811761
+[sub_resource type="SGCircleShape2D" id="SGCircleShape2D_8v3m6"]
+radius = 2378651
 
 [sub_resource type="Curve" id="Curve_616pu"]
 _limits = [0.0, 2.0, 0.0, 1.0]
@@ -40,20 +40,24 @@ random_pitch = 1.0594631
 streams_count = 1
 stream_0/stream = ExtResource("3_gkwjo")
 
-[node name="Ball3d" type="Node3D" unique_id=1077794002 groups=["network_sync"]]
+[node name="Ball3d" type="Node3D" unique_id=1450709965 groups=["network_sync"]]
 script = ExtResource("1_1awvx")
 
-[node name="Ball2D" type="SGCharacterBody2D" parent="." unique_id=978173109 groups=["ball", "network_sync"]]
+[node name="Ball2D" type="SGRigidBody2D" parent="." unique_id=958076940 groups=["ball", "network_sync"]]
+gravity_y = 32768
+mass = 100
+bounciness = 65536
+linear_damping = 655
+angular_damping = 655
+gravity_scale = 65536
 collision_layer = 4
 collision_mask = 4
 unique_name_in_owner = true
 script = ExtResource("2_cy21b")
-BOUNCINESS = 59000
-LINEAR_DAMPING = 600
 metadata/_custom_type_script = "uid://r8e80j04btgn"
 
 [node name="SGCollisionShape2D" type="SGCollisionShape2D" parent="Ball2D" unique_id=357563604]
-shape = SubResource("SGCircleShape2D_cy21b")
+shape = SubResource("SGCircleShape2D_8v3m6")
 unique_name_in_owner = true
 
 [node name="TrailViewport" type="SubViewport" parent="." unique_id=1140469948]

@@ -10,9 +10,13 @@ extents_y = 6446358
 extents_x = 4112889
 extents_y = 4104657
 
-[node name="Player2d" type="SGCharacterBody2D" unique_id=802664772 groups=["network_sync", "player"]]
+[node name="Player2d" type="SGRigidBody2D" unique_id=154895554 groups=["network_sync", "player"]]
+gravity_y = 32768
+mass = 100
+linear_damping = 655
+angular_damping = 655
+gravity_scale = 65536
 script = ExtResource("1_hkkr1")
-metadata/_custom_type_script = "uid://r8e80j04btgn"
 
 [node name="KickArea" type="SGArea2D" parent="." unique_id=162389694]
 collision_layer = 4

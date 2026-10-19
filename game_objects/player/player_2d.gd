@@ -24,7 +24,7 @@ var SYNCED_jumping_for_ticks := 0
 var SYNCED_supering_for_ticks := 0
 
 var SYNCED_kicking_for_ticks := 0
-var SYNCED_last_kicked_on_tick := -10
+var SYNCED_last_kicked_on_tick := -30
 
 var SYNCED_facing_direction = 1
 
@@ -91,12 +91,11 @@ func _predict_remote_input(previous_input: Dictionary, SYNCED_ticks_since_real_i
 	return out
 	
 func _integrate_forces():
-	velocity.x += SPEED * (_direction.y - _direction.x)
+	velocity.x = SPEED * (_direction.y - _direction.x)
 	if sign(velocity.x) != SYNCED_facing_direction and sign(velocity.x) != 0:
 		if not SyncManager.is_in_rollback():
 			turn.emit(sign(velocity.x))
 		SYNCED_facing_direction = sign(velocity.x)
-	super._integrate_forces()
 
 func _network_preprocess(input):
 	super._network_preprocess(input)
@@ -105,15 +104,15 @@ func _network_preprocess(input):
 func _network_process(input: Dictionary) -> void:
 	SYNCED_ticks += 1
 	var joy_direction = input.get("joy_direction", Vector4i.ZERO)
-
+	
 	var jumping = input.get("jumping", false)
 	var kicking = input.get("kicking", false)
 	var supering = input.get("supering", false)
 	
 	if joy_direction.w >= 1:
-		GRAVITY_SCALE = SGFixed.from_int(7)
+		gravity_scale = SGFixed.from_int(7 * SGFixed.ONE)
 	else:
-		GRAVITY_SCALE = SGFixed.ONE
+		gravity_scale = SGFixed.ONE
 
 	if jumping:
 		SYNCED_jumping_for_ticks += 1
@@ -134,7 +133,7 @@ func _network_process(input: Dictionary) -> void:
 		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
 	# Make sure the kick area is aware of collisions
-	if SYNCED_kicking_for_ticks == 1 and (SYNCED_ticks - SYNCED_last_kicked_on_tick) > KICK_COOLDOWN_SYNCED_ticks:
+	if SYNCED_kicking_for_ticks >= 1 and (SYNCED_ticks - SYNCED_last_kicked_on_tick) > KICK_COOLDOWN_SYNCED_ticks:
 		if not SyncManager.is_in_rollback():
 			kick.emit(false)
 		SYNCED_last_kicked_on_tick = SYNCED_ticks
@@ -145,9 +144,9 @@ func _network_process(input: Dictionary) -> void:
 				kick.emit(true)
 			ball = bodies[ball_index]
 			var hit_direction = ball.fixed_position.direction_to(fixed_position)
-			var hit_force_vector = SGFixed.vector2(-SGFixed.mul(KICK_POWER, hit_direction.x) + linear_velocity.x, -SGFixed.mul(KICK_POWER, hit_direction.y) + linear_velocity.y)
+			var hit_force_vector = SGFixed.vector2(-SGFixed.mul(KICK_POWER, hit_direction.x) + velocity.x, -SGFixed.mul(KICK_POWER, hit_direction.y) + velocity.y)
 			var ball_rad = 99091
-			var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))	
+			var hit_distance_vector = SGFixed.vector2(SGFixed.mul(ball_rad,hit_direction.x),SGFixed.mul(ball_rad,hit_direction.y))
 			ball.apply_impulse(hit_force_vector, hit_distance_vector)
 			ball.play_kick_sound(hit_force_vector)
 

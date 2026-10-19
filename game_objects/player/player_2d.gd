@@ -110,7 +110,8 @@ func _network_process(input: Dictionary) -> void:
 	var supering = input.get("supering", false)
 	
 	if joy_direction.w >= 1:
-		gravity_scale = SGFixed.from_int(7 * SGFixed.ONE)
+		gravity_scale = 7 * SGFixed.ONE
+		print(gravity_scale)
 	else:
 		gravity_scale = SGFixed.ONE
 

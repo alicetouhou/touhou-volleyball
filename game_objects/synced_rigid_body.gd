@@ -18,7 +18,7 @@ func _network_preprocess(_input):
 	clear_forces()
 	sync_to_physics_engine()
 
-func _network_process(_input):
+func _network_postprocess(_input):
 	display_position.x = SGFixed.to_float(fixed_position.x)
 	display_position.y = SGFixed.to_float(fixed_position.y)
 	move_and_slide()

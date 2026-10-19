@@ -4,7 +4,7 @@ extends SyncedRigidBody
 
 var last_on_floor = false
 
-func _network_process(_input):
+func _network_process(_input: Dictionary) -> void:
 	if is_on_floor() and not last_on_floor:
 		play_land_sound()
 	if is_on_floor():
@@ -19,16 +19,6 @@ func play_kick_sound(hit_force: SGFixedVector2) -> void:
 		%BigKickStream.play(0.04)
 	else:
 		%KickStream.play(0.04)
-
-func _network_postprocess(_input):
-	for k in kick_requests:
-		apply_impulse(
-			SGFixed.vector2(k["force_x"], k["force_y"]),
-			SGFixed.vector2(k["direction_x"], k["direction_y"])
-		)
-	kick_requests = []
-	
-	super._network_process()
 
 func play_land_sound() -> void:
 	if SyncManager.is_in_rollback():

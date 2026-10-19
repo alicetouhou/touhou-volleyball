@@ -20,6 +20,16 @@ func play_kick_sound(hit_force: SGFixedVector2) -> void:
 	else:
 		%KickStream.play(0.04)
 
+func _network_postprocess(_input):
+	for k in kick_requests:
+		apply_impulse(
+			SGFixed.vector2(k["force_x"], k["force_y"]),
+			SGFixed.vector2(k["direction_x"], k["direction_y"])
+		)
+	kick_requests = []
+	
+	super._network_process()
+
 func play_land_sound() -> void:
 	if SyncManager.is_in_rollback():
 		return

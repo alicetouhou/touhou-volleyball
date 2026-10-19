@@ -42,6 +42,7 @@ stream_0/stream = ExtResource("3_gkwjo")
 
 [node name="Ball3d" type="Node3D" unique_id=1450709965 groups=["network_sync"]]
 script = ExtResource("1_1awvx")
+metadata/_custom_type_script = "uid://biv5gpq46pxiq"
 
 [node name="Ball2D" type="SGRigidBody2D" parent="." unique_id=958076940 groups=["ball", "network_sync"]]
 gravity_y = 32768

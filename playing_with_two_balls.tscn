@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://noiqqan7d7bh"]
+
+[ext_resource type="Script" uid="uid://bmcb42rkgmyqg" path="res://playing_with_two_balls.gd" id="1_aag8u"]
+[ext_resource type="Script" uid="uid://r8e80j04btgn" path="res://game_objects/synced_rigid_body.gd" id="1_kdecu"]
+[ext_resource type="Texture2D" uid="uid://cb70ljle7mf4h" path="res://volleyball.png" id="2_o4n05"]
+
+[sub_resource type="SGCircleShape2D" id="SGCircleShape2D_o4n05"]
+radius = 6200571
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_aag8u"]
+blend_mode = 1
+
+[node name="PlayingWithTwoBalls" type="Node2D" unique_id=102881716]
+script = ExtResource("1_aag8u")
+
+[node name="VisualBall" type="SGCharacterBody2D" parent="." unique_id=615177944]
+collision_layer = 16
+collision_mask = 0
+fixed_position_x = 11765000
+fixed_position_y = 50000000
+unique_name_in_owner = true
+position = Vector2(179.51965, 762.93945)
+script = ExtResource("1_kdecu")
+metadata/_custom_type_script = "uid://r8e80j04btgn"
+
+[node name="Sprite2D" type="Sprite2D" parent="VisualBall" unique_id=1195204308]
+scale = Vector2(0.5125, 0.5125)
+texture = ExtResource("2_o4n05")
+
+[node name="SGCollisionShape2D" type="SGCollisionShape2D" parent="VisualBall" unique_id=547828570]
+shape = SubResource("SGCircleShape2D_o4n05")
+visible = false
+
+[node name="TargetBall" type="SGCharacterBody2D" parent="." unique_id=1995098403]
+collision_layer = 16
+collision_mask = 0
+fixed_position_x = 11765000
+fixed_position_y = 60000000
+unique_name_in_owner = true
+position = Vector2(179.51965, 915.52734)
+script = ExtResource("1_kdecu")
+metadata/_custom_type_script = "uid://r8e80j04btgn"
+
+[node name="Sprite2D" type="Sprite2D" parent="TargetBall" unique_id=392472809]
+modulate = Color(0.99961334, 0.044184163, 0.024492007, 1)
+material = SubResource("CanvasItemMaterial_aag8u")
+scale = Vector2(0.5125, 0.5125)
+texture = ExtResource("2_o4n05")
+
+[node name="SGCollisionShape2D" type="SGCollisionShape2D" parent="TargetBall" unique_id=665761729]
+shape = SubResource("SGCircleShape2D_o4n05")
+visible = false

@@ -2,9 +2,6 @@ class_name Player3D
 
 extends Node3D
 
-## Triggered when the super ability's charge changes
-signal super_charge_updated(value: float)
-
 ## Show the cool particles on the ball!
 signal request_create_ball_hit_visual
 signal request_create_dust_trail(direction: int)

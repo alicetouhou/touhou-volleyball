@@ -4,24 +4,26 @@ extends Node3D
 
 
 const player_scene = preload("res://game_objects/player/Player3D.tscn")
-const cpu_scene = preload("res://game_objects/player/CPUPlayer.tscn")
+const cpu_scene = preload("res://game_objects/player/CPUPlayer3D.tscn")
 
-## The ball node.
-var ball: RigidBody3D
 ## Which side's turn is currently playing (ie who served).
 var serving := 0
 ## If true, the round is currently running.
 var round_running := false
 ## Score [left, right]
-var score = [0, 0]
+var SYNCED_score = [0, 0]
+var SYNCED_round_running := false
+
+var ball: Ball3D
 
 @onready var ball_positions = [%P1BallSpawnPoint.global_position, %P2BallSpawnPoint.global_position]
 @onready var player_positions = [%P1SpawnPoint.global_position, %P2SpawnPoint.global_position, %P3SpawnPoint.global_position, %P4SpawnPoint.global_position]
 @onready var players = $Players
 @onready var camera = %Camera
+@onready var countdown_timer = $"../UI/Countdown"
+@onready var scoreboard = $"../UI/ScoreBoard"
 
 ## Spawn the required nodes and initiate first play on all clients
-@rpc("call_local")
 func start_game() -> void:
 	# Container resets and definitions
 	var ball_container = $Ball
@@ -31,15 +33,15 @@ func start_game() -> void:
 	for child in players.get_children():
 		child.queue_free()
 	
-	score = [0, 0]
-	
+	SYNCED_score = [0, 0]
+
 	# Ball
-	ball = preload("res://game_objects/ball/Ball3D.tscn").instantiate()
-	ball.freeze = true
+	ball = SyncManager.spawn("ball", $Ball, preload("res://game_objects/ball/Ball3D.tscn"), {
+		"fixed_position_x": SGFixed.from_float(ball_positions[0].x),
+		"fixed_position_y": SGFixed.from_float(ball_positions[0].y),
+	})
 	ball.create_fx.connect(create_fx)
-	ball.body_entered.connect(ball_collided)
-	ball_container.add_child(ball, true)
-	
+
 	# Players
 	var connected_players: Array = get_parent().players
 	if len(connected_players) % 2 == 1:
@@ -47,110 +49,102 @@ func start_game() -> void:
 
 	var i = 0
 	for peer: PlayerPeer in connected_players:
-		var player: Player = (player_scene if peer.peer_id > -1 else cpu_scene).instantiate()
-		
-		player.name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
+		var use_player_scene: PackedScene = player_scene if peer.peer_id != -1 else cpu_scene
 
-		# Disable input for CPUs and players on other computers
-		player.player_id = peer.peer_id
-		if peer.peer_id < 0 or (player.player_id != multiplayer.get_unique_id() and not peer.local_co_op):
-			player.disable_input()
+		var player_name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
+		var player: Player3D = SyncManager.spawn(player_name, players, use_player_scene, {
+			"player_id": peer.peer_id,
+			"fixed_position_x": SGFixed.from_float(player_positions[i].x),
+			"fixed_position_y": SGFixed.from_float(player_positions[i].y),
+			"input_device": peer.input_device,
+			"character": peer.character,
+		})
+		player.set_multiplayer_authority(peer.peer_id)
+		
+		player.request_create_dust_trail.connect(func(direction): create_dust_trail(player, direction))
+		player.request_create_ball_hit_visual.connect(func(): create_ball_hit_visual(player))
 
-		if peer.local_co_op:
-			player.set_multiplayer_authority(multiplayer.get_unique_id())
-		
-		var charge_bar = preload("res://game_objects/SuperCharge.tscn").instantiate()
-		charge_bar.name = str(peer)
-		var side = 0
-		if i >= floori(len(connected_players) / 2.):
-			side = 1
-		%ChargeBars.get_child(side).add_child(charge_bar)
-		
-		player.on_hit_ball.connect(player_hit_ball)
-		player.super_used.connect(func(): player_super_used(peer))
-		player.super_charge_updated.connect(
-			func(value): charge_bar.set_charge.rpc(value)
-		)
-		player.create_fx.connect(create_fx)
-		
-		player.input_device = peer.input_device
-		
-		players.add_child(player, true)
-		if peer.peer_id > 0:
-			player.set_character.rpc.call_deferred($"/root/Lobby".get_player_by_id(peer.peer_id).character)
 		i += 1
-	
+
 	get_tree().call_group("cpu", "cpu_init", ball, players.get_children())
 	get_tree().call_group("cpu", "update_game_state", false)
+
+	setup_round()
+
+func _network_process(_input):
+	if ball.get_ball_2d().is_on_floor():
+		if SYNCED_round_running:
+			SYNCED_round_running = false
+			var winning_player = 0 if ball.get_ball_2d().fixed_position.x > SGFixed.from_int(960) else 1
+			SYNCED_score[winning_player] += 1
+			# Set up the server for the next round
+			serving = winning_player
+			%EndRoundTimer.start()
+			write_score()
+
+func setup_round():
+	for cpu_player in get_tree().get_nodes_in_group("cpu_player_2d"):
+		cpu_player.update_game_state(false)
+
+	countdown_timer.text = "3"
+	countdown_timer.show()
+	ball.get_ball_2d().freeze = true
+	ball.get_ball_2d().velocity = SGFixed.vector2(0, 0)
+
+	ball.get_ball_2d().fixed_position_x = SGFixed.from_float(ball_positions[serving].x)
+	ball.get_ball_2d().fixed_position_y = SGFixed.from_float(ball_positions[serving].y)
+
+	%StartGameTimer3.start()
+	%StartGameTimer2.start()
+	%StartGameTimer1.start()
+
+func start_round():
+	countdown_timer.hide()
+	SYNCED_round_running = true
+	ball.get_ball_2d().freeze = false
 	
-	start_round()
+	for cpu_player in get_tree().get_nodes_in_group("cpu_player_2d"):
+		cpu_player.update_game_state(true)
 
 func reset() -> void:
-	var ball_container = $Ball
-	for child in ball_container.get_children():
-		child.queue_free()
-	ball = null
+	print("Reset, this needs to do something btw...")
 
-	for child in players.get_children():
-		child.queue_free()
+func create_dust_trail(player: Player3D, direction: int):
+	%FxManager.create_at_pos(FXManager.dust_settle, player.position - Vector3(0, .6, 0), direction != 1)
 
-func start_round() -> void:
-	if not ball:
-		return
-	
-	for i in players.get_child_count():
-		var player: Node3D = players.get_child(i)
-		if not player is Sprite3D:
-			player.linear_velocity = Vector3.ZERO
-		player.global_position = player_positions[wrap(i, 0, len(player_positions))]
-		
-
-	ball.freeze = true
-	ball.linear_velocity = Vector3.ZERO
-	ball.speed_percent = 1.0
-	ball.global_position = ball_positions[serving]
-	
-	await get_tree().create_timer(1).timeout
-	if not ball:
-		return
-
-	round_running = true
-	ball.freeze = false
-	get_tree().call_group("cpu", "update_game_state", true)
-
-func end_round() -> void:
-	if ball.position.x >= 0:
-		serving = 0
-	else:
-		serving = 1
-	
-	if not round_running:
-		return
-	
-	round_running = false
-	get_tree().call_group("cpu", "update_game_state", false)
-	
-	score[serving] += 1
-	%ScoreBoard.text = "%s - %s" % score
-	%Score.show()
-	await get_tree().create_timer(.75).timeout
-	%Score.hide()
-	
-	start_round()
+func create_ball_hit_visual(player: Player3D):
+	%FxManager.create_at_pos(FXManager.pummel_pop, (player.position + ball.position) / 2.)
+	%FxManager.create_with_parent_3D(FXManager.pressure_ring, ball)
+	%Camera.add_trauma(.1, .1)
 
 func create_fx(fx: PackedScene, pos: Vector3) -> void:
 	%FxManager.create_at_pos(fx, pos)
 
-func ball_collided(body: Node) -> void:
-	if body.is_in_group("ground"):
-		end_round()
-
-func player_hit_ball() -> void:
-	%FxManager.create_with_parent_3D(FXManager.pressure_ring, ball)
-	%Camera.add_trauma(.1)
-
-func player_super_used(player: PlayerPeer) -> void:
-	Supers.run(self, players.get_node("%s-%s" % [player.peer_id, player.input_device]))
-	
 func get_fx_manager():
 	return %FxManager
+
+func write_score():
+	scoreboard.text = str(SYNCED_score[0]) + " - " + str(SYNCED_score[1])
+
+func _on_start_game_timer_3_timeout() -> void:
+	countdown_timer.text = "2"
+
+func _on_start_game_timer_2_timeout() -> void:
+	countdown_timer.text = "1"
+
+func _on_start_game_timer_1_timeout() -> void:
+	start_round()
+
+func _on_end_round_timer_timeout() -> void:
+	setup_round()
+
+func _save_state() -> Dictionary:
+	return {
+		"SYNCED_score_left": SYNCED_score[0],
+		"SYNCED_score_right": SYNCED_score[1],
+		"SYNCED_round_running": SYNCED_round_running,
+	}
+
+func _load_state(data):
+	SYNCED_score = [data["SYNCED_score_left"], data["SYNCED_score_right"]]
+	SYNCED_round_running = data["SYNCED_round_running"]

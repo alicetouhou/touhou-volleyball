@@ -2,7 +2,7 @@ extends Node
 
 const shanghai = preload("res://game_objects/cpu/shanghai.tscn")
 
-func run(game: Level, player: Player):
+func run(game: Level, player: Player3D):
 	var character_name = player.character.name
 	
 	if character_name == "Reimu":
@@ -16,7 +16,7 @@ func run(game: Level, player: Player):
 	if character_name == "Sakuya":
 		sakuya(game, player)
 
-func reimu(game: Level, player: Player):
+func reimu(game: Level, player: Player3D):
 	if player.super_charge < 1:
 		return
 
@@ -51,30 +51,30 @@ func reimu(game: Level, player: Player):
 	
 	player.set_velocity_multiplier(1.0,1.0)
 
-func alice(game: Level, player: Player):
+func alice(game: Level, player: Player3D):
 	if player.super_charge < 1:
 		return
 	player.super_charge -= 1
 	var shanghai_instance = shanghai.instantiate()
 	game.players.add_child(shanghai_instance)
-	shanghai_instance.global_position = player.global_position + Vector3(-0.5,0.5,0.0)
+	#shanghai_instance.global_position = player.global_position + Vector3(-0.5,0.5,0.0)
 	shanghai_instance.cpu_init(game.ball, game.players.get_children())
 	
 	await get_tree().create_timer(6.0).timeout
 	if shanghai_instance and not shanghai_instance.is_queued_for_deletion():
 		shanghai_instance.queue_free()
 
-func yuyuko(game: Level, player: Player):
+func yuyuko(game: Level, player: Player3D):
 	if player.super_charge < 1:
 		return
 	player.super_charge -= 1
-	player.scale = Vector3(3, 3, 3)
+	#player.scale = Vector3(3, 3, 3)
 
 	await get_tree().create_timer(3).timeout
 	
-	player.scale = Vector3(1, 1, 1)
+	#player.scale = Vector3(1, 1, 1)
 		
-func marisa(level: Level, player: Player):
+func marisa(level: Level, player: Player3D):
 	var ball = player.find_ball_in_area(player.marisa_super_collider)
 	if (!ball):
 		return
@@ -91,9 +91,9 @@ func marisa(level: Level, player: Player):
 	player.marisa_super_sfx.play()
 	var fx = level.get_fx_manager()
 	
-	await get_tree().create_timer(0.75).timeout
-	fx.create_at_pos(fx.perfect_burst, player.global_position + Vector3(0.0,0.0,0.0))
-	fx.create_at_pos(fx.holy_pillar, player.global_position + Vector3(-1.0 if reflect else 1.0,0.0,0.0), reflect)
+	await get_tree().create_timer(0.2).timeout
+	##fx.create_at_pos(fx.perfect_burst, player.global_position + Vector3(0.0,0.0,0.0))
+	#fx.create_at_pos(fx.holy_pillar, player.global_position + Vector3(-1.0 if reflect else 1.0,0.0,0.0), reflect)
 	level.camera.add_trauma(0.1)
 	fx.create_particle_at_pos("master_spark_star", player.global_position, reflect)
 	fx.create_particle_at_pos("master_spark_heart", player.global_position, reflect)
@@ -114,7 +114,7 @@ func marisa(level: Level, player: Player):
 	await get_tree().create_timer(1.0).timeout
 	level.ball.set_collision_mask_value(4, true)
 
-func sakuya(level: Level, player: Player):
+func sakuya(level: Level, player: Player3D):
 	if player.super_charge < 2:
 		return
 	player.super_charge -= 2

@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://butv44ydur5tf"]
+
+[ext_resource type="Script" uid="uid://bu1yigksoxrh1" path="res://game_objects/player/player_2d.gd" id="1_hkkr1"]
+
+[sub_resource type="SGRectangleShape2D" id="SGRectangleShape2D_h32g3"]
+extents_x = 7101720
+extents_y = 6446358
+
+[sub_resource type="SGRectangleShape2D" id="SGRectangleShape2D_s23s1"]
+extents_x = 4112889
+extents_y = 4104657
+
+[node name="Player2d" type="SGRigidBody2D" unique_id=154895554 groups=["network_sync", "player"]]
+gravity_y = 32768
+mass = 100
+linear_damping = 655
+angular_damping = 655
+gravity_scale = 65536
+script = ExtResource("1_hkkr1")
+
+[node name="KickArea" type="SGArea2D" parent="." unique_id=162389694]
+collision_layer = 4
+collision_mask = 4
+unique_name_in_owner = true
+
+[node name="SGCollisionShape2D" type="SGCollisionShape2D" parent="KickArea" unique_id=497173366]
+shape = SubResource("SGRectangleShape2D_h32g3")
+modulate = Color(0.99999994, 0.107860245, 0.43282932, 1)
+
+[node name="CollisionShape2D" type="SGCollisionShape2D" parent="." unique_id=1890498040]
+shape = SubResource("SGRectangleShape2D_s23s1")
+modulate = Color(1, 1, 1, 0.27450982)

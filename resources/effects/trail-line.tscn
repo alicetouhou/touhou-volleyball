@@ -186,4 +186,5 @@ texture_filter = 2
 material = SubResource("mat")
 sprite_frames = SubResource("frames")
 autoplay = "default"
-frame_progress = 0.92773926
+frame = 1
+frame_progress = 0.7129423

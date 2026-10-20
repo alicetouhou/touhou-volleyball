@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://ct5g5rqqffh3e" path="res://lobby/dedicated_server.gd" id="2_l3xxi"]
 [ext_resource type="Script" uid="uid://wh87i7gbtj06" path="res://camera_3d.gd" id="3_dk04u"]
 [ext_resource type="PackedScene" uid="uid://ca4cs8h4j08ay" path="res://game_objects/vfx/FXManager.tscn" id="4_qfux7"]
+[ext_resource type="Script" uid="uid://vqkivouo6eom" path="res://addons/godot-rollback-netcode/NetworkTimer.gd" id="6_8v3m6"]
+[ext_resource type="Script" uid="uid://bmbuwtj33vxgo" path="res://lobby/frame_rate.gd" id="9_8v3m6"]
 [ext_resource type="Script" uid="uid://bvamk6gb8rnnl" path="res://lobby/pinger.gd" id="9_8367x"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_4veey"]
@@ -50,6 +52,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="SyncStatus" type="Label" parent="LobbyOverlay" unique_id=1375915233]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 32.0
+offset_top = 47.0
+offset_right = 919.0
+offset_bottom = 254.0
+
 [node name="Network" type="HBoxContainer" parent="LobbyOverlay" unique_id=1161531551]
 layout_mode = 0
 offset_right = 40.0
@@ -83,7 +93,7 @@ visible = false
 layout_mode = 2
 text = "Start game"
 
-[node name="Characters" type="HBoxContainer" parent="LobbyOverlay" unique_id=1158666434]
+[node name="Characters" type="HBoxContainer" parent="LobbyOverlay" unique_id=1158666434 node_paths=PackedStringArray("lobby")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 12
@@ -94,49 +104,71 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = -150
 script = ExtResource("2_4veey")
+lobby = NodePath("../..")
 
-[node name="Level" type="Node3D" parent="." unique_id=489659158]
+[node name="Level" type="Node3D" parent="." unique_id=489659158 groups=["network_sync"]]
+unique_name_in_owner = true
 script = ExtResource("1_uj4ub")
 
 [node name="TouhouVolleyball" parent="Level" unique_id=1885262703 instance=ExtResource("1_jtv5c")]
 
 [node name="Markers" type="Node3D" parent="Level" unique_id=1428041500]
 
-[node name="P1BallSpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1785701356]
+[node name="P1BallSpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=450378299]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4, 0)
+position = Vector2(733, 654)
 
-[node name="P2BallSpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1561185774]
+[node name="P2BallSpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=2047380491]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4, 0)
+position = Vector2(1275, 648)
 
-[node name="P1SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=158125368]
+[node name="P1SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=1452683293]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.46894157, 0)
+position = Vector2(397, 736)
 
-[node name="P2SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=759686758]
+[node name="P2SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=1672842030]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.46894157, 0)
+position = Vector2(1349, 748)
 
-[node name="P3SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1425394337]
+[node name="P3SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=1318271061]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6773343, 0.46894157, 0)
+position = Vector2(521, 739)
 
-[node name="P4SpawnPoint" type="Marker3D" parent="Level/Markers" unique_id=1654558373]
+[node name="P4SpawnPoint" type="Marker2D" parent="Level/Markers" unique_id=613854870]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.716914, 0.46894157, 0)
+position = Vector2(1460, 744)
 
 [node name="Players" type="Node3D" parent="Level" unique_id=1411736408]
 
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="Level" unique_id=2073793907]
-_spawnable_scenes = PackedStringArray("uid://cbyawmu8vbekl", "uid://xq2fjwwy8qix")
-spawn_path = NodePath("../Players")
-
 [node name="Ball" type="Node3D" parent="Level" unique_id=979437667]
 
-[node name="BallSpawner" type="MultiplayerSpawner" parent="Level" unique_id=1104166831]
-_spawnable_scenes = PackedStringArray("uid://reki74cx25co")
-spawn_path = NodePath("../Ball")
+[node name="EndRoundTimer" type="Node" parent="Level" unique_id=1950532382]
+unique_name_in_owner = true
+script = ExtResource("6_8v3m6")
+one_shot = true
+wait_ticks = 105
+metadata/_custom_type_script = "uid://vqkivouo6eom"
+
+[node name="StartGameTimer3" type="Node" parent="Level" unique_id=307877150]
+unique_name_in_owner = true
+script = ExtResource("6_8v3m6")
+one_shot = true
+wait_ticks = 45
+metadata/_custom_type_script = "uid://vqkivouo6eom"
+
+[node name="StartGameTimer2" type="Node" parent="Level" unique_id=652207702]
+unique_name_in_owner = true
+script = ExtResource("6_8v3m6")
+one_shot = true
+wait_ticks = 90
+metadata/_custom_type_script = "uid://vqkivouo6eom"
+
+[node name="StartGameTimer1" type="Node" parent="Level" unique_id=1125457583]
+unique_name_in_owner = true
+script = ExtResource("6_8v3m6")
+one_shot = true
+wait_ticks = 135
+metadata/_custom_type_script = "uid://vqkivouo6eom"
 
 [node name="Camera" type="Camera3D" parent="Level" unique_id=757775853]
 unique_name_in_owner = true
@@ -181,6 +213,21 @@ offset_right = 2043.0
 offset_bottom = 879.0
 theme_override_font_sizes/font_size = 250
 text = "Score!"
+
+[node name="Countdown" type="Label" parent="UI" unique_id=298865777]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.47864583
+anchor_top = 0.18240741
+anchor_right = 0.52343756
+anchor_bottom = 0.37222221
+offset_right = -6.1035156e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 150
+text = "3"
+metadata/_edit_use_anchors_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1155132226]
 layout_mode = 1
@@ -227,6 +274,18 @@ grow_horizontal = 0
 text = "0ms"
 script = ExtResource("9_8367x")
 
+[node name="FrameRate" type="Label" parent="." unique_id=194093839]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -58.0
+offset_top = 30.0
+offset_right = -8.0
+offset_bottom = 53.0
+grow_horizontal = 0
+text = "60FPS"
+script = ExtResource("9_8v3m6")
+
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Host" method="show"]
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/Join" method="show"]
 [connection signal="connection_stopped" from="." to="LobbyOverlay/Network/IP" method="show"]
@@ -250,3 +309,7 @@ script = ExtResource("9_8367x")
 [connection signal="pressed" from="LobbyOverlay/Network/Disconnect" to="." method="stop_connection"]
 [connection signal="pressed" from="LobbyOverlay/Network/Start" to="." method="start_game"]
 [connection signal="pressed" from="LobbyOverlay/Network/Start" to="DedicatedServerStart" method="start_dedicated_game"]
+[connection signal="timeout" from="Level/EndRoundTimer" to="Level" method="_on_end_round_timer_timeout"]
+[connection signal="timeout" from="Level/StartGameTimer3" to="Level" method="_on_start_game_timer_3_timeout"]
+[connection signal="timeout" from="Level/StartGameTimer2" to="Level" method="_on_start_game_timer_2_timeout"]
+[connection signal="timeout" from="Level/StartGameTimer1" to="Level" method="_on_start_game_timer_1_timeout"]

@@ -4,7 +4,7 @@ var peer_id: int = 0
 
 # -99 is any controller
 # -1 and greater restrict to a specific controller
-var input_device = -99
+var input_device: int = -99
 var character: String = "alice_margatroid.tres"
 var color: Color
 var number: int

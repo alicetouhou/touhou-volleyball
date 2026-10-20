@@ -1,5 +1,7 @@
 extends HBoxContainer
 
+@export var lobby: Lobby = null
+
 var players: Array[PlayerPeer] = []
 var character_order: Array[String] = []
 
@@ -26,8 +28,8 @@ var selected: CharacterResource
 func unpress_others(character: CharacterResource) -> void:
 	selected = character
 	var selected_id = (selected.resource_path.split("/") as Array).back()
-	if $"/root/Lobby".connected:
-		$"/root/Lobby".set_player_character.rpc(multiplayer.get_unique_id(), selected_id)
+	if lobby.connected:
+		lobby.set_player_character.rpc(multiplayer.get_unique_id(), selected_id)
 	for child in get_children():
 		child.radio_unpressed()
 
@@ -60,13 +62,13 @@ func prev_character(c: String):
 
 func handle_input(player: PlayerPeer, event: InputEvent):
 	if event.is_action_pressed("ui_right"):
-		if $"/root/Lobby".connected:
-			$"/root/Lobby".set_player_character.rpc(player.peer_id, next_character(player.character))
+		if lobby.connected:
+			lobby.set_player_character.rpc(player.peer_id, next_character(player.character))
 		for child in get_children():
 			child.radio_unpressed()
 	if event.is_action_pressed("ui_left"):
-		if $"/root/Lobby".connected:
-			$"/root/Lobby".set_player_character.rpc(player.peer_id, prev_character(player.character))
+		if lobby.connected:
+			lobby.set_player_character.rpc(player.peer_id, prev_character(player.character))
 		for child in get_children():
 			child.radio_unpressed()
 

@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dxtb0xbxtmm78"]
+
+[ext_resource type="Script" uid="uid://cjwl0i3wreld6" path="res://physics_test.gd" id="1_v25gn"]
+
+[sub_resource type="SGCircleShape2D" id="SGCircleShape2D_v25gn"]
+radius = 2884328
+
+[node name="PhysicsTest" type="Node2D" unique_id=1806060005]
+script = ExtResource("1_v25gn")
+
+[node name="SGRigidBody2D" type="SGRigidBody2D" parent="." unique_id=187661050]
+gravity_y = 32768
+mass = 100
+linear_damping = 655
+angular_damping = 655
+gravity_scale = 65536
+fixed_position_x = 9568256
+fixed_position_y = 4128768
+position = Vector2(146, 63)
+
+[node name="CollisionShape2D" type="SGCollisionShape2D" parent="SGRigidBody2D" unique_id=557091523]
+shape = SubResource("SGCircleShape2D_v25gn")
+
+[node name="SGRigidBody2D2" type="SGRigidBody2D" parent="." unique_id=1305613324]
+gravity_y = 32768
+mass = 100
+linear_damping = 655
+angular_damping = 655
+gravity_scale = 458752
+fixed_position_x = 16449536
+fixed_position_y = 4128768
+position = Vector2(251, 63)
+
+[node name="CollisionShape2D" type="SGCollisionShape2D" parent="SGRigidBody2D2" unique_id=13070420]
+shape = SubResource("SGCircleShape2D_v25gn")

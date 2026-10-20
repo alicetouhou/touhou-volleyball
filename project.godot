@@ -15,16 +15,25 @@ run/main_scene="uid://c8lfngdce82fl"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://btdfuwvwralce"
+
 [autoload]
 
 Supers="*uid://djih161ntx8ci"
+SyncManager="*uid://dpiim8is0veq7"
+SyncDebugger="*uid://b5o4o7egu3y8s"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot-rollback-netcode/plugin.cfg")
 
 [filesystem]
 
@@ -36,6 +45,8 @@ ball=""
 player=""
 ground=""
 cpu=""
+network_sync="Synced via Godot Rollback"
+cpu_player_2d=""
 
 [input]
 
@@ -89,10 +100,20 @@ switch_character={
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":1,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
+sync_debug={
+&"deadzone": 0.5,
+&"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":16,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194342,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+
+[network]
+
+rollback/debug/rollback_ticks=5
 
 [physics]
 
-3d/physics_engine="Jolt Physics"
+2d/physics_engine="Dummy"
+3d/physics_engine="Dummy"
 3d/default_linear_damp=0.0
 
 [rendering]

@@ -75,13 +75,16 @@ func _network_process(_input) -> void:
 		ball = get_tree().get_first_node_in_group("ball")
 
 	ball_predictions = predict_ball_locations(ball.velocity, 100)
+	print(ball_predictions)
+	# I cound not get the code working past this point -jake
+	return
 	
 	# Cancel intention if something changed.
 	if ball_target:
 		if ball_predictions.size() <= ball_target[0]:
 			reset_intentions()
 		elif (SGFixed.vector2(ball_target[1], ball_target[2]).sub(ball_predictions[ball_target[0]])).length() > 0.01:
-			var min_diff = 999999.
+			var min_diff = 999999. * SGFixed.ONE
 			var min_i = 0
 			for i in range(ball_target[0], ball_target[0] + 5):
 				if i < 0 or i >= ball_predictions.size():
@@ -225,26 +228,38 @@ func get_direction() -> int:
 func predict_ball_locations(v: SGFixedVector2, n: int) -> Array[SGFixedVector2]:
 	var g := SGFixed.vector2(ball.gravity_x, ball.gravity_y)
 	var p := ball.fixed_position
-	var t = 1
+	var t := 1
 	var predictions: Array[SGFixedVector2] = []
+	
 	for i in range(0,n):
 		var T: int = t * DELTA
-		var new_pos = p.add(v.mul(T)).add(g.mul(SGFixed.HALF).mul(SGFixed.pow(T, 2))).add(g.mul(SGFixed.HALF).mul((i + 1) * SGFixed.ONE).mul(SGFixed.pow(DELTA, 2)))
+		
+		# var new_pos = p + v * T + .5 * g * pow(T, 2) + (i+1) * 0.5 * g * pow(delta, 2)
 
-		if new_pos.x < -11.:
-			new_pos.x = -(new_pos.x + 11. * SGFixed.ONE) - 11. * SGFixed.ONE
-		if new_pos.x > 11.:
-			new_pos.x = -(new_pos.x - 11. * SGFixed.ONE) + 11. * SGFixed.ONE
-		if new_pos.y > 10.:
-			new_pos.y = -(new_pos.y - 11. * SGFixed.ONE) + 11. * SGFixed.ONE
+		var vt = v.mul(T)
+		var half_g = g.mul(SGFixed.HALF)
+		var half_g_t_squared = half_g.mul(SGFixed.pow(T, SGFixed.TWO))
+		var i_plus_one = SGFixed.ONE * (i + 1)
+		var half_i_plus_one_g_delta_squared = g.mul(SGFixed.mul(SGFixed.mul(i_plus_one, SGFixed.HALF), SGFixed.pow(DELTA, SGFixed.TWO)))
+
+		var new_pos = p.add(vt).add(half_g_t_squared).add(half_i_plus_one_g_delta_squared)
+
+		# Bouncing?
+		if new_pos.x < -3000000:
+			new_pos.x = -(new_pos.x + 3000000) - 3000000
+		if new_pos.x > 3000000:
+			new_pos.x = -(new_pos.x - 3000000) + 3000000
+		if new_pos.y > -2500000:
+			new_pos.y = -(new_pos.y + 2500000) - 2500000
 		
 		predictions.push_back(new_pos)
 		
-		if new_pos.y > 1.5 * SGFixed.ONE:
+		if new_pos.y > (SGFixed.ONE + SGFixed.HALF):
 			t += 1
 		else:
 			visualize_predictions()
 			return predictions
+
 	visualize_predictions()
 	return predictions
 

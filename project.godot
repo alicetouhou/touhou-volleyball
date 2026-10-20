@@ -46,6 +46,7 @@ player=""
 ground=""
 cpu=""
 network_sync="Synced via Godot Rollback"
+cpu_player_2d=""
 
 [input]
 

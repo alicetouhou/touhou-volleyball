@@ -7,16 +7,9 @@ signal request_create_ball_hit_visual
 signal request_create_dust_trail(direction: int)
 
 @onready var Animations = %AnimationTree.get("parameters/playback")
-
-var player_2d = null
-var cpu_player = false
+@onready var player_2d: Player2D = %Player2d
 
 func _network_spawn(data):
-	if data["cpu_player"] == true:
-		player_2d = %CPUPlayer2D.create_instance()
-	else:
-		player_2d = %Player2d.create_instance()
-	
 	player_2d.set_character(data["character"])
 	player_2d.player_id = data["player_id"]
 	player_2d.input_device = data["input_device"]

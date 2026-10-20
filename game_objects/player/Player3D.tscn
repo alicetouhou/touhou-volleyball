@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cbyawmu8vbekl"]
 
 [ext_resource type="Script" uid="uid://blxb51ypbdrqg" path="res://game_objects/player/player_3d.gd" id="1_bn5eq"]
+[ext_resource type="PackedScene" uid="uid://butv44ydur5tf" path="res://game_objects/player/Player2D.tscn" id="2_bp3gs"]
 [ext_resource type="Texture2D" uid="uid://bluw2veqruu0j" path="res://assets/sprites/characters/yuyuko.png" id="2_kxtgu"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://c14uejte347bk" path="res://player/animations.tres" id="3_kxtgu"]
 [ext_resource type="Texture2D" uid="uid://vsimlmjv380n" path="res://icon.svg" id="4_bp3gs"]
@@ -140,12 +141,9 @@ _data = {
 [node name="Player3d" type="Node3D" unique_id=1887892659 groups=["network_sync"]]
 script = ExtResource("1_bn5eq")
 
-[node name="Player2d" parent="." unique_id=802664772 instance_placeholder="res://game_objects/player/Player2D.tscn"]
+[node name="Player2d" parent="." unique_id=802664772 instance=ExtResource("2_bp3gs")]
 collision_layer = 2
 collision_mask = 0
-unique_name_in_owner = true
-
-[node name="CPUPlayer2D" parent="." unique_id=154895554 instance_placeholder="res://game_objects/player/CPUPlayer2D.tscn"]
 unique_name_in_owner = true
 
 [node name="Texture" type="Node3D" parent="." unique_id=1883257529]
@@ -154,7 +152,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.11847544, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="Texture" unique_id=705725850]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1.0248818, 0, 0, 0, 1, 0, 0.07464564, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0293336, 0, 0, 0, 1, 0, 0.08800071, 0)
 flip_h = true
 texture = ExtResource("2_kxtgu")
 
@@ -192,5 +190,3 @@ parameters/turn/Direction/blend_amount = 0.0
 
 [connection signal="kick" from="Player2d" to="." method="_on_player_2d_kick"]
 [connection signal="turn" from="Player2d" to="." method="_on_player_2d_turn"]
-[connection signal="kick" from="CPUPlayer2D" to="." method="_on_player_2d_kick"]
-[connection signal="turn" from="CPUPlayer2D" to="." method="_on_player_2d_turn"]

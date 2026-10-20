@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bq7c3j70yxuq8"]
+
+[ext_resource type="PackedScene" uid="uid://cbyawmu8vbekl" path="res://game_objects/player/Player3D.tscn" id="1_r16fm"]
+[ext_resource type="Script" uid="uid://dnimh3mcqosku" path="res://game_objects/player/cpu_player_2d.gd" id="2_vwtcu"]
+[ext_resource type="Texture2D" uid="uid://vsimlmjv380n" path="res://icon.svg" id="4_ys1i6"]
+
+[node name="Player3d" unique_id=1887892659 instance=ExtResource("1_r16fm")]
+
+[node name="Player2d" parent="." index="0" unique_id=802664772 groups=["cpu_player_2d"]]
+script = ExtResource("2_vwtcu")
+
+[node name="Debug1" type="Label" parent="Player2d" index="2" unique_id=801584505]
+unique_name_in_owner = true
+offset_left = -77.0
+offset_top = -340.0
+offset_right = 121.0
+offset_bottom = -271.0
+theme_override_font_sizes/font_size = 50
+text = "Debug 1"
+
+[node name="Debug2" type="Label" parent="Player2d" index="3" unique_id=398732200]
+unique_name_in_owner = true
+offset_left = -78.0
+offset_top = -225.0
+offset_right = 120.0
+offset_bottom = -156.0
+theme_override_font_sizes/font_size = 50
+text = "Debug 2"
+
+[node name="Debug3" type="Label" parent="Player2d" index="4" unique_id=1520268011]
+unique_name_in_owner = true
+offset_left = -81.0
+offset_top = -154.0
+offset_right = 117.0
+offset_bottom = -85.0
+theme_override_font_sizes/font_size = 50
+text = "Debug 3"
+
+[node name="Target" type="Sprite2D" parent="Player2d" index="5" unique_id=1163895810]
+unique_name_in_owner = true
+texture = ExtResource("4_ys1i6")
+
+[node name="Pred" type="Sprite2D" parent="Player2d" index="6" unique_id=1825333054]
+unique_name_in_owner = true
+self_modulate = Color(0.57215255, 0.00023776591, 0.5723742, 1)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_ys1i6")
+
+[node name="Sprite3D" parent="Texture" parent_id_path=PackedInt32Array(1883257529) index="0" unique_id=705725850]
+transform = Transform3D(1, 0, 0, 0, 1.0264132, 0, 0, 0, 1, 0, 0.079239726, 0)

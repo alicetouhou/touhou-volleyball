@@ -4,6 +4,7 @@ extends Node3D
 
 
 const player_scene = preload("res://game_objects/player/Player3D.tscn")
+const cpu_scene = preload("res://game_objects/player/CPUPlayer3D.tscn")
 
 ## Which side's turn is currently playing (ie who served).
 var serving := 0
@@ -48,11 +49,10 @@ func start_game() -> void:
 
 	var i = 0
 	for peer: PlayerPeer in connected_players:
-		var use_player_scene: PackedScene = player_scene
+		var use_player_scene: PackedScene = player_scene if peer.peer_id != -1 else cpu_scene
 
 		var player_name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
 		var player: Player3D = SyncManager.spawn(player_name, players, use_player_scene, {
-			"cpu_player": peer.peer_id == -1,
 			"player_id": peer.peer_id,
 			"fixed_position_x": SGFixed.from_float(player_positions[i].x),
 			"fixed_position_y": SGFixed.from_float(player_positions[i].y),
@@ -83,6 +83,9 @@ func _network_process(_input):
 			write_score()
 
 func setup_round():
+	for cpu_player in get_tree().get_nodes_in_group("cpu_player_2d"):
+		cpu_player.update_game_state(false)
+
 	countdown_timer.text = "3"
 	countdown_timer.show()
 	ball.get_ball_2d().freeze = true
@@ -99,6 +102,9 @@ func start_round():
 	countdown_timer.hide()
 	SYNCED_round_running = true
 	ball.get_ball_2d().freeze = false
+	
+	for cpu_player in get_tree().get_nodes_in_group("cpu_player_2d"):
+		cpu_player.update_game_state(true)
 
 func reset() -> void:
 	print("Reset, this needs to do something btw...")

@@ -241,14 +241,14 @@ func predict_ball_locations(v: SGFixedVector2, n: int, step_size: int = 50) -> A
 
 		var new_pos = p.add(vt).add(half_g_t_squared).add(half_i_plus_one_g_delta_squared)
 
-		# Bouncing?
+		# Bouncing
 		if new_pos.x < -3000000:
 			new_pos.x = -(new_pos.x + 3000000) - 3000000
 		if new_pos.x > 129099248:
 			new_pos.x = -(new_pos.x - 129099248) + 129099248
 		if new_pos.y > 59000000:
 			new_pos.y = -(new_pos.y - 59000000) + 59000000
-		
+
 		predictions.push_back(new_pos)
 		
 		if new_pos.y > (SGFixed.ONE + SGFixed.HALF):

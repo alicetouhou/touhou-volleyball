@@ -7,3 +7,5 @@ script = ExtResource("1_poidi")
 
 [node name="Lobby" parent="." unique_id=1193217656 instance_placeholder="res://lobby/lobby.tscn"]
 unique_name_in_owner = true
+
+[connection signal="players_updated" from="Lobby" to="Lobby/LobbyOverlay/Characters" method="players_updated"]

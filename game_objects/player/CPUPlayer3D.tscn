@@ -47,4 +47,4 @@ scale = Vector2(0.25, 0.25)
 texture = ExtResource("4_ys1i6")
 
 [node name="Sprite3D" parent="Texture" parent_id_path=PackedInt32Array(1883257529) index="0" unique_id=705725850]
-transform = Transform3D(1, 0, 0, 0, 1.0004445, 0, 0, 0, 1, 0, 0.0013334947, 0)
+transform = Transform3D(1, 0, 0, 0, 1.0193524, 0, 0, 0, 1, 0, 0.058057457, 0)

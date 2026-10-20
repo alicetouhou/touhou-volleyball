@@ -93,7 +93,7 @@ visible = false
 layout_mode = 2
 text = "Start game"
 
-[node name="Characters" type="HBoxContainer" parent="LobbyOverlay" unique_id=1158666434]
+[node name="Characters" type="HBoxContainer" parent="LobbyOverlay" unique_id=1158666434 node_paths=PackedStringArray("lobby")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 12
@@ -104,6 +104,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = -150
 script = ExtResource("2_4veey")
+lobby = NodePath("../..")
 
 [node name="Level" type="Node3D" parent="." unique_id=489659158 groups=["network_sync"]]
 unique_name_in_owner = true

@@ -1,9 +1,0 @@
-[gd_scene format=3 uid="uid://dudk4c1fwh3oe"]
-
-[ext_resource type="Script" uid="uid://b0joodra3a7c" path="res://tests/open_game.gd" id="1_mejok"]
-
-[node name="OpenGame" type="Node2D" unique_id=1319068100]
-script = ExtResource("1_mejok")
-
-[node name="Lobby" parent="." unique_id=1193217656 instance_placeholder="res://lobby/lobby.tscn"]
-unique_name_in_owner = true

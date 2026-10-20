@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://rbsjdtlogunn"]
+
+[ext_resource type="Script" uid="uid://csygelsexamla" path="res://tests/local_game.gd" id="1_2db2y"]
+[ext_resource type="PackedScene" uid="uid://c8lfngdce82fl" path="res://lobby/lobby.tscn" id="1_05gko"]
+
+[node name="LocalGame" type="Node2D" unique_id=915782137]
+script = ExtResource("1_2db2y")
+
+[node name="Lobby" parent="." unique_id=1193217656 instance=ExtResource("1_05gko")]
+unique_name_in_owner = true
+
+[connection signal="players_updated" from="Lobby" to="Lobby/LobbyOverlay/Characters" method="players_updated"]

@@ -1,5 +1,6 @@
 extends Node
 
+class_name Lobby
 
 signal server_started
 signal players_updated(players)

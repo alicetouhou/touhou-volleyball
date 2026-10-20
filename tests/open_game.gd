@@ -1,3 +1,5 @@
+## Start both instances of the game, and connect them if two are opened.
+
 extends Node2D
 
 var lobby

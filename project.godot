@@ -33,7 +33,7 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/godot-rollback-netcode/plugin.cfg")
 
 [filesystem]
 
@@ -107,7 +107,7 @@ sync_debug={
 
 [network]
 
-rollback/debug/rollback_ticks=7
+rollback/debug/rollback_ticks=5
 
 [physics]
 

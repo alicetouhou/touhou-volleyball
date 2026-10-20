@@ -133,10 +133,9 @@ func _network_process(input: Dictionary) -> void:
 		apply_central_impulse(SGFixed.vector2(0,-JUMP))
 
 	# Make sure the kick area is aware of collisions
-	if SYNCED_kicking_for_ticks >= 1 and (SYNCED_ticks - SYNCED_last_kicked_on_tick) > KICK_COOLDOWN_SYNCED_ticks:
+	if SYNCED_kicking_for_ticks == 1:
 		if not SyncManager.is_in_rollback():
 			kick.emit(false)
-		SYNCED_last_kicked_on_tick = SYNCED_ticks
 		var bodies = %KickArea.get_overlapping_bodies()
 		var ball_index = bodies.find_custom(func(x): return x.is_in_group("ball"))
 		if ball_index >= 0:

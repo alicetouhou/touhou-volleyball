@@ -62,8 +62,8 @@ func local_game() -> Error:
 		connected = true
 		multiplayer.multiplayer_peer = server
 
-		peer_connected(1, 16)
-		peer_connected(2, 0)
+		peer_connected(1, 16, true)
+		peer_connected(2, 0, true)
 
 	return err
 
@@ -83,12 +83,14 @@ func stop_connection() -> void:
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	players = []
 
-func peer_connected(id: int, input_device: int = -99):
+func peer_connected(id: int, input_device: int = -99, local_peer: bool = false):
 	if OS.has_feature("dedicated_server") and len(players) == 0:
 		$DedicatedServerStart.set_multiplayer_authority(id)
 		give_start_permission.rpc_id(id)
 
-	if id != multiplayer.get_unique_id():
+	# Local players should not be tracked by the sync manager, because it will try to
+	# send a message to a client that doens't exist.
+	if not local_peer and id != multiplayer.get_unique_id():
 		SyncManager.add_peer(id)
 
 	if multiplayer.get_unique_id() == 1:

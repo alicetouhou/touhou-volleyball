@@ -8,16 +8,24 @@ signal request_create_dust_trail(direction: int)
 
 @onready var Animations = %AnimationTree.get("parameters/playback")
 
+var player_2d = null
+var cpu_player = false
+
 func _network_spawn(data):
-	%Player2d.set_character(data["character"])
-	%Player2d.player_id = data["player_id"]
-	%Player2d.input_device = data["input_device"]
-	%Player2d.fixed_position_x = data["fixed_position_x"]
-	%Player2d.fixed_position_y = data["fixed_position_y"]
-	%Player2d.sync_to_physics_engine()
+	if data["cpu_player"] == true:
+		player_2d = %CPUPlayer2D.create_instance()
+	else:
+		player_2d = %Player2d.create_instance()
+	
+	player_2d.set_character(data["character"])
+	player_2d.player_id = data["player_id"]
+	player_2d.input_device = data["input_device"]
+	player_2d.fixed_position_x = data["fixed_position_x"]
+	player_2d.fixed_position_y = data["fixed_position_y"]
+	player_2d.sync_to_physics_engine()
 
 func _process(_delta: float) -> void:
-	position = Globals.map_pos2D_to_pos3D(get_viewport().get_camera_3d(), %Player2d.display_position)
+	position = Globals.map_pos2D_to_pos3D(get_viewport().get_camera_3d(), player_2d.display_position)
 
 func _on_player_2d_kick(successful: bool) -> void:
 	if successful:

@@ -4,7 +4,6 @@ extends Node3D
 
 
 const player_scene = preload("res://game_objects/player/Player3D.tscn")
-# const cpu_scene = preload("res://game_objects/player/CPUPlayer.tscn")
 
 ## Which side's turn is currently playing (ie who served).
 var serving := 0
@@ -53,6 +52,7 @@ func start_game() -> void:
 
 		var player_name = "%s-%s" % [peer.peer_id, peer.input_device] if peer.peer_id > -1 else "cpu"
 		var player: Player3D = SyncManager.spawn(player_name, players, use_player_scene, {
+			"cpu_player": peer.peer_id == -1,
 			"player_id": peer.peer_id,
 			"fixed_position_x": SGFixed.from_float(player_positions[i].x),
 			"fixed_position_y": SGFixed.from_float(player_positions[i].y),

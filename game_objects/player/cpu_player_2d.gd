@@ -74,8 +74,7 @@ func _network_process(_input) -> void:
 	if not ball:
 		ball = get_tree().get_first_node_in_group("ball")
 
-	ball_predictions = predict_ball_locations(ball.velocity, 100)
-	print(ball_predictions)
+	ball_predictions = predict_ball_locations(ball.velocity, 20)
 	# I cound not get the code working past this point -jake
 	return
 	
@@ -225,7 +224,7 @@ func get_direction() -> int:
 	else:
 		return 1
 
-func predict_ball_locations(v: SGFixedVector2, n: int) -> Array[SGFixedVector2]:
+func predict_ball_locations(v: SGFixedVector2, n: int, step_size: int = 50) -> Array[SGFixedVector2]:
 	var g := SGFixed.vector2(ball.gravity_x, ball.gravity_y)
 	var p := ball.fixed_position
 	var t := 1
@@ -233,8 +232,6 @@ func predict_ball_locations(v: SGFixedVector2, n: int) -> Array[SGFixedVector2]:
 	
 	for i in range(0,n):
 		var T: int = t * DELTA
-		
-		# var new_pos = p + v * T + .5 * g * pow(T, 2) + (i+1) * 0.5 * g * pow(delta, 2)
 
 		var vt = v.mul(T)
 		var half_g = g.mul(SGFixed.HALF)
@@ -247,15 +244,16 @@ func predict_ball_locations(v: SGFixedVector2, n: int) -> Array[SGFixedVector2]:
 		# Bouncing?
 		if new_pos.x < -3000000:
 			new_pos.x = -(new_pos.x + 3000000) - 3000000
-		if new_pos.x > 3000000:
-			new_pos.x = -(new_pos.x - 3000000) + 3000000
-		if new_pos.y > -2500000:
-			new_pos.y = -(new_pos.y + 2500000) - 2500000
+		if new_pos.x > 129099248:
+			new_pos.x = -(new_pos.x - 129099248) + 129099248
+		if new_pos.y > 59000000:
+			new_pos.y = -(new_pos.y - 59000000) + 59000000
 		
 		predictions.push_back(new_pos)
 		
 		if new_pos.y > (SGFixed.ONE + SGFixed.HALF):
-			t += 1
+			# Step is large to reduce lag
+			t += step_size
 		else:
 			visualize_predictions()
 			return predictions
